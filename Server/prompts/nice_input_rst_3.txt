@@ -1,0 +1,22 @@
+.. _dt-node-main-ex:
+
+Here's a DTS fragment for some imaginary hardware we'll return to throughout
+this file for examples:
+
+.. literalinclude:: main-example.dts
+   :language: devicetree
+   :start-after: start-after-here
+
+Here are a few ways to get node identifiers for the ``i2c@40002000`` node:
+
+- ``DT_PATH(soc, i2c_40002000)``
+- ``DT_NODELABEL(i2c1)``
+- ``DT_ALIAS(sensor_controller)``
+- ``DT_INST(x, vnd_soc_i2c)`` for some unknown number ``x``. See the
+  :c:func:`DT_INST()` documentation for details.
+
+.. important::
+
+   Non-alphanumeric characters like dash (``-``) and the at sign (``@``) in
+   devicetree names are converted to underscores (``_``). The names in a DTS
+   are also converted to lowercase.

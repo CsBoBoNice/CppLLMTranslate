@@ -1,0 +1,23 @@
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\qwen1_5-32b-chat-q4_k_m.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 123 -r "<|im_end|>" -ngl 27 -i --chatml 
+
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\Qwen1.5-7B-Chat-f16.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 123 -r "<|im_end|>" -ngl 25 -i --chatml 
+
+
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\Qwen1.5-7B-Chat-Q6_K.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 5 -r "<|im_end|>" -ngl 33 -i --chatml 
+
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\Qwen1.5-14B-Chat-Q6_K.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 123 -r "<|im_end|>" -ngl 28 -i --chatml 
+
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\Qwen1.5-14B-Chat-Q4_K_M.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 123 -r "<|im_end|>" -ngl 35 -i --chatml 
+
+.\build\bin\Release\fxxk_datasheet_llama_cpp.exe -m D:\models\Qwen1.5-14B-Chat-Q3_K_M.gguf -f .\prompts\fxxk_zh.txt -t 16 --keep -1 -c 2560 -b 2560 -ub 2560 -n -1 -s 123 -r "<|im_end|>" -ngl 41 -i --chatml 
+
+
+
+
+
+
+
+
+
+
+

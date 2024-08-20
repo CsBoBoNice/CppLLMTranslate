@@ -1,0 +1,549 @@
+[1723774699] Log start
+[1723774699] Cmd: ./build/bin/llama-cli -m ./models/gemma-2-9b-it-Q5_K_L.gguf -t 4 -c 8192 -n -1 -s 555 --temp 0 --color -cnv --no-escape
+[1723774699] main: build = 97 (f17153f)
+[1723774699] main: built with cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0 for x86_64-linux-gnu
+[1723774699] main: seed  = 555
+[1723774699] main: llama backend init
+[1723774699] main: load the model and apply lora adapter, if any
+[1723774699] llama_model_loader: loaded meta data with 33 key-value pairs and 464 tensors from ./models/gemma-2-9b-it-Q5_K_L.gguf (version GGUF V3 (latest))
+[1723774699] llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+[1723774699] llama_model_loader: - kv   0:                       general.architecture str              = gemma2
+[1723774699] llama_model_loader: - kv   1:                               general.name str              = gemma-2-9b-it
+[1723774699] llama_model_loader: - kv   2:                      gemma2.context_length u32              = 8192
+[1723774699] llama_model_loader: - kv   3:                    gemma2.embedding_length u32              = 3584
+[1723774699] llama_model_loader: - kv   4:                         gemma2.block_count u32              = 42
+[1723774699] llama_model_loader: - kv   5:                 gemma2.feed_forward_length u32              = 14336
+[1723774699] llama_model_loader: - kv   6:                gemma2.attention.head_count u32              = 16
+[1723774699] llama_model_loader: - kv   7:             gemma2.attention.head_count_kv u32              = 8
+[1723774699] llama_model_loader: - kv   8:    gemma2.attention.layer_norm_rms_epsilon f32              = 0.000001
+[1723774699] llama_model_loader: - kv   9:                gemma2.attention.key_length u32              = 256
+[1723774699] llama_model_loader: - kv  10:              gemma2.attention.value_length u32              = 256
+[1723774699] llama_model_loader: - kv  11:                          general.file_type u32              = 17
+[1723774699] llama_model_loader: - kv  12:              gemma2.attn_logit_softcapping f32              = 50.000000
+[1723774699] llama_model_loader: - kv  13:             gemma2.final_logit_softcapping f32              = 30.000000
+[1723774699] llama_model_loader: - kv  14:            gemma2.attention.sliding_window u32              = 4096
+[1723774699] llama_model_loader: - kv  15:                       tokenizer.ggml.model str              = llama
+[1723774699] llama_model_loader: - kv  16:                         tokenizer.ggml.pre str              = default
+[1723774699] llama_model_loader: - kv  17:                      tokenizer.ggml.tokens arr[str,256000]  = ["<pad>", "<eos>", "<bos>", "<unk>", ...
+[1723774699] llama_model_loader: - kv  18:                      tokenizer.ggml.scores arr[f32,256000]  = [-1000.000000, -1000.000000, -1000.00...
+[1723774699] llama_model_loader: - kv  19:                  tokenizer.ggml.token_type arr[i32,256000]  = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+[1723774699] llama_model_loader: - kv  20:                tokenizer.ggml.bos_token_id u32              = 2
+[1723774699] llama_model_loader: - kv  21:                tokenizer.ggml.eos_token_id u32              = 1
+[1723774699] llama_model_loader: - kv  22:            tokenizer.ggml.unknown_token_id u32              = 3
+[1723774699] llama_model_loader: - kv  23:            tokenizer.ggml.padding_token_id u32              = 0
+[1723774699] llama_model_loader: - kv  24:               tokenizer.ggml.add_bos_token bool             = true
+[1723774699] llama_model_loader: - kv  25:               tokenizer.ggml.add_eos_token bool             = false
+[1723774699] llama_model_loader: - kv  26:                    tokenizer.chat_template str              = {{ bos_token }}{% if messages[0]['rol...
+[1723774699] llama_model_loader: - kv  27:            tokenizer.ggml.add_space_prefix bool             = false
+[1723774699] llama_model_loader: - kv  28:               general.quantization_version u32              = 2
+[1723774699] llama_model_loader: - kv  29:                      quantize.imatrix.file str              = /models_out/gemma-2-9b-it-GGUF/gemma-...
+[1723774699] llama_model_loader: - kv  30:                   quantize.imatrix.dataset str              = /training_dir/calibration_datav3.txt
+[1723774699] llama_model_loader: - kv  31:             quantize.imatrix.entries_count i32              = 294
+[1723774699] llama_model_loader: - kv  32:              quantize.imatrix.chunks_count i32              = 128
+[1723774699] llama_model_loader: - type  f32:  169 tensors
+[1723774699] llama_model_loader: - type q8_0:    1 tensors
+[1723774699] llama_model_loader: - type q5_K:  252 tensors
+[1723774699] llama_model_loader: - type q6_K:   42 tensors
+[1723774699] llm_load_vocab: special tokens cache size = 217
+[1723774699] llm_load_vocab: token to piece cache size = 1.6014 MB
+[1723774699] llm_load_print_meta: format           = GGUF V3 (latest)
+[1723774699] llm_load_print_meta: arch             = gemma2
+[1723774699] llm_load_print_meta: vocab type       = SPM
+[1723774699] llm_load_print_meta: n_vocab          = 256000
+[1723774699] llm_load_print_meta: n_merges         = 0
+[1723774699] llm_load_print_meta: vocab_only       = 0
+[1723774699] llm_load_print_meta: n_ctx_train      = 8192
+[1723774699] llm_load_print_meta: n_embd           = 3584
+[1723774699] llm_load_print_meta: n_layer          = 42
+[1723774699] llm_load_print_meta: n_head           = 16
+[1723774699] llm_load_print_meta: n_head_kv        = 8
+[1723774699] llm_load_print_meta: n_rot            = 256
+[1723774699] llm_load_print_meta: n_swa            = 4096
+[1723774699] llm_load_print_meta: n_embd_head_k    = 256
+[1723774699] llm_load_print_meta: n_embd_head_v    = 256
+[1723774699] llm_load_print_meta: n_gqa            = 2
+[1723774699] llm_load_print_meta: n_embd_k_gqa     = 2048
+[1723774699] llm_load_print_meta: n_embd_v_gqa     = 2048
+[1723774699] llm_load_print_meta: f_norm_eps       = 0.0e+00
+[1723774699] llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
+[1723774699] llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+[1723774699] llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+[1723774699] llm_load_print_meta: f_logit_scale    = 0.0e+00
+[1723774699] llm_load_print_meta: n_ff             = 14336
+[1723774699] llm_load_print_meta: n_expert         = 0
+[1723774699] llm_load_print_meta: n_expert_used    = 0
+[1723774699] llm_load_print_meta: causal attn      = 1
+[1723774699] llm_load_print_meta: pooling type     = 0
+[1723774699] llm_load_print_meta: rope type        = 2
+[1723774699] llm_load_print_meta: rope scaling     = linear
+[1723774699] llm_load_print_meta: freq_base_train  = 10000.0
+[1723774699] llm_load_print_meta: freq_scale_train = 1
+[1723774699] llm_load_print_meta: n_ctx_orig_yarn  = 8192
+[1723774699] llm_load_print_meta: rope_finetuned   = unknown
+[1723774699] llm_load_print_meta: ssm_d_conv       = 0
+[1723774699] llm_load_print_meta: ssm_d_inner      = 0
+[1723774699] llm_load_print_meta: ssm_d_state      = 0
+[1723774699] llm_load_print_meta: ssm_dt_rank      = 0
+[1723774699] llm_load_print_meta: model type       = 9B
+[1723774699] llm_load_print_meta: model ftype      = Q5_K - Medium
+[1723774699] llm_load_print_meta: model params     = 9.24 B
+[1723774699] llm_load_print_meta: model size       = 6.39 GiB (5.94 BPW) 
+[1723774699] llm_load_print_meta: general.name     = gemma-2-9b-it
+[1723774699] llm_load_print_meta: BOS token        = 2 '<bos>'
+[1723774699] llm_load_print_meta: EOS token        = 1 '<eos>'
+[1723774699] llm_load_print_meta: UNK token        = 3 '<unk>'
+[1723774699] llm_load_print_meta: PAD token        = 0 '<pad>'
+[1723774699] llm_load_print_meta: LF token         = 227 '<0x0A>'
+[1723774699] llm_load_print_meta: EOT token        = 107 '<end_of_turn>'
+[1723774699] llm_load_print_meta: max token length = 48
+[1723774699] llm_load_tensors: ggml ctx size =    0.21 MiB
+[1723774700] llm_load_tensors:        CPU buffer size =  6545.56 MiB
+[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] .[1723774700] 
+[1723774700] llama_new_context_with_model: n_ctx      = 8192
+[1723774700] llama_new_context_with_model: n_batch    = 2048
+[1723774700] llama_new_context_with_model: n_ubatch   = 512
+[1723774700] llama_new_context_with_model: flash_attn = 0
+[1723774700] llama_new_context_with_model: freq_base  = 10000.0
+[1723774700] llama_new_context_with_model: freq_scale = 1
+[1723774702] llama_kv_cache_init:        CPU KV buffer size =  2688.00 MiB
+[1723774702] llama_new_context_with_model: KV self size  = 2688.00 MiB, K (f16): 1344.00 MiB, V (f16): 1344.00 MiB
+[1723774702] llama_new_context_with_model:        CPU  output buffer size =     0.98 MiB
+[1723774702] llama_new_context_with_model:        CPU compute buffer size =   507.00 MiB
+[1723774702] llama_new_context_with_model: graph nodes  = 1690
+[1723774702] llama_new_context_with_model: graph splits = 1
+[1723774702] warming up the model with an empty run
+[1723774702] n_ctx: 8192
+[1723774702] main: chat template example: <start_of_turn>user
+You are a helpful assistant
+
+Hello<end_of_turn>
+<start_of_turn>model
+Hi there<end_of_turn>
+<start_of_turn>user
+How are you?<end_of_turn>
+<start_of_turn>model
+
+[1723774702] 
+[1723774702] system_info: n_threads = 4 / 4 | AVX = 1 | AVX_VNNI = 0 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | AVX512_BF16 = 0 | FMA = 1 | NEON = 0 | SVE = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 0 | SSE3 = 1 | SSSE3 = 1 | VSX = 0 | MATMUL_INT8 = 0 | LLAMAFILE = 1 | 
+[1723774702] add_bos: 1
+[1723774702] tokenize the prompt
+[1723774702] prompt: ""
+[1723774702] tokens: [ '<bos>':2 ]
+[1723774702] recalculate the cached logits (check): embd_inp.empty() false, n_matching_session_tokens 0, embd_inp.size() 1, session_tokens.size() 0, embd_inp.size() 1
+[1723774702] main: interactive mode on.
+[1723774702] sampling: 
+	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
+	top_k = 40, tfs_z = 1.000, top_p = 0.950, min_p = 0.050, typical_p = 1.000, temp = 0.000
+	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000
+[1723774702] sampling order: 
+CFG -> Penalties -> top_k -> tfs_z -> typical_p -> top_p -> min_p -> temperature 
+[1723774702] generate: n_ctx = 8192, n_batch = 2048, n_predict = -1, n_keep = 1
+[1723774702] 
+
+[1723774702] == Running in interactive mode. ==
+[1723774702]  - Press Ctrl+C to interject at any time.
+[1723774702]  - Press Return to return control to the AI.
+ - To return control without starting a new line, end your input with '/'.
+ - If you want to submit another line, end your input with '\'.
+
+[1723774702] embd_inp.size(): 1, n_consumed: 0
+[1723774702] eval: [ '<bos>':2 ]
+[1723774703] n_past = 1
+[1723774703] embd_inp.size(): 1, n_consumed: 1
+[1723774703] waiting for user input
+[1723774723] buffer: '将以下英文翻译为中文：erase block size in units of sector size
+'
+[1723774723] formatted: <start_of_turn>user
+将以下英文翻译为中文：erase block size in units of sector size<end_of_turn>
+<start_of_turn>model
+
+[1723774723] input tokens: [ '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723774723] n_remain: -24
+[1723774723] embd_inp.size(): 24, n_consumed: 1
+[1723774723] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723774727] n_past = 24
+[1723774727] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542 ]
+[1723774727] n_remain: -25
+[1723774727] eval: [ '':235542 ]
+[1723774728] n_past = 25
+[1723774728] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974 ]
+[1723774728] n_remain: -26
+[1723774728] eval: [ '':238974 ]
+[1723774728] n_past = 26
+[1723774728] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149 ]
+[1723774728] n_remain: -27
+[1723774728] eval: [ '':236149 ]
+[1723774728] n_past = 27
+[1723774728] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308 ]
+[1723774728] n_remain: -28
+[1723774728] eval: [ '':44308 ]
+[1723774729] n_past = 28
+[1723774729] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640 ]
+[1723774729] n_remain: -29
+[1723774729] eval: [ '':235640 ]
+[1723774729] n_past = 29
+[1723774729] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778 ]
+[1723774729] n_remain: -30
+[1723774729] eval: [ '':48778 ]
+[1723774730] n_past = 30
+[1723774730] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785 ]
+[1723774730] n_remain: -31
+[1723774730] eval: [ '':238785 ]
+[1723774730] n_past = 31
+[1723774730] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232 ]
+[1723774730] n_remain: -32
+[1723774730] eval: [ '':236232 ]
+[1723774731] n_past = 32
+[1723774731] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240 ]
+[1723774731] n_remain: -33
+[1723774731] eval: [ '':237240 ]
+[1723774731] n_past = 33
+[1723774731] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308 ]
+[1723774731] n_remain: -34
+[1723774731] eval: [ '':44308 ]
+[1723774731] n_past = 34
+[1723774731] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362 ]
+[1723774731] n_remain: -35
+[1723774731] eval: [ '':235362 ]
+[1723774732] n_past = 35
+[1723774732] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248 ]
+[1723774732] n_remain: -36
+[1723774732] eval: [ ' ':235248 ]
+[1723774732] n_past = 36
+[1723774732] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110 ]
+[1723774732] n_remain: -37
+[1723774732] eval: [ '':110 ]
+[1723774733] n_past = 37
+[1723774733] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688 ]
+[1723774733] n_remain: -38
+[1723774733] eval: [ '**':688 ]
+[1723774733] n_past = 38
+[1723774733] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107 ]
+[1723774733] n_remain: -39
+[1723774733] eval: [ '':49107 ]
+[1723774733] n_past = 39
+[1723774733] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058 ]
+[1723774733] n_remain: -40
+[1723774733] eval: [ ':**':66058 ]
+[1723774734] n_past = 40
+[1723774734] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109 ]
+[1723774734] n_remain: -41
+[1723774734] eval: [ '':109 ]
+[1723774734] n_past = 41
+[1723774734] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287 ]
+[1723774734] n_remain: -42
+[1723774734] eval: [ '*':235287 ]
+[1723774735] n_past = 42
+[1723774735] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231 ]
+[1723774735] n_remain: -43
+[1723774735] eval: [ ' **':5231 ]
+[1723774735] n_past = 43
+[1723774735] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381 ]
+[1723774735] n_remain: -44
+[1723774735] eval: [ 'erase':50381 ]
+[1723774735] n_past = 44
+[1723774735] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963 ]
+[1723774735] n_remain: -45
+[1723774735] eval: [ ' block':3963 ]
+[1723774736] n_past = 45
+[1723774736] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058 ]
+[1723774736] n_remain: -46
+[1723774736] eval: [ ':**':66058 ]
+[1723774736] n_past = 46
+[1723774736] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380 ]
+[1723774736] n_remain: -47
+[1723774736] eval: [ ' ':55380 ]
+[1723774736] n_past = 47
+[1723774736] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728 ]
+[1723774736] n_remain: -48
+[1723774736] eval: [ '':14728 ]
+[1723774737] n_past = 48
+[1723774737] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199 ]
+[1723774737] n_remain: -49
+[1723774737] eval: [ '':179199 ]
+[1723774737] n_past = 49
+[1723774737] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132 ]
+[1723774737] n_remain: -50
+[1723774737] eval: [ '':236132 ]
+[1723774738] n_past = 50
+[1723774738] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206 ]
+[1723774738] n_remain: -51
+[1723774738] eval: [ '':238206 ]
+[1723774738] n_past = 51
+[1723774738] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004 ]
+[1723774738] n_remain: -52
+[1723774738] eval: [ '':236004 ]
+[1723774738] n_past = 52
+[1723774738] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052 ]
+[1723774738] n_remain: -53
+[1723774738] eval: [ '':29052 ]
+[1723774739] n_past = 53
+[1723774739] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493 ]
+[1723774739] n_remain: -54
+[1723774739] eval: [ '':235493 ]
+[1723774739] n_past = 54
+[1723774739] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163 ]
+[1723774739] n_remain: -55
+[1723774739] eval: [ '':40163 ]
+[1723774739] n_past = 55
+[1723774739] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785 ]
+[1723774739] n_remain: -56
+[1723774739] eval: [ '':238785 ]
+[1723774740] n_past = 56
+[1723774740] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232 ]
+[1723774740] n_remain: -57
+[1723774740] eval: [ '':236232 ]
+[1723774740] n_past = 57
+[1723774740] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528 ]
+[1723774740] n_remain: -58
+[1723774740] eval: [ '':140528 ]
+[1723774741] n_past = 58
+[1723774741] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641 ]
+[1723774741] n_remain: -59
+[1723774741] eval: [ '':72641 ]
+[1723774741] n_past = 59
+[1723774741] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240 ]
+[1723774741] n_remain: -60
+[1723774741] eval: [ '':237240 ]
+[1723774742] n_past = 60
+[1723774742] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362 ]
+[1723774742] n_remain: -61
+[1723774742] eval: [ '':235362 ]
+[1723774742] n_past = 61
+[1723774742] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108 ]
+[1723774742] n_remain: -62
+[1723774742] eval: [ '':108 ]
+[1723774742] n_past = 62
+[1723774742] last: [ '<pad>':0, '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287 ]
+[1723774742] n_remain: -63
+[1723774742] eval: [ '*':235287 ]
+[1723774743] n_past = 63
+[1723774743] last: [ '<pad>':0, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231 ]
+[1723774743] n_remain: -64
+[1723774743] eval: [ ' **':5231 ]
+[1723774743] n_past = 64
+[1723774743] last: [ '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136 ]
+[1723774743] n_remain: -65
+[1723774743] eval: [ 'sector':45136 ]
+[1723774744] n_past = 65
+[1723774744] last: [ 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395 ]
+[1723774744] n_remain: -66
+[1723774744] eval: [ ' size':2395 ]
+[1723774744] n_past = 66
+[1723774744] last: [ '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058 ]
+[1723774744] n_remain: -67
+[1723774744] eval: [ ':**':66058 ]
+[1723774744] n_past = 67
+[1723774744] last: [ '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380 ]
+[1723774744] n_remain: -68
+[1723774744] eval: [ ' ':55380 ]
+[1723774745] n_past = 68
+[1723774745] last: [ '':18390, '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728 ]
+[1723774745] n_remain: -69
+[1723774745] eval: [ '':14728 ]
+[1723774745] n_past = 69
+[1723774745] last: [ '':43899, '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199 ]
+[1723774745] n_remain: -70
+[1723774745] eval: [ '':179199 ]
+[1723774746] n_past = 70
+[1723774746] last: [ '':73583, '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132 ]
+[1723774746] n_remain: -71
+[1723774746] eval: [ '':236132 ]
+[1723774749] n_past = 71
+[1723774749] last: [ '':235640, '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206 ]
+[1723774749] n_remain: -72
+[1723774749] eval: [ '':238206 ]
+[1723774753] n_past = 72
+[1723774753] last: [ '':50039, '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004 ]
+[1723774753] n_remain: -73
+[1723774753] eval: [ '':236004 ]
+[1723774755] n_past = 73
+[1723774755] last: [ '':235465, 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052 ]
+[1723774755] n_remain: -74
+[1723774755] eval: [ '':29052 ]
+[1723774760] n_past = 74
+[1723774760] last: [ 'erase':50381, ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493 ]
+[1723774760] n_remain: -75
+[1723774760] eval: [ '':235493 ]
+[1723774761] n_past = 75
+[1723774761] last: [ ' block':3963, ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121 ]
+[1723774761] n_remain: -76
+[1723774761] eval: [ '':5121 ]
+[1723774762] n_past = 76
+[1723774762] last: [ ' size':2395, ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121, '':238974 ]
+[1723774762] n_remain: -77
+[1723774762] eval: [ '':238974 ]
+[1723774762] n_past = 77
+[1723774762] last: [ ' in':575, ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121, '':238974, '':236149 ]
+[1723774762] n_remain: -78
+[1723774762] eval: [ '':236149 ]
+[1723774763] n_past = 78
+[1723774763] last: [ ' units':7845, ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121, '':238974, '':236149, '':160984 ]
+[1723774763] n_remain: -79
+[1723774763] eval: [ '':160984 ]
+[1723774763] n_past = 79
+[1723774763] last: [ ' of':576, ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121, '':238974, '':236149, '':160984, '':235365 ]
+[1723774763] n_remain: -80
+[1723774763] eval: [ '':235365 ]
+[1723774763] n_past = 80
+[1723774763] last: [ ' sector':8843, ' size':2395, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235542, '':238974, '':236149, '':44308, '':235640, '':48778, '':238785, '':236232, '':237240, '':44308, '':235362, ' ':235248, '':110, '**':688, '':49107, ':**':66058, '':109, '*':235287, ' **':5231, 'erase':50381, ' block':3963, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':40163, '':238785, '':236232, '':140528, '':72641, '':237240, '':235362, '':108, '*':235287, ' **':5231, 'sector':45136, ' size':2395, ':**':66058, ' ':55380, '':14728, '':179199, '':236132, '':238206, '':236004, '':29052, '':235493, '':5121, '':238974, '':236149, '':160984, '':235365, '':35760 ]
+[1723774763] n_remain: -81
+[1723774763] eval: [ '':35760 ]
+[1723774764] n_past = 81
+[1723774764] embd_inp.size(): 24, n_consumed: 24
+[1723774764] waiting for user input
+[1723774794] buffer: '将以下英文翻译为中文，无需多余的解释：nothing to do since we do blocking
+'
+[1723774794] formatted: 
+<start_of_turn>user
+将以下英文翻译为中文，无需多余的解释：nothing to do since we do blocking<end_of_turn>
+<start_of_turn>model
+
+[1723774794] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723774794] n_remain: -110
+[1723774794] embd_inp.size(): 54, n_consumed: 24
+[1723774794] eval: [ '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723774799] n_past = 111
+[1723774799] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508 ]
+[1723774799] n_remain: -111
+[1723774799] eval: [ '':38508 ]
+[1723774799] n_past = 112
+[1723774799] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078 ]
+[1723774799] n_remain: -112
+[1723774799] eval: [ '':7078 ]
+[1723774800] n_past = 113
+[1723774800] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240 ]
+[1723774800] n_remain: -113
+[1723774800] eval: [ '':50240 ]
+[1723774800] n_past = 114
+[1723774800] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255 ]
+[1723774800] n_remain: -114
+[1723774800] eval: [ '':218255 ]
+[1723774800] n_past = 115
+[1723774800] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199 ]
+[1723774800] n_remain: -115
+[1723774800] eval: [ '':18199 ]
+[1723774801] n_past = 116
+[1723774801] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365 ]
+[1723774801] n_remain: -116
+[1723774801] eval: [ '':235365 ]
+[1723774801] n_past = 117
+[1723774801] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402 ]
+[1723774801] n_remain: -117
+[1723774801] eval: [ '':131402 ]
+[1723774801] n_past = 118
+[1723774801] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402, '':18490 ]
+[1723774801] n_remain: -118
+[1723774801] eval: [ '':18490 ]
+[1723774802] n_past = 119
+[1723774802] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402, '':18490, '':235362 ]
+[1723774802] n_remain: -119
+[1723774802] eval: [ '':235362 ]
+[1723774802] n_past = 120
+[1723774802] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402, '':18490, '':235362, ' ':235248 ]
+[1723774802] n_remain: -120
+[1723774802] eval: [ ' ':235248 ]
+[1723774803] n_past = 121
+[1723774803] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402, '':18490, '':235362, ' ':235248, '':108 ]
+[1723774803] n_remain: -121
+[1723774803] eval: [ '':108 ]
+[1723774803] n_past = 122
+[1723774803] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'nothing':32657, ' to':577, ' do':749, ' since':2754, ' we':783, ' do':749, ' blocking':35578, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':38508, '':7078, '':50240, '':218255, '':18199, '':235365, '':131402, '':18490, '':235362, ' ':235248, '':108, '<end_of_turn>':107 ]
+[1723774803] n_remain: -122
+[1723774803] found an EOG token
+[1723774803] formatted: <start_of_turn>model
+由于我们采用阻塞方式，无需操作。<end_of_turn>
+
+[1723774803] waiting for user input
+[1723776516] buffer: '将以下英文翻译为中文，无需多余的解释：Lock/Unlock media removal
+'
+[1723776516] formatted: 
+<start_of_turn>user
+将以下英文翻译为中文，无需多余的解释：Lock/Unlock media removal<end_of_turn>
+<start_of_turn>model
+
+[1723776516] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723776516] n_remain: -149
+[1723776516] eval: [ '<end_of_turn>':107 ]
+[1723776517] n_past = 123
+[1723776517] embd_inp.size(): 81, n_consumed: 54
+[1723776517] eval: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723776521] n_past = 150
+[1723776521] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963 ]
+[1723776521] n_remain: -150
+[1723776521] eval: [ '':178963 ]
+[1723776521] n_past = 151
+[1723776521] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283 ]
+[1723776521] n_remain: -151
+[1723776521] eval: [ '/':235283 ]
+[1723776522] n_past = 152
+[1723776522] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015 ]
+[1723776522] n_remain: -152
+[1723776522] eval: [ '':148015 ]
+[1723776522] n_past = 153
+[1723776522] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015, '':47302 ]
+[1723776522] n_remain: -153
+[1723776522] eval: [ '':47302 ]
+[1723776523] n_past = 154
+[1723776523] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015, '':47302, '':128265 ]
+[1723776523] n_remain: -154
+[1723776523] eval: [ '':128265 ]
+[1723776523] n_past = 155
+[1723776523] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015, '':47302, '':128265, ' ':235248 ]
+[1723776523] n_remain: -155
+[1723776523] eval: [ ' ':235248 ]
+[1723776523] n_past = 156
+[1723776523] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015, '':47302, '':128265, ' ':235248, '':108 ]
+[1723776523] n_remain: -156
+[1723776523] eval: [ '':108 ]
+[1723776524] n_past = 157
+[1723776524] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'Lock':14071, '/':235283, 'Unlock':39982, ' media':4562, ' removal':15959, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':178963, '/':235283, '':148015, '':47302, '':128265, ' ':235248, '':108, '<end_of_turn>':107 ]
+[1723776524] n_remain: -157
+[1723776524] found an EOG token
+[1723776524] formatted: <start_of_turn>model
+锁定/解锁媒体移除<end_of_turn>
+
+[1723776524] waiting for user input
+[1723776700] buffer: '将以下英文翻译为中文，无需多余的解释：Eject media
+'
+[1723776700] formatted: 
+<start_of_turn>user
+将以下英文翻译为中文，无需多余的解释：Eject media<end_of_turn>
+<start_of_turn>model
+
+[1723776700] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723776700] n_remain: -182
+[1723776700] eval: [ '<end_of_turn>':107 ]
+[1723776700] n_past = 158
+[1723776700] embd_inp.size(): 106, n_consumed: 81
+[1723776700] eval: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1723776704] n_past = 183
+[1723776704] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':173745 ]
+[1723776704] n_remain: -183
+[1723776704] eval: [ '':173745 ]
+[1723776705] n_past = 184
+[1723776705] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':173745, '':47302 ]
+[1723776705] n_remain: -184
+[1723776705] eval: [ '':47302 ]
+[1723776705] n_past = 185
+[1723776705] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':173745, '':47302, ' ':235248 ]
+[1723776705] n_remain: -185
+[1723776705] eval: [ ' ':235248 ]
+[1723776705] n_past = 186
+[1723776705] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':173745, '':47302, ' ':235248, '':108 ]
+[1723776705] n_remain: -186
+[1723776705] eval: [ '':108 ]
+[1723776706] n_past = 187
+[1723776706] last: [ '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '<pad>':0, '':108, '<start_of_turn>':106, 'user':1645, '':108, '':236007, '':18390, '':43899, '':73583, '':235640, '':50039, '':235365, '':131402, '':235626, '':237113, '':235370, '':49107, '':235465, 'E':235291, 'ject':1079, ' media':4562, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':173745, '':47302, ' ':235248, '':108, '<end_of_turn>':107 ]
+[1723776706] n_remain: -187
+[1723776706] found an EOG token
+[1723776706] formatted: <start_of_turn>model
+弹出媒体<end_of_turn>
+
+[1723776706] waiting for user input
+[1723792316] 
+[1723792316] llama_print_timings:        load time =    3291.99 ms
+[1723792316] llama_print_timings:      sample time =      40.65 ms /    82 runs   (    0.50 ms per token,  2017.27 tokens per second)
+[1723792316] llama_print_timings: prompt eval time =   69675.15 ms /   109 tokens (  639.22 ms per token,     1.56 tokens per second)
+[1723792316] llama_print_timings:        eval time =   44441.92 ms /    78 runs   (  569.77 ms per token,     1.76 tokens per second)
+[1723792316] llama_print_timings:       total time = 17613521.89 ms /   187 tokens

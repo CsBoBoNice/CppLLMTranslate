@@ -1,0 +1,5 @@
+set(TARGET fxxk_datasheet_llama_cpp)
+add_executable(${TARGET} main.cpp cJSON.c cJSON.h TranslationManager.cpp TranslationManager.h)
+install(TARGETS ${TARGET} RUNTIME)
+target_link_libraries(${TARGET} PRIVATE common llama ${CMAKE_THREAD_LIBS_INIT})
+target_compile_features(${TARGET} PRIVATE cxx_std_17)

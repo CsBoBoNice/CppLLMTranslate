@@ -1,0 +1,42 @@
+# GIF解码器
+
+允许在LVGL中使用GIF图像。基于 https://github.com/lecram/gifdec
+
+在`lv_conf.h`中启用`LV_USE_GIF`后，可以使用`lv_gif_create(parent)`来创建一个GIF控件。
+
+`lv_gif_set_src(obj, src)`与`lv_img_set_src`非常相似。它也接受变量（`lv_img_dsc_t`）或文件作为图像源。
+
+## 将GIF文件转换为C数组
+
+要将GIF文件转换为字节数组，请使用[LVGL在线转换器](https://lvgl.io/tools/imageconverter)。选择“Raw”颜色格式和“C array”输出格式。
+
+## 从文件中使用GIF图像
+
+例如：
+```c
+lv_gif_set_src(obj, "S:path/to/example.gif");
+```
+
+请注意，需要注册文件系统驱动程序才能从文件中打开图像。更多信息请阅读[这里](https://docs.lvgl.io/master/overview/file-system.html)，或者在`lv_conf.h`中启用`LV_USE_FS_...`
+
+## 内存要求
+
+为了解码和显示GIF动画，需要以下数量的RAM：
+- `LV_COLOR_DEPTH 8`: 3 x 图像宽度 x 图像高度
+- `LV_COLOR_DEPTH 16`: 4 x 图像宽度 x 图像高度
+- `LV_COLOR_DEPTH 32`: 5 x 图像宽度 x 图像高度
+
+## 示例
+
+```eval_rst
+.. include:: ../../examples/libs/gif/index.rst
+```
+
+## API
+
+```eval_rst
+.. doxygenfile:: lv_gif.h
+  :project: lvgl
+```
+
+

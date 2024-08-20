@@ -1,0 +1,23 @@
+Node identifiers
+****************
+
+To get information about a particular devicetree node, you need a *node
+identifier* for it. This is a just a C macro that refers to the node.
+
+These are the main ways to get a node identifier:
+
+By node label
+   Use :c:func:`DT_NODELABEL()` to get a node identifier from a :ref:`node
+   label <dt-node-labels>`. Node labels are often provided by SoC :file:`.dtsi`
+   files to give nodes names that match the SoC datasheet, like ``i2c1``,
+   ``spi2``, etc.
+
+By alias
+   Use :c:func:`DT_ALIAS()` to get a node identifier for a property of the
+   special ``/aliases`` node. This is sometimes done by applications (like
+   :zephyr:code-sample:`blinky`, which uses the ``led0`` alias) that need to
+   refer to *some* device of a particular type ("the board's user LED") but
+   don't care which one is used.
+
+Two node identifiers which refer to the same node are identical and can be used
+interchangeably.
