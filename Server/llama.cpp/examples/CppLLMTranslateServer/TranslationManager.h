@@ -17,6 +17,7 @@ enum class FileType
     MD,
     RST,
     HPP,
+    CHAT,
     UNKNOWN
 };
 
@@ -43,10 +44,10 @@ public:
     std::filesystem::path directory = "../file_processing/datasheet_input/";              // 原输入路径
     std::filesystem::path directory_output = "../file_processing/datasheet_output/";      // 输出路径
     std::filesystem::path directory_cut = "../file_processing/datasheet_output/docs_cut"; // 切割输出路径
-    std::filesystem::path directory_en = "../file_processing/datasheet_output/docs_en";   // 翻译输出路径(中英对照)
+    std::filesystem::path directory_en = "../file_processing/datasheet_output/docs_en"; // 翻译输出路径(中英对照)
 
     std::string progress_file = "../file_processing/datasheet_output/progress.json"; // 进度文件
-    std::string paragraph_info_file = "../prompts/paragraph_info.json"; // 段落分割阈值文件
+    std::string paragraph_info_file = "../prompts/paragraph_info.json";              // 段落分割阈值文件
 
     std::string nice_input_rst_1 = "../prompts/nice_input_rst_1.txt";   // 优质提问
     std::string nice_output_rst_1 = "../prompts/nice_output_rst_1.txt"; // 优质回答
@@ -68,11 +69,11 @@ public:
     std::string string_chat_suffix_rst;   // 提问后缀
     std::string string_systemInfo_rst;    // 系统提示
 
-    std::string nice_input_md = "../prompts/nice_input_md.txt";         // 优质提问
-    std::string nice_output_md = "../prompts/nice_output_md.txt";       // 优质回答
+    std::string nice_input_md = "../prompts/nice_input_md.txt";   // 优质提问
+    std::string nice_output_md = "../prompts/nice_output_md.txt"; // 优质回答
     std::string chat_prefix_md = "../prompts/chat_prefix_md.txt"; // 提问前缀
-    std::string chat_suffix_md = "../prompts/chat_suffix_md.txt";       // 提问后缀
-    std::string systemInfo_md = "../prompts/systemInfo_md.txt";         // 系统提示
+    std::string chat_suffix_md = "../prompts/chat_suffix_md.txt"; // 提问后缀
+    std::string systemInfo_md = "../prompts/systemInfo_md.txt";   // 系统提示
 
     std::string string_nice_input_md;  // 优质提问
     std::string string_nice_output_md; // 优质回答
@@ -80,17 +81,29 @@ public:
     std::string string_chat_suffix_md; // 提问后缀
     std::string string_systemInfo_md;  // 系统提示
 
-    std::string nice_input_hpp = "../prompts/nice_input_hpp.txt";         // 优质提问
-    std::string nice_output_hpp = "../prompts/nice_output_hpp.txt";       // 优质回答
+    std::string nice_input_hpp = "../prompts/nice_input_hpp.txt";   // 优质提问
+    std::string nice_output_hpp = "../prompts/nice_output_hpp.txt"; // 优质回答
     std::string chat_prefix_hpp = "../prompts/chat_prefix_hpp.txt"; // 提问前缀
-    std::string chat_suffix_hpp = "../prompts/chat_suffix_hpp.txt";       // 提问后缀
-    std::string systemInfo_hpp = "../prompts/systemInfo_hpp.txt";         // 系统提示
+    std::string chat_suffix_hpp = "../prompts/chat_suffix_hpp.txt"; // 提问后缀
+    std::string systemInfo_hpp = "../prompts/systemInfo_hpp.txt";   // 系统提示
 
     std::string string_nice_input_hpp;  // 优质提问
     std::string string_nice_output_hpp; // 优质回答
     std::string string_chat_prefix_hpp; // 提问前缀
     std::string string_chat_suffix_hpp; // 提问后缀
     std::string string_systemInfo_hpp;  // 系统提示
+
+    std::string nice_input_chat = "../prompts/nice_input_chat.txt";   // 优质提问
+    std::string nice_output_chat = "../prompts/nice_output_chat.txt"; // 优质回答
+    std::string chat_prefix_chat = "../prompts/chat_prefix_chat.txt"; // 提问前缀
+    std::string chat_suffix_chat = "../prompts/chat_suffix_chat.txt"; // 提问后缀
+    std::string systemInfo_chat = "../prompts/systemInfo_chat.txt";   // 系统提示
+
+    std::string string_nice_input_chat;  // 优质提问
+    std::string string_nice_output_chat; // 优质回答
+    std::string string_chat_prefix_chat; // 提问前缀
+    std::string string_chat_suffix_chat; // 提问后缀
+    std::string string_systemInfo_chat;  // 系统提示
 
     std::string Separator_cut = "*-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-*";
 

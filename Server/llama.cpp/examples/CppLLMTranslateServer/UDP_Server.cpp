@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-20 11:26:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-20 15:18:15
- * @FilePath: /server/src/UDP_Server/UDP_Server.cpp
+ * @LastEditTime: 2024-08-22 13:53:15
+ * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/UDP_Server.cpp
  */
 #include "UDP_Server.h"
 #include <arpa/inet.h>
@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include "MessageManager.h"
 
 UDP_Server::UDP_Server(int port)
 {
@@ -71,7 +73,41 @@ void UDP_Server::Run()
     }
 }
 
-void UDP_Server::Close()
+void UDP_Server::Close() const
 {
     close(socketfd);
+}
+
+void UDP_Server::Recv_thread()
+{
+    int count_get = 0;
+    while (true) {
+        bzero(buf, sizeof(buf));
+        int ret = recvfrom(socketfd, buf, sizeof(buf), 0, (struct sockaddr *)&recv_addr, &address_len);
+
+        if (ret > 0) {
+            std::string input_str(buf);
+            MessageManager &manager = MessageManager::getInstance();
+            manager.pushToInputQueue(input_str);
+        }
+
+        char *ip = inet_ntoa(recv_addr.sin_addr);
+        int port = ntohs(recv_addr.sin_port);
+
+        std::cout << "[" << ip << "][" << port << "]收到数据 len:" << ret << " " << ++count_get << std::endl;
+        std::cout << "数据[" << strlen(buf) << "][" << buf << "]" << std::endl;
+    }
+}
+
+void UDP_Server::Send_thread()
+{
+    while (true) {
+
+        MessageManager &manager_input = MessageManager::getInstance();
+        std::string message;
+        manager_input.popFromOutputQueue(message);
+
+        sendto(socketfd, message.c_str(), message.length(), 0, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
+        std::cout << "发送数据 " << message.length() << " " << message.c_str() << std::endl;
+    }
 }

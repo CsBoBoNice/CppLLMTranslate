@@ -478,8 +478,13 @@ void TranslationManager::init_systemInfo(void) {
     string_chat_suffix_hpp = readFile(chat_suffix_hpp);
     string_systemInfo_hpp = readFile(systemInfo_hpp);
 
-    printf("\n init_systemInfo success \n");
+    string_nice_input_chat = readFile(nice_input_chat);
+    string_nice_output_chat = readFile(nice_output_chat);
+    string_chat_prefix_chat = readFile(chat_prefix_chat);
+    string_chat_suffix_chat = readFile(chat_suffix_chat);
+    string_systemInfo_chat = readFile(systemInfo_chat);
 
+    printf("\n init_systemInfo success \n");
 }
 
 // 函数用于判断字符串末尾的文件类型

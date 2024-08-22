@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-21 09:10:44
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 14:53:08
- * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/MessageManager.cpp
+ * @LastEditTime: 2024-08-22 14:53:33
+ * @FilePath: /CppLLMTranslate/GUI/lvgl/main/src/MessageManager.cpp
  */
 // MessageManager.cpp
 #include "MessageManager.h"

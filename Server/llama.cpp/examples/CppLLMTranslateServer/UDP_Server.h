@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-20 11:26:18
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-20 11:37:23
- * @FilePath: /server/src/UdpServer/UdpServer.h
+ * @LastEditTime: 2024-08-22 15:04:07
+ * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/UDP_Server.h
  */
 #ifndef UDP_SERVER_H
 #define UDP_SERVER_H
@@ -16,14 +16,19 @@ private:
     struct sockaddr_in server_addr;
     struct sockaddr_in recv_addr;
     socklen_t address_len;
-    char buf[2048];
+    char buf[65507];
+
 
 public:
     UDP_Server(int port);
     ~UDP_Server();
     bool Initialize();
     void Run();
-    void Close();
+    void Close() const;
+
+    void Send_thread();
+    void Recv_thread();
+
 };
 
 #endif // UDP_SERVER_H
