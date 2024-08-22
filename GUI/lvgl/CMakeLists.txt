@@ -16,6 +16,10 @@ set(WORKING_DIRECTORY ${PROJECT_SOURCE_DIR})
 
 find_package(SDL2 REQUIRED SDL2)
 
+find_package(X11 REQUIRED)
+
+
+
 add_compile_definitions($<$<BOOL:${LV_USE_DRAW_SDL}>:LV_USE_DRAW_SDL=1>)
 add_compile_definitions($<$<BOOL:${LV_USE_LIBPNG}>:LV_USE_LIBPNG=1>)
 add_compile_definitions($<$<BOOL:${LV_USE_LIBJPEG_TURBO}>:LV_USE_LIBJPEG_TURBO=1>)
@@ -31,7 +35,11 @@ add_executable(main
                     main/src/MessageManager.h
                     main/src/UDP_Client.cpp
                     main/src/UDP_Client.h
+                    main/src/ubantu_copy.cpp
+                    main/src/ubantu_copy.h
 )
+
+target_link_libraries(main X11::X11)
 
 target_compile_definitions(main PRIVATE LV_CONF_INCLUDE_SIMPLE)
 target_link_libraries(main lvgl lvgl::examples lvgl::demos lvgl::thorvg ${SDL2_LIBRARIES} m pthread)

@@ -1,1 +1,7 @@
-美好的一天
+
+# GIF解码器
+允许在LVGL中使用GIF图像。基于 https://github.com/lecram/gifdec
+
+在`lv_conf.h`中启用`LV_USE_GIF`后，可以使用`lv_gif_create(parent)`来创建一个GIF控件。
+
+`lv_gif_set_src(obj, src)`与`lv_img_set_src`非常相似。它也接受变量（`lv_img_dsc_t`）或文件作为图像源。

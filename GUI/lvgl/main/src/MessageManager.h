@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-21 09:08:21
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 14:53:27
+ * @LastEditTime: 2024-08-22 17:24:18
  * @FilePath: /CppLLMTranslate/GUI/lvgl/main/src/MessageManager.h
  */
 // MessageManager.h
@@ -29,6 +29,8 @@ class MessageManager {
     bool popFromInputQueue(std::string &message);
     // 从输入队列取出消息，不等待
     bool popFromInputQueueNoWait(std::string &message);
+    // 从输入队列中移除消息
+    bool CleanFromInputQueue();
 
     // 将消息加入输出队列
     void pushToOutputQueue(const std::string &message);
@@ -36,6 +38,8 @@ class MessageManager {
     bool popFromOutputQueue(std::string &message);
     // 从输出队列取出消息，不等待
     bool popFromOutputQueueNoWait(std::string &message);
+    // 从输出队列中移除消息
+    bool CleanFromOutputQueue();
 
 
   private:

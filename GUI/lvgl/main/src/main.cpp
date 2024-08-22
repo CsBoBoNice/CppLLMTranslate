@@ -19,6 +19,7 @@
 
 #include "UDP_Client.h"
 #include "MessageManager.h"
+#include "ubantu_copy.h"
 
 #include <cstring>
 
@@ -27,12 +28,22 @@ static lv_display_t *hal_init(int32_t w, int32_t h);
 lv_obj_t *ta_input = NULL;
 lv_obj_t *ta_output = NULL;
 
-void my_timer(lv_timer_t * timer)
+std::string copy_text_last;
+
+void Clipboard_Singleton_timer(lv_timer_t *timer)
+{
+    std::string copy_text = ClipboardSingleton::getInstance().getCopyString();
+    if (copy_text != copy_text_last) {
+        lv_textarea_set_text(ta_input, copy_text.c_str());
+        copy_text_last = copy_text;
+    }
+}
+
+void my_timer(lv_timer_t *timer)
 {
     std::string show_text;
     MessageManager &manager = MessageManager::getInstance();
-    if(manager.popFromInputQueueNoWait(show_text))
-    {
+    if (manager.popFromInputQueueNoWait(show_text)) {
         lv_textarea_add_text(ta_output, show_text.c_str());
     }
 }
@@ -43,7 +54,7 @@ static void translate_button_cb(lv_event_t *e)
 
     if (event_code == LV_EVENT_CLICKED) {
         lv_textarea_set_text(ta_output, "");
- 
+
         std::string src_text = lv_textarea_get_text(ta_input);
 
         MessageManager &manager = MessageManager::getInstance();
@@ -91,7 +102,7 @@ void ui_main()
     lv_obj_add_style(ta_output, &style, 0);
 
     lv_obj_t *translate_but = lv_btn_create(lv_screen_active());
-    lv_obj_set_size(translate_but, 50, 30);
+    lv_obj_set_size(translate_but, 100, 50);
     lv_obj_set_pos(translate_but, 300, 500);
 
     lv_obj_t *ui_label_button = lv_label_create(translate_but);
@@ -100,9 +111,9 @@ void ui_main()
 
     lv_obj_add_event_cb(translate_but, translate_button_cb, LV_EVENT_CLICKED, NULL);
 
+    lv_timer_create(my_timer, 100, NULL);
 
-    lv_timer_create(my_timer, 100,  NULL);
-
+    lv_timer_create(Clipboard_Singleton_timer, 100, NULL);
 }
 
 UDP_Client *client_p = nullptr;
@@ -115,6 +126,12 @@ void UDP_Client_Recv_thread()
 void UDP_Client_Send_thread()
 {
     client_p->Send_thread();
+}
+
+void Clipboard_Singleton_thread()
+{
+    // 获取单例实例并启动剪贴板监控
+    ClipboardSingleton::getInstance().run();
 }
 
 int main(int argc, char **argv)
@@ -135,8 +152,11 @@ int main(int argc, char **argv)
     std::thread t_UDP_Client_Recv_thread(UDP_Client_Recv_thread);
     std::thread t_UDP_Client_Send_thread(UDP_Client_Send_thread);
 
+    std::thread t_Clipboard_Singleton_thread(Clipboard_Singleton_thread);
+
     t_UDP_Client_Recv_thread.detach();
     t_UDP_Client_Send_thread.detach();
+    t_Clipboard_Singleton_thread.detach();
 
     ui_main();
 

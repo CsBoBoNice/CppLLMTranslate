@@ -1,119 +1,119 @@
-[1724313380] Log start
-[1724313380] Cmd: ./build/bin/CppLLMTranslateServer -m /home/csbobo/models/gemma-2-2B-it-Q8_0.gguf -p hi -t 4 -c 8192 -n -1 -s 555 --temp 0 --color -cnv --no-escape
-[1724313380] TranslationChat: build = 97 (f17153f)
-[1724313380] TranslationChat: built with cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0 for x86_64-linux-gnu
-[1724313380] TranslationChat: seed  = 555
-[1724313380] TranslationChat: llama backend init
-[1724313380] TranslationChat: load the model and apply lora adapter, if any
-[1724313380] llama_model_loader: loaded meta data with 35 key-value pairs and 288 tensors from /home/csbobo/models/gemma-2-2B-it-Q8_0.gguf (version GGUF V3 (latest))
-[1724313380] llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
-[1724313380] llama_model_loader: - kv   0:                       general.architecture str              = gemma2
-[1724313380] llama_model_loader: - kv   1:                               general.type str              = model
-[1724313380] llama_model_loader: - kv   2:                               general.name str              = Gemma 2 2b It
-[1724313380] llama_model_loader: - kv   3:                           general.finetune str              = it
-[1724313380] llama_model_loader: - kv   4:                           general.basename str              = gemma-2
-[1724313380] llama_model_loader: - kv   5:                         general.size_label str              = 2B
-[1724313380] llama_model_loader: - kv   6:                            general.license str              = gemma
-[1724313380] llama_model_loader: - kv   7:                               general.tags arr[str,2]       = ["conversational", "text-generation"]
-[1724313380] llama_model_loader: - kv   8:                      gemma2.context_length u32              = 8192
-[1724313380] llama_model_loader: - kv   9:                    gemma2.embedding_length u32              = 2304
-[1724313380] llama_model_loader: - kv  10:                         gemma2.block_count u32              = 26
-[1724313380] llama_model_loader: - kv  11:                 gemma2.feed_forward_length u32              = 9216
-[1724313380] llama_model_loader: - kv  12:                gemma2.attention.head_count u32              = 8
-[1724313380] llama_model_loader: - kv  13:             gemma2.attention.head_count_kv u32              = 4
-[1724313380] llama_model_loader: - kv  14:    gemma2.attention.layer_norm_rms_epsilon f32              = 0.000001
-[1724313380] llama_model_loader: - kv  15:                gemma2.attention.key_length u32              = 256
-[1724313380] llama_model_loader: - kv  16:              gemma2.attention.value_length u32              = 256
-[1724313380] llama_model_loader: - kv  17:                          general.file_type u32              = 7
-[1724313380] llama_model_loader: - kv  18:              gemma2.attn_logit_softcapping f32              = 50.000000
-[1724313380] llama_model_loader: - kv  19:             gemma2.final_logit_softcapping f32              = 30.000000
-[1724313380] llama_model_loader: - kv  20:            gemma2.attention.sliding_window u32              = 4096
-[1724313380] llama_model_loader: - kv  21:                       tokenizer.ggml.model str              = llama
-[1724313380] llama_model_loader: - kv  22:                         tokenizer.ggml.pre str              = default
-[1724313380] llama_model_loader: - kv  23:                      tokenizer.ggml.tokens arr[str,256000]  = ["<pad>", "<eos>", "<bos>", "<unk>", ...
-[1724313380] llama_model_loader: - kv  24:                      tokenizer.ggml.scores arr[f32,256000]  = [-1000.000000, -1000.000000, -1000.00...
-[1724313380] llama_model_loader: - kv  25:                  tokenizer.ggml.token_type arr[i32,256000]  = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
-[1724313380] llama_model_loader: - kv  26:                tokenizer.ggml.bos_token_id u32              = 2
-[1724313380] llama_model_loader: - kv  27:                tokenizer.ggml.eos_token_id u32              = 1
-[1724313380] llama_model_loader: - kv  28:            tokenizer.ggml.unknown_token_id u32              = 3
-[1724313380] llama_model_loader: - kv  29:            tokenizer.ggml.padding_token_id u32              = 0
-[1724313380] llama_model_loader: - kv  30:               tokenizer.ggml.add_bos_token bool             = true
-[1724313380] llama_model_loader: - kv  31:               tokenizer.ggml.add_eos_token bool             = false
-[1724313380] llama_model_loader: - kv  32:                    tokenizer.chat_template str              = {{ bos_token }}{% if messages[0]['rol...
-[1724313380] llama_model_loader: - kv  33:            tokenizer.ggml.add_space_prefix bool             = false
-[1724313380] llama_model_loader: - kv  34:               general.quantization_version u32              = 2
-[1724313380] llama_model_loader: - type  f32:  105 tensors
-[1724313380] llama_model_loader: - type q8_0:  183 tensors
-[1724313380] llm_load_vocab: special tokens cache size = 249
-[1724313380] llm_load_vocab: token to piece cache size = 1.6014 MB
-[1724313380] llm_load_print_meta: format           = GGUF V3 (latest)
-[1724313380] llm_load_print_meta: arch             = gemma2
-[1724313380] llm_load_print_meta: vocab type       = SPM
-[1724313380] llm_load_print_meta: n_vocab          = 256000
-[1724313380] llm_load_print_meta: n_merges         = 0
-[1724313380] llm_load_print_meta: vocab_only       = 0
-[1724313380] llm_load_print_meta: n_ctx_train      = 8192
-[1724313380] llm_load_print_meta: n_embd           = 2304
-[1724313380] llm_load_print_meta: n_layer          = 26
-[1724313380] llm_load_print_meta: n_head           = 8
-[1724313380] llm_load_print_meta: n_head_kv        = 4
-[1724313380] llm_load_print_meta: n_rot            = 256
-[1724313380] llm_load_print_meta: n_swa            = 4096
-[1724313380] llm_load_print_meta: n_embd_head_k    = 256
-[1724313380] llm_load_print_meta: n_embd_head_v    = 256
-[1724313380] llm_load_print_meta: n_gqa            = 2
-[1724313380] llm_load_print_meta: n_embd_k_gqa     = 1024
-[1724313380] llm_load_print_meta: n_embd_v_gqa     = 1024
-[1724313380] llm_load_print_meta: f_norm_eps       = 0.0e+00
-[1724313380] llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
-[1724313380] llm_load_print_meta: f_clamp_kqv      = 0.0e+00
-[1724313380] llm_load_print_meta: f_max_alibi_bias = 0.0e+00
-[1724313380] llm_load_print_meta: f_logit_scale    = 0.0e+00
-[1724313380] llm_load_print_meta: n_ff             = 9216
-[1724313380] llm_load_print_meta: n_expert         = 0
-[1724313380] llm_load_print_meta: n_expert_used    = 0
-[1724313380] llm_load_print_meta: causal attn      = 1
-[1724313380] llm_load_print_meta: pooling type     = 0
-[1724313380] llm_load_print_meta: rope type        = 2
-[1724313380] llm_load_print_meta: rope scaling     = linear
-[1724313380] llm_load_print_meta: freq_base_train  = 10000.0
-[1724313380] llm_load_print_meta: freq_scale_train = 1
-[1724313380] llm_load_print_meta: n_ctx_orig_yarn  = 8192
-[1724313380] llm_load_print_meta: rope_finetuned   = unknown
-[1724313380] llm_load_print_meta: ssm_d_conv       = 0
-[1724313380] llm_load_print_meta: ssm_d_inner      = 0
-[1724313380] llm_load_print_meta: ssm_d_state      = 0
-[1724313380] llm_load_print_meta: ssm_dt_rank      = 0
-[1724313380] llm_load_print_meta: model type       = 2B
-[1724313380] llm_load_print_meta: model ftype      = Q8_0
-[1724313380] llm_load_print_meta: model params     = 2.61 B
-[1724313380] llm_load_print_meta: model size       = 2.59 GiB (8.50 BPW) 
-[1724313380] llm_load_print_meta: general.name     = Gemma 2 2b It
-[1724313380] llm_load_print_meta: BOS token        = 2 '<bos>'
-[1724313380] llm_load_print_meta: EOS token        = 1 '<eos>'
-[1724313380] llm_load_print_meta: UNK token        = 3 '<unk>'
-[1724313380] llm_load_print_meta: PAD token        = 0 '<pad>'
-[1724313380] llm_load_print_meta: LF token         = 227 '<0x0A>'
-[1724313380] llm_load_print_meta: EOT token        = 107 '<end_of_turn>'
-[1724313380] llm_load_print_meta: max token length = 48
-[1724313380] llm_load_tensors: ggml ctx size =    0.13 MiB
-[1724313380] llm_load_tensors:        CPU buffer size =  2649.74 MiB
-[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] .[1724313380] 
-[1724313380] llama_new_context_with_model: n_ctx      = 8192
-[1724313380] llama_new_context_with_model: n_batch    = 2048
-[1724313380] llama_new_context_with_model: n_ubatch   = 512
-[1724313380] llama_new_context_with_model: flash_attn = 0
-[1724313380] llama_new_context_with_model: freq_base  = 10000.0
-[1724313380] llama_new_context_with_model: freq_scale = 1
-[1724313381] llama_kv_cache_init:        CPU KV buffer size =   832.00 MiB
-[1724313381] llama_new_context_with_model: KV self size  =  832.00 MiB, K (f16):  416.00 MiB, V (f16):  416.00 MiB
-[1724313381] llama_new_context_with_model:        CPU  output buffer size =     0.98 MiB
-[1724313381] llama_new_context_with_model:        CPU compute buffer size =   504.50 MiB
-[1724313381] llama_new_context_with_model: graph nodes  = 1050
-[1724313381] llama_new_context_with_model: graph splits = 1
-[1724313381] warming up the model with an empty run
-[1724313381] n_ctx: 8192
-[1724313381] TranslationChat: chat template example: <start_of_turn>user
+[1724318720] Log start
+[1724318720] Cmd: ./build/bin/CppLLMTranslateServer -m /home/csbobo/models/gemma-2-2B-it-Q8_0.gguf -p hi -t 4 -c 8192 -n -1 -s 555 --temp 0 --color -cnv --no-escape
+[1724318720] TranslationChat: build = 97 (f17153f)
+[1724318720] TranslationChat: built with cc (Ubuntu 11.4.0-1ubuntu1~22.04) 11.4.0 for x86_64-linux-gnu
+[1724318720] TranslationChat: seed  = 555
+[1724318720] TranslationChat: llama backend init
+[1724318720] TranslationChat: load the model and apply lora adapter, if any
+[1724318720] llama_model_loader: loaded meta data with 35 key-value pairs and 288 tensors from /home/csbobo/models/gemma-2-2B-it-Q8_0.gguf (version GGUF V3 (latest))
+[1724318720] llama_model_loader: Dumping metadata keys/values. Note: KV overrides do not apply in this output.
+[1724318720] llama_model_loader: - kv   0:                       general.architecture str              = gemma2
+[1724318720] llama_model_loader: - kv   1:                               general.type str              = model
+[1724318720] llama_model_loader: - kv   2:                               general.name str              = Gemma 2 2b It
+[1724318720] llama_model_loader: - kv   3:                           general.finetune str              = it
+[1724318720] llama_model_loader: - kv   4:                           general.basename str              = gemma-2
+[1724318720] llama_model_loader: - kv   5:                         general.size_label str              = 2B
+[1724318720] llama_model_loader: - kv   6:                            general.license str              = gemma
+[1724318720] llama_model_loader: - kv   7:                               general.tags arr[str,2]       = ["conversational", "text-generation"]
+[1724318720] llama_model_loader: - kv   8:                      gemma2.context_length u32              = 8192
+[1724318720] llama_model_loader: - kv   9:                    gemma2.embedding_length u32              = 2304
+[1724318720] llama_model_loader: - kv  10:                         gemma2.block_count u32              = 26
+[1724318720] llama_model_loader: - kv  11:                 gemma2.feed_forward_length u32              = 9216
+[1724318720] llama_model_loader: - kv  12:                gemma2.attention.head_count u32              = 8
+[1724318720] llama_model_loader: - kv  13:             gemma2.attention.head_count_kv u32              = 4
+[1724318720] llama_model_loader: - kv  14:    gemma2.attention.layer_norm_rms_epsilon f32              = 0.000001
+[1724318720] llama_model_loader: - kv  15:                gemma2.attention.key_length u32              = 256
+[1724318720] llama_model_loader: - kv  16:              gemma2.attention.value_length u32              = 256
+[1724318720] llama_model_loader: - kv  17:                          general.file_type u32              = 7
+[1724318720] llama_model_loader: - kv  18:              gemma2.attn_logit_softcapping f32              = 50.000000
+[1724318720] llama_model_loader: - kv  19:             gemma2.final_logit_softcapping f32              = 30.000000
+[1724318720] llama_model_loader: - kv  20:            gemma2.attention.sliding_window u32              = 4096
+[1724318720] llama_model_loader: - kv  21:                       tokenizer.ggml.model str              = llama
+[1724318720] llama_model_loader: - kv  22:                         tokenizer.ggml.pre str              = default
+[1724318720] llama_model_loader: - kv  23:                      tokenizer.ggml.tokens arr[str,256000]  = ["<pad>", "<eos>", "<bos>", "<unk>", ...
+[1724318720] llama_model_loader: - kv  24:                      tokenizer.ggml.scores arr[f32,256000]  = [-1000.000000, -1000.000000, -1000.00...
+[1724318720] llama_model_loader: - kv  25:                  tokenizer.ggml.token_type arr[i32,256000]  = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+[1724318720] llama_model_loader: - kv  26:                tokenizer.ggml.bos_token_id u32              = 2
+[1724318720] llama_model_loader: - kv  27:                tokenizer.ggml.eos_token_id u32              = 1
+[1724318720] llama_model_loader: - kv  28:            tokenizer.ggml.unknown_token_id u32              = 3
+[1724318720] llama_model_loader: - kv  29:            tokenizer.ggml.padding_token_id u32              = 0
+[1724318720] llama_model_loader: - kv  30:               tokenizer.ggml.add_bos_token bool             = true
+[1724318720] llama_model_loader: - kv  31:               tokenizer.ggml.add_eos_token bool             = false
+[1724318720] llama_model_loader: - kv  32:                    tokenizer.chat_template str              = {{ bos_token }}{% if messages[0]['rol...
+[1724318720] llama_model_loader: - kv  33:            tokenizer.ggml.add_space_prefix bool             = false
+[1724318720] llama_model_loader: - kv  34:               general.quantization_version u32              = 2
+[1724318720] llama_model_loader: - type  f32:  105 tensors
+[1724318720] llama_model_loader: - type q8_0:  183 tensors
+[1724318720] llm_load_vocab: special tokens cache size = 249
+[1724318720] llm_load_vocab: token to piece cache size = 1.6014 MB
+[1724318720] llm_load_print_meta: format           = GGUF V3 (latest)
+[1724318720] llm_load_print_meta: arch             = gemma2
+[1724318720] llm_load_print_meta: vocab type       = SPM
+[1724318720] llm_load_print_meta: n_vocab          = 256000
+[1724318720] llm_load_print_meta: n_merges         = 0
+[1724318720] llm_load_print_meta: vocab_only       = 0
+[1724318720] llm_load_print_meta: n_ctx_train      = 8192
+[1724318720] llm_load_print_meta: n_embd           = 2304
+[1724318720] llm_load_print_meta: n_layer          = 26
+[1724318720] llm_load_print_meta: n_head           = 8
+[1724318720] llm_load_print_meta: n_head_kv        = 4
+[1724318720] llm_load_print_meta: n_rot            = 256
+[1724318720] llm_load_print_meta: n_swa            = 4096
+[1724318720] llm_load_print_meta: n_embd_head_k    = 256
+[1724318720] llm_load_print_meta: n_embd_head_v    = 256
+[1724318720] llm_load_print_meta: n_gqa            = 2
+[1724318720] llm_load_print_meta: n_embd_k_gqa     = 1024
+[1724318720] llm_load_print_meta: n_embd_v_gqa     = 1024
+[1724318720] llm_load_print_meta: f_norm_eps       = 0.0e+00
+[1724318720] llm_load_print_meta: f_norm_rms_eps   = 1.0e-06
+[1724318720] llm_load_print_meta: f_clamp_kqv      = 0.0e+00
+[1724318720] llm_load_print_meta: f_max_alibi_bias = 0.0e+00
+[1724318720] llm_load_print_meta: f_logit_scale    = 0.0e+00
+[1724318720] llm_load_print_meta: n_ff             = 9216
+[1724318720] llm_load_print_meta: n_expert         = 0
+[1724318720] llm_load_print_meta: n_expert_used    = 0
+[1724318720] llm_load_print_meta: causal attn      = 1
+[1724318720] llm_load_print_meta: pooling type     = 0
+[1724318720] llm_load_print_meta: rope type        = 2
+[1724318720] llm_load_print_meta: rope scaling     = linear
+[1724318720] llm_load_print_meta: freq_base_train  = 10000.0
+[1724318720] llm_load_print_meta: freq_scale_train = 1
+[1724318720] llm_load_print_meta: n_ctx_orig_yarn  = 8192
+[1724318720] llm_load_print_meta: rope_finetuned   = unknown
+[1724318720] llm_load_print_meta: ssm_d_conv       = 0
+[1724318720] llm_load_print_meta: ssm_d_inner      = 0
+[1724318720] llm_load_print_meta: ssm_d_state      = 0
+[1724318720] llm_load_print_meta: ssm_dt_rank      = 0
+[1724318720] llm_load_print_meta: model type       = 2B
+[1724318720] llm_load_print_meta: model ftype      = Q8_0
+[1724318720] llm_load_print_meta: model params     = 2.61 B
+[1724318720] llm_load_print_meta: model size       = 2.59 GiB (8.50 BPW) 
+[1724318720] llm_load_print_meta: general.name     = Gemma 2 2b It
+[1724318720] llm_load_print_meta: BOS token        = 2 '<bos>'
+[1724318720] llm_load_print_meta: EOS token        = 1 '<eos>'
+[1724318720] llm_load_print_meta: UNK token        = 3 '<unk>'
+[1724318720] llm_load_print_meta: PAD token        = 0 '<pad>'
+[1724318720] llm_load_print_meta: LF token         = 227 '<0x0A>'
+[1724318720] llm_load_print_meta: EOT token        = 107 '<end_of_turn>'
+[1724318720] llm_load_print_meta: max token length = 48
+[1724318720] llm_load_tensors: ggml ctx size =    0.13 MiB
+[1724318720] llm_load_tensors:        CPU buffer size =  2649.74 MiB
+[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] .[1724318720] 
+[1724318720] llama_new_context_with_model: n_ctx      = 8192
+[1724318720] llama_new_context_with_model: n_batch    = 2048
+[1724318720] llama_new_context_with_model: n_ubatch   = 512
+[1724318720] llama_new_context_with_model: flash_attn = 0
+[1724318720] llama_new_context_with_model: freq_base  = 10000.0
+[1724318720] llama_new_context_with_model: freq_scale = 1
+[1724318721] llama_kv_cache_init:        CPU KV buffer size =   832.00 MiB
+[1724318721] llama_new_context_with_model: KV self size  =  832.00 MiB, K (f16):  416.00 MiB, V (f16):  416.00 MiB
+[1724318721] llama_new_context_with_model:        CPU  output buffer size =     0.98 MiB
+[1724318721] llama_new_context_with_model:        CPU compute buffer size =   504.50 MiB
+[1724318721] llama_new_context_with_model: graph nodes  = 1050
+[1724318721] llama_new_context_with_model: graph splits = 1
+[1724318721] warming up the model with an empty run
+[1724318721] n_ctx: 8192
+[1724318721] TranslationChat: chat template example: <start_of_turn>user
 You are a helpful assistant
 
 Hello<end_of_turn>
@@ -123,43 +123,48 @@ Hi there<end_of_turn>
 How are you?<end_of_turn>
 <start_of_turn>model
 
-[1724313381] 
-[1724313381] system_info: n_threads = 4 / 4 | AVX = 1 | AVX_VNNI = 0 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | AVX512_BF16 = 0 | FMA = 1 | NEON = 0 | SVE = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 0 | SSE3 = 1 | SSSE3 = 1 | VSX = 0 | MATMUL_INT8 = 0 | LLAMAFILE = 1 | 
-[1724313381] add_bos: 1
-[1724313381] formatted: 
-[1724313381] tokenize the prompt
-[1724313381] prompt: ""
-[1724313381] tokens: [ '<bos>':2 ]
-[1724313381] recalculate the cached logits (check): embd_inp.empty() false, n_matching_session_tokens 0, embd_inp.size() 1, session_tokens.size() 0, embd_inp.size() 1
-[1724313381] TranslationChat: interactive mode on.
-[1724313381] sampling: 
+[1724318721] 
+[1724318721] system_info: n_threads = 4 / 4 | AVX = 1 | AVX_VNNI = 0 | AVX2 = 1 | AVX512 = 0 | AVX512_VBMI = 0 | AVX512_VNNI = 0 | AVX512_BF16 = 0 | FMA = 1 | NEON = 0 | SVE = 0 | ARM_FMA = 0 | F16C = 1 | FP16_VA = 0 | WASM_SIMD = 0 | BLAS = 0 | SSE3 = 1 | SSSE3 = 1 | VSX = 0 | MATMUL_INT8 = 0 | LLAMAFILE = 1 | 
+[1724318721] add_bos: 1
+[1724318721] formatted: 
+[1724318721] tokenize the prompt
+[1724318721] prompt: ""
+[1724318721] tokens: [ '<bos>':2 ]
+[1724318721] recalculate the cached logits (check): embd_inp.empty() false, n_matching_session_tokens 0, embd_inp.size() 1, session_tokens.size() 0, embd_inp.size() 1
+[1724318721] TranslationChat: interactive mode on.
+[1724318721] sampling: 
 	repeat_last_n = 64, repeat_penalty = 1.000, frequency_penalty = 0.000, presence_penalty = 0.000
 	top_k = 40, tfs_z = 1.000, top_p = 0.950, min_p = 0.050, typical_p = 1.000, temp = 0.000
 	mirostat = 0, mirostat_lr = 0.100, mirostat_ent = 5.000
-[1724313381] sampling order: 
+[1724318721] sampling order: 
 CFG -> Penalties -> top_k -> tfs_z -> typical_p -> top_p -> min_p -> temperature 
-[1724313381] generate: n_ctx = 8192, n_batch = 2048, n_predict = -1, n_keep = 1
-[1724313381] 
+[1724318721] generate: n_ctx = 8192, n_batch = 2048, n_predict = -1, n_keep = 1
+[1724318721] 
 
-[1724313381] == Running in interactive mode. ==
-[1724313381]  - Press Ctrl+C to interject at any time.
-[1724313381]  - Press Return to return control to the AI.
+[1724318721] == Running in interactive mode. ==
+[1724318721]  - Press Ctrl+C to interject at any time.
+[1724318721]  - Press Return to return control to the AI.
  - To return control without starting a new line, end your input with '/'.
  - If you want to submit another line, end your input with '\'.
 
-[1724313381] embd_inp.size(): 1, n_consumed: 0
-[1724313381] eval: [ '<bos>':2 ]
-[1724313384] n_past = 1
-[1724313384] embd_inp.size(): 1, n_consumed: 1
-[1724313384] waiting for user input
-[1724313403] formatted: 
-[1724313403] formatted: <start_of_turn>user
-- Role: 专业翻译员
-- Background: 用户需要将英文文档翻译成简体中文，并且需要保持文档的原始格式和专业术语的准确性。
-- OutputFormat: 翻译后仅输出翻译内容，无需其他解释说明。
+[1724318721] embd_inp.size(): 1, n_consumed: 0
+[1724318721] eval: [ '<bos>':2 ]
+[1724318722] n_past = 1
+[1724318722] embd_inp.size(): 1, n_consumed: 1
+[1724318722] waiting for user input
+[1724318734] formatted: 
+[1724318734] formatted: <start_of_turn>user
+你是专业翻译员，你需要将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。
 
 [待翻译内容开始]
-nice day
+
+# GIF decoder
+Allow using GIF images in LVGL. Based on https://github.com/lecram/gifdec
+
+When enabled in `lv_conf.h` with `LV_USE_GIF` `lv_gif_create(parent)` can be used to create a gif widget.
+
+`lv_gif_set_src(obj, src)` works very similarly to `lv_img_set_src`. As source, it also accepts images as variables (`lv_img_dsc_t`) or files.
+
 [待翻译内容结束]
 
 开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
@@ -167,22 +172,27 @@ nice day
 [优质翻译开始]<end_of_turn>
 <start_of_turn>model
 
-[1724313403] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
+[1724318734] formatted: <start_of_turn>model
+# GIF解码器
+允许在LVGL中使用GIF图像。基于 https://github.com/lecram/gifdec
 
-[1724313403] buffer: '
+在`lv_conf.h`中启用`LV_USE_GIF`后，可以使用`lv_gif_create(parent)`来创建一个GIF控件。
+
+`lv_gif_set_src(obj, src)`与`lv_img_set_src`非常相似。它也接受变量（`lv_img_dsc_t`）或文件作为图像源。<end_of_turn>
+
+[1724318734] buffer: '
 [待翻译内容开始]
-home
+InputQueue
 [待翻译内容结束]
 
 开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
 
 [优质翻译开始]
 '
-[1724313403] formatted: 
+[1724318734] formatted: 
 <start_of_turn>user
 [待翻译内容开始]
-home
+InputQueue
 [待翻译内容结束]
 
 开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
@@ -190,311 +200,31 @@ home
 [优质翻译开始]<end_of_turn>
 <start_of_turn>model
 
-[1724313403] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313403] n_remain: -48
-[1724313403] embd_inp.size(): 156, n_consumed: 0
-[1724313403] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '-':235290, ' Role':19912, ':':235292, ' ':229913, '':73583, '':236382, '':108, '-':235290, ' Background':25493, ':':235292, ' ':64095, '':11213, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, '':235365, '':38723, '':11213, '':39876, '':82024, '':235370, '':34992, '':41595, '':235581, '':34380, '':236491, '':236409, '':235370, '':101046, '':235753, '':235362, '':108, '-':235290, ' Output':16230, 'Format':5699, ':':235292, ' ':235248, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'nice':16606, ' day':1744, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313412] n_past = 157
-[1724313412] last: [ '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235618 ]
-[1724313412] n_remain: -49
-[1724313412] eval: [ '':235618 ]
-[1724313413] n_past = 158
-[1724313413] last: [ '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235618, ' ':235248 ]
-[1724313413] n_remain: -50
-[1724313413] eval: [ ' ':235248 ]
-[1724313413] n_past = 159
-[1724313413] last: [ '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235618, ' ':235248, '':108 ]
-[1724313413] n_remain: -51
-[1724313413] eval: [ '':108 ]
-[1724313413] n_past = 160
-[1724313413] last: [ ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'home':6274, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':235618, ' ':235248, '':108, '<end_of_turn>':107 ]
-[1724313413] n_remain: -52
-[1724313413] found an EOG token
-[1724313413] formatted: <start_of_turn>model
-家<end_of_turn>
+[1724318734] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1724318734] n_remain: -49
+[1724318734] embd_inp.size(): 345, n_consumed: 0
+[1724318734] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '':51641, '':34380, '':73583, '':236382, '':235365, '':191316, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, ',':235269, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':109, '#':235345, ' GIF':58128, ' decoder':63023, '':108, 'Allow':18437, ' using':2177, ' GIF':58128, ' images':5191, ' in':575, ' LV':48383, 'GL':6380, '.':235265, ' Based':19609, ' on':611, ' https':4009, '://':1336, 'github':8384, '.':235265, 'com':872, '/':235283, 'lec':5755, 'ram':2293, '/':235283, 'gif':16247, 'dec':11534, '':109, 'When':4115, ' enabled':16734, ' in':575, ' `':4103, 'lv':23874, '_':235298, 'conf':7363, '.':235265, 'h':235259, '`':235376, ' with':675, ' `':4103, 'LV':18299, '_':235298, 'USE':10254, '_':235298, 'GIF':79962, '`':235376, ' `':4103, 'lv':23874, '_':235298, 'gif':16247, '_':235298, 'create':3159, '(':235278, 'parent':3474, ')`':68409, ' can':798, ' be':614, ' used':1671, ' to':577, ' create':3104, ' a':476, ' gif':9138, ' widget':24820, '.':235265, '':109, '`':235376, 'lv':23874, '_':235298, 'gif':16247, '_':235298, 'set':881, '_':235298, 'src':5379, '(':235278, 'obj':4627, ',':235269, ' src':6306, ')`':68409, ' works':3598, ' very':1508, ' similarly':34330, ' to':577, ' `':4103, 'lv':23874, '_':235298, 'img':3030, '_':235298, 'set':881, '_':235298, 'src':5379, '`.':27271, ' As':1877, ' source':4303, ',':235269, ' it':665, ' also':1170, ' accepts':44275, ' images':5191, ' as':685, ' variables':9404, ' (`':83747, 'lv':23874, '_':235298, 'img':3030, '_':235298, 'dsc':93604, '_':235298, 't':235251, '`)':28581, ' or':689, ' files':6630, '.':235265, '':109, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '#':235345, ' GIF':58128, '':233526, '':235986, '':108, '':64032, '':235473, 'LV':18299, 'GL':6380, '':235493, '':7060, 'GIF':79962, '':82101, '':235362, '':71223, ' https':4009, '://':1336, 'github':8384, '.':235265, 'com':872, '/':235283, 'lec':5755, 'ram':2293, '/':235283, 'gif':16247, 'dec':11534, '':109, '':235473, '`':235376, 'lv':23874, '_':235298, 'conf':7363, '.':235265, 'h':235259, '`':235376, '':235493, '':130491, '`':235376, 'LV':18299, '_':235298, 'USE':10254, '_':235298, 'GIF':79962, '`':235376, '':235725, '':235365, '':151048, '`':235376, 'lv':23874, '_':235298, 'gif':16247, '_':235298, 'create':3159, '(':235278, 'parent':3474, ')`':68409, '':235547, '':164460, 'GIF':79962, '':119763, '':235362, '':109, '`':235376, 'lv':23874, '_':235298, 'gif':16247, '_':235298, 'set':881, '_':235298, 'src':5379, '(':235278, 'obj':4627, ',':235269, ' src':6306, ')`':68409, '':235971, '`':235376, 'lv':23874, '_':235298, 'img':3030, '_':235298, 'set':881, '_':235298, 'src':5379, '`':235376, '':13585, '':110768, '':235362, '':236380, '':235623, '':37839, '':61196, '':235538, '`':235376, 'lv':23874, '_':235298, 'img':3030, '_':235298, 'dsc':93604, '_':235298, 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
+[1724318757] n_past = 346
+[1724318757] last: [ 'img':3030, '_':235298, 'dsc':93604, '_':235298, 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':29672 ]
+[1724318757] n_remain: -50
+[1724318757] eval: [ '':29672 ]
+[1724318757] n_past = 347
+[1724318757] last: [ '_':235298, 'dsc':93604, '_':235298, 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':29672, '':109856 ]
+[1724318757] n_remain: -51
+[1724318757] eval: [ '':109856 ]
+[1724318758] n_past = 348
+[1724318758] last: [ 'dsc':93604, '_':235298, 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':29672, '':109856, ' ':235248 ]
+[1724318758] n_remain: -52
+[1724318758] eval: [ ' ':235248 ]
+[1724318759] n_past = 349
+[1724318759] last: [ '_':235298, 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':29672, '':109856, ' ':235248, '':108 ]
+[1724318759] n_remain: -53
+[1724318759] eval: [ '':108 ]
+[1724318760] n_past = 350
+[1724318760] last: [ 't':235251, '`':235376, '':235536, '':236132, '':14275, '':26165, '':82101, '':236227, '':235362, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'Input':3678, 'Queue':11925, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':29672, '':109856, ' ':235248, '':108, '<end_of_turn>':107 ]
+[1724318760] n_remain: -54
+[1724318760] found an EOG token
+[1724318760] formatted: <start_of_turn>model
+输入队列<end_of_turn>
 
-[1724313413] waiting for user input
-[1724313413] formatted: 
-[1724313413] formatted: <start_of_turn>user
-- Role: 专业翻译员
-- Background: 用户需要将英文文档翻译成简体中文，并且需要保持文档的原始格式和专业术语的准确性。
-- OutputFormat: 翻译后仅输出翻译内容，无需其他解释说明。
-
-[待翻译内容开始]
-nice day
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313413] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
-
-[1724313413] buffer: '
-[待翻译内容开始]
-make
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]
-'
-[1724313413] formatted: 
-<start_of_turn>user
-[待翻译内容开始]
-make
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313413] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313413] n_remain: -48
-[1724313413] eval: [ '<end_of_turn>':107 ]
-[1724313415] n_past = 2
-[1724313415] embd_inp.size(): 156, n_consumed: 0
-[1724313415] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '-':235290, ' Role':19912, ':':235292, ' ':229913, '':73583, '':236382, '':108, '-':235290, ' Background':25493, ':':235292, ' ':64095, '':11213, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, '':235365, '':38723, '':11213, '':39876, '':82024, '':235370, '':34992, '':41595, '':235581, '':34380, '':236491, '':236409, '':235370, '':101046, '':235753, '':235362, '':108, '-':235290, ' Output':16230, 'Format':5699, ':':235292, ' ':235248, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'nice':16606, ' day':1744, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313423] n_past = 158
-[1724313423] last: [ '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':75452 ]
-[1724313423] n_remain: -49
-[1724313423] eval: [ ' ':75452 ]
-[1724313424] n_past = 159
-[1724313424] last: [ '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':75452, ' ':235248 ]
-[1724313424] n_remain: -50
-[1724313424] eval: [ ' ':235248 ]
-[1724313426] n_past = 160
-[1724313426] last: [ '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':75452, ' ':235248, '':108 ]
-[1724313426] n_remain: -51
-[1724313426] eval: [ '':108 ]
-[1724313426] n_past = 161
-[1724313426] last: [ ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'make':6778, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':75452, ' ':235248, '':108, '<end_of_turn>':107 ]
-[1724313426] n_remain: -52
-[1724313426] found an EOG token
-[1724313426] formatted: <start_of_turn>model
-制作<end_of_turn>
-
-[1724313426] waiting for user input
-[1724313426] formatted: 
-[1724313426] formatted: <start_of_turn>user
-- Role: 专业翻译员
-- Background: 用户需要将英文文档翻译成简体中文，并且需要保持文档的原始格式和专业术语的准确性。
-- OutputFormat: 翻译后仅输出翻译内容，无需其他解释说明。
-
-[待翻译内容开始]
-nice day
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313426] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
-
-[1724313426] buffer: '
-[待翻译内容开始]
-end
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]
-'
-[1724313426] formatted: 
-<start_of_turn>user
-[待翻译内容开始]
-end
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313426] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313426] n_remain: -48
-[1724313426] eval: [ '<end_of_turn>':107 ]
-[1724313426] n_past = 2
-[1724313426] embd_inp.size(): 156, n_consumed: 0
-[1724313426] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '-':235290, ' Role':19912, ':':235292, ' ':229913, '':73583, '':236382, '':108, '-':235290, ' Background':25493, ':':235292, ' ':64095, '':11213, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, '':235365, '':38723, '':11213, '':39876, '':82024, '':235370, '':34992, '':41595, '':235581, '':34380, '':236491, '':236409, '':235370, '':101046, '':235753, '':235362, '':108, '-':235290, ' Output':16230, 'Format':5699, ':':235292, ' ':235248, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'nice':16606, ' day':1744, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313435] n_past = 158
-[1724313435] last: [ '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192 ]
-[1724313435] n_remain: -49
-[1724313435] eval: [ '':118192 ]
-[1724313436] n_past = 159
-[1724313436] last: [ '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939 ]
-[1724313436] n_remain: -50
-[1724313436] eval: [ '':192939 ]
-[1724313436] n_past = 160
-[1724313436] last: [ '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, ' ':235248 ]
-[1724313436] n_remain: -51
-[1724313436] eval: [ ' ':235248 ]
-[1724313437] n_past = 161
-[1724313437] last: [ ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, ' ':235248, '':108 ]
-[1724313437] n_remain: -52
-[1724313437] eval: [ '':108 ]
-[1724313438] n_past = 162
-[1724313438] last: [ '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'end':615, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, ' ':235248, '':108, '<end_of_turn>':107 ]
-[1724313438] n_remain: -53
-[1724313438] found an EOG token
-[1724313438] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
-
-[1724313438] waiting for user input
-[1724313466] formatted: 
-[1724313466] formatted: <start_of_turn>user
-- Role: 专业翻译员
-- Background: 用户需要将英文文档翻译成简体中文，并且需要保持文档的原始格式和专业术语的准确性。
-- OutputFormat: 翻译后仅输出翻译内容，无需其他解释说明。
-
-[待翻译内容开始]
-nice day
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313466] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
-
-[1724313466] buffer: '
-[待翻译内容开始]
-way can do this
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]
-'
-[1724313466] formatted: 
-<start_of_turn>user
-[待翻译内容开始]
-way can do this
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313466] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313466] n_remain: -51
-[1724313466] eval: [ '<end_of_turn>':107 ]
-[1724313467] n_past = 2
-[1724313467] embd_inp.size(): 159, n_consumed: 0
-[1724313467] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '-':235290, ' Role':19912, ':':235292, ' ':229913, '':73583, '':236382, '':108, '-':235290, ' Background':25493, ':':235292, ' ':64095, '':11213, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, '':235365, '':38723, '':11213, '':39876, '':82024, '':235370, '':34992, '':41595, '':235581, '':34380, '':236491, '':236409, '':235370, '':101046, '':235753, '':235362, '':108, '-':235290, ' Output':16230, 'Format':5699, ':':235292, ' ':235248, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'nice':16606, ' day':1744, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313475] n_past = 161
-[1724313475] last: [ ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248 ]
-[1724313475] n_remain: -52
-[1724313475] eval: [ ' ':235248 ]
-[1724313476] n_past = 162
-[1724313476] last: [ '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108 ]
-[1724313476] n_remain: -53
-[1724313476] eval: [ '':108 ]
-[1724313476] n_past = 163
-[1724313476] last: [ '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108, '  ':139 ]
-[1724313476] n_remain: -54
-[1724313476] eval: [ '  ':139 ]
-[1724313477] n_past = 164
-[1724313477] last: [ '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108, '  ':139, '':108 ]
-[1724313477] n_remain: -55
-[1724313477] eval: [ '':108 ]
-[1724313477] n_past = 165
-[1724313477] last: [ 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108, '  ':139, '':108, '  ':139 ]
-[1724313477] n_remain: -56
-[1724313477] eval: [ '  ':139 ]
-[1724313478] n_past = 166
-[1724313478] last: [ '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108, '  ':139, '':108, '  ':139, '':108 ]
-[1724313478] n_remain: -57
-[1724313478] eval: [ '':108 ]
-[1724313479] n_past = 167
-[1724313479] last: [ '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'way':1677, ' can':798, ' do':749, ' this':736, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, ' ':235248, '':108, '  ':139, '':108, '  ':139, '':108, '<end_of_turn>':107 ]
-[1724313479] n_remain: -58
-[1724313479] found an EOG token
-[1724313479] formatted: <start_of_turn>model
-<end_of_turn>
-
-[1724313479] waiting for user input
-[1724313490] formatted: 
-[1724313490] formatted: <start_of_turn>user
-- Role: 专业翻译员
-- Background: 用户需要将英文文档翻译成简体中文，并且需要保持文档的原始格式和专业术语的准确性。
-- OutputFormat: 翻译后仅输出翻译内容，无需其他解释说明。
-
-[待翻译内容开始]
-nice day
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313490] formatted: <start_of_turn>model
-美好的一天<end_of_turn>
-
-[1724313490] buffer: '
-[待翻译内容开始]
-no good
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]
-'
-[1724313490] formatted: 
-<start_of_turn>user
-[待翻译内容开始]
-no good
-[待翻译内容结束]
-
-开始翻译任务，翻译后仅输出翻译内容，无需其他解释说明。
-
-[优质翻译开始]<end_of_turn>
-<start_of_turn>model
-
-[1724313490] input tokens: [ '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313490] n_remain: -49
-[1724313490] eval: [ '<end_of_turn>':107 ]
-[1724313490] n_past = 2
-[1724313490] embd_inp.size(): 157, n_consumed: 0
-[1724313490] eval: [ '<start_of_turn>':106, 'user':1645, '':108, '-':235290, ' Role':19912, ':':235292, ' ':229913, '':73583, '':236382, '':108, '-':235290, ' Background':25493, ':':235292, ' ':64095, '':11213, '':236007, '':43899, '':82024, '':73583, '':235636, '':236453, '':235784, '':50039, '':235365, '':38723, '':11213, '':39876, '':82024, '':235370, '':34992, '':41595, '':235581, '':34380, '':236491, '':236409, '':235370, '':101046, '':235753, '':235362, '':108, '-':235290, ' Output':16230, 'Format':5699, ':':235292, ' ':235248, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'nice':16606, ' day':1744, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108 ]
-[1724313499] n_past = 159
-[1724313499] last: [ '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845 ]
-[1724313499] n_remain: -50
-[1724313499] eval: [ '':6845 ]
-[1724313501] n_past = 160
-[1724313501] last: [ '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607 ]
-[1724313501] n_remain: -51
-[1724313501] eval: [ '':235607 ]
-[1724313501] n_past = 161
-[1724313501] last: [ ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607, '':24968 ]
-[1724313501] n_remain: -52
-[1724313501] eval: [ '':24968 ]
-[1724313501] n_past = 162
-[1724313501] last: [ '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607, '':24968, '':235362 ]
-[1724313501] n_remain: -53
-[1724313501] eval: [ '':235362 ]
-[1724313502] n_past = 163
-[1724313502] last: [ '':108, '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607, '':24968, '':235362, ' ':235248 ]
-[1724313502] n_remain: -54
-[1724313502] eval: [ ' ':235248 ]
-[1724313502] n_past = 164
-[1724313502] last: [ '<start_of_turn>':106, 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607, '':24968, '':235362, ' ':235248, '':108 ]
-[1724313502] n_remain: -55
-[1724313502] eval: [ '':108 ]
-[1724313502] n_past = 165
-[1724313502] last: [ 'model':2516, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':118192, '':192939, '<end_of_turn>':107, '':108, '':108, '<start_of_turn>':106, 'user':1645, '':108, '[':235309, '':236435, '':73583, '':11795, '':14261, ']':235307, '':108, 'no':956, ' good':1426, '':108, '[':235309, '':236435, '':73583, '':11795, '':35288, ']':235307, '':109, '':14261, '':73583, '':29646, '':235365, '':73583, '':235725, '':237235, '':37094, '':73583, '':11795, '':235365, '':131402, '':16212, '':49107, '':34310, '':235362, '':109, '[':235309, '':110052, '':73583, '':14261, ']':235307, '<end_of_turn>':107, '':108, '<start_of_turn>':106, 'model':2516, '':108, '':6845, '':235607, '':24968, '':235362, ' ':235248, '':108, '<end_of_turn>':107 ]
-[1724313502] n_remain: -56
-[1724313502] found an EOG token
-[1724313502] formatted: <start_of_turn>model
-没有好东西。<end_of_turn>
-
-[1724313502] waiting for user input
+[1724318760] waiting for user input

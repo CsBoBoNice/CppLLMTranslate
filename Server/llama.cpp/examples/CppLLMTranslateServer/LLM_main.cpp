@@ -940,6 +940,8 @@ int TranslationChat(int argc, char ** argv) {
 
                 g_manager.my_output_ss.str(""); // 清空输出结果
 
+                MessageManager::getInstance().CleanFromInputQueue(); // 清空输入队列
+
                 // printf("ToOutputQueue %s\n", output_str.c_str());
 
                 /*****************************************************************/
