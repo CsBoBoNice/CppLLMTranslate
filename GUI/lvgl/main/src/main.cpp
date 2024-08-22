@@ -44,7 +44,8 @@ void my_timer(lv_timer_t *timer)
     std::string show_text;
     MessageManager &manager = MessageManager::getInstance();
     if (manager.popFromInputQueueNoWait(show_text)) {
-        lv_textarea_add_text(ta_output, show_text.c_str());
+        // lv_textarea_add_text(ta_output, show_text.c_str());
+        lv_textarea_set_text(ta_output, show_text.c_str());
     }
 }
 

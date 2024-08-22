@@ -935,8 +935,7 @@ int TranslationChat(int argc, char ** argv) {
                 // printf("ToOutputQueue\n");
                 // 将ostringstream的内容转换为std::string
                 std::string output_str = g_manager.my_output_ss.str();
-                MessageManager &manager = MessageManager::getInstance();
-                manager.pushToOutputQueue(output_str);
+                MessageManager::getInstance().pushToOutputQueue(output_str);
 
                 g_manager.my_output_ss.str(""); // 清空输出结果
 
@@ -947,9 +946,10 @@ int TranslationChat(int argc, char ** argv) {
                 /*****************************************************************/
                 /*****************************************************************/
 
-                MessageManager &manager_input = MessageManager::getInstance();
                 std::string message;
-                manager_input.popFromInputQueue(message);
+                MessageManager::getInstance().popFromInputQueue(message);
+
+                MessageManager::getInstance().pushToOutputQueue("正在翻译中，请稍等...");
 
                 std::string input_msg = message;
 
