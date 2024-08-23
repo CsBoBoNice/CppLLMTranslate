@@ -29,11 +29,28 @@ UDP_Server::~UDP_Server()
 
 bool UDP_Server::Initialize()
 {
+#ifdef _WIN32
+    // 初始化 Winsock
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        printf("WSAStartup failed\n");
+        return -1;
+    }
+
+    socketfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+    if (socketfd == INVALID_SOCKET) {
+        printf("socket failed with error: %d\n", WSAGetLastError());
+        WSACleanup();
+        return -1;
+    }
+#else
     socketfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
     if (socketfd == -1) {
-        std::cerr << "socket fail" << std::endl;
+        std::cerr << "socket fail " << errno << std::endl;
+
         return false;
     }
+#endif
 
 #ifdef _WIN32
     char optval = 1;

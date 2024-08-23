@@ -979,7 +979,7 @@ int TranslationChat(int argc, char ** argv) {
                 // 取到一个消息发送一个响应
                 agreementInfo info;
                 info.cmd = (int)AgreementCmd::course_msg;
-                info.msg = "正在翻译中，请稍等...\n\n";
+                info.msg = "正在翻译中，请稍等 ...\n\n";
                 std::string msg_translate = agreement::getInstance().wrapToJson(info);
                 MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送过程中的文本
 

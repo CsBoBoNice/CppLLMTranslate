@@ -21,7 +21,12 @@
 
 class UDP_Server {
   private:
+#ifdef _WIN32
+    SOCKET socketfd;
+#else
     int socketfd;
+#endif
+
     struct sockaddr_in server_addr;
     struct sockaddr_in recv_addr;
     socklen_t address_len;
