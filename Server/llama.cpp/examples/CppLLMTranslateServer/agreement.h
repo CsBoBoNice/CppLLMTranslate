@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-23 13:55:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 14:16:25
- * @FilePath: /lvgl/main/src/agreement.h
+ * @LastEditTime: 2024-08-23 17:26:55
+ * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/agreement.h
  */
 // agreement.h
 #ifndef AGREEMENT_H
@@ -12,40 +12,40 @@
 #include <mutex>
 #include "cJSON.h"
 
-enum class AgreementStatus {
-    idle,
-    busy,
-    unknown
-};
+enum class AgreementStatus { idle, busy, unknown };
 
-enum class AgreementCmd {
-    success_msg,
-    course_msg,
-    translate_msg,
-    unknown
-};
+enum class AgreementCmd { success_msg, course_msg, translate_msg, unknown };
 
 struct agreementInfo {
     int cmd;
     std::string msg;
+    std::string system;
+    std::string chat_prefix;
+    std::string chat_suffix;
+    std::string user_msg_1;
+    std::string user_msg_2;
+    std::string user_msg_3;
+    std::string assistant_msg_1;
+    std::string assistant_msg_2;
+    std::string assistant_msg_3;
 };
 
 class agreement {
-public:
+  public:
     // 获取单例对象的静态方法
-    static agreement& getInstance();
+    static agreement &getInstance();
 
     // 设置和获取状态的方法，线程安全
     void setStatus(AgreementStatus status);
     AgreementStatus getStatus() const;
 
     // 解析json数据
-    agreementInfo parseJson(const std::string& jsonStr);
+    agreementInfo parseJson(const std::string &jsonStr);
 
     // 封装为json数据
-    std::string wrapToJson(const agreementInfo& info);
+    std::string wrapToJson(const agreementInfo &info);
 
-private:
+  private:
     // 构造函数和析构函数私有化，防止外部创建和删除对象
     agreement() {}
     ~agreement() {}

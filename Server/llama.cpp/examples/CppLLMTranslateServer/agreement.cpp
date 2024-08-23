@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-23 13:55:54
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 14:12:12
- * @FilePath: /lvgl/main/src/agreement.cpp
+ * @LastEditTime: 2024-08-23 17:30:12
+ * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/agreement.cpp
  */
 // agreement.cpp
 #include "agreement.h"
@@ -36,12 +36,59 @@ agreementInfo agreement::parseJson(const std::string &jsonStr)
     }
 
     cJSON *cmd = cJSON_GetObjectItem(root, "cmd");
-    cJSON *msg = cJSON_GetObjectItem(root, "msg");
     if (cmd != nullptr) {
         info.cmd = cmd->valueint;
     }
+
+    cJSON *msg = cJSON_GetObjectItem(root, "msg");
     if (msg != nullptr) {
         info.msg = msg->valuestring;
+    }
+
+    cJSON *system = cJSON_GetObjectItem(root, "system");
+    if (system != nullptr) {
+        info.system = system->valuestring;
+    }
+
+    cJSON *chat_prefix = cJSON_GetObjectItem(root, "chat_prefix");
+    if (chat_prefix != nullptr) {
+        info.chat_prefix = chat_prefix->valuestring;
+    }
+
+    cJSON *chat_suffix = cJSON_GetObjectItem(root, "chat_suffix");
+    if (chat_suffix != nullptr) {
+        info.chat_suffix = chat_suffix->valuestring;
+    }
+
+    cJSON *user_msg_1 = cJSON_GetObjectItem(root, "user_msg_1");
+    if (user_msg_1 != nullptr) {
+        info.user_msg_1 = user_msg_1->valuestring;
+    }
+
+    cJSON *user_msg_2 = cJSON_GetObjectItem(root, "user_msg_2");
+    if (user_msg_2 != nullptr) {
+        info.user_msg_2 = user_msg_2->valuestring;
+    }
+
+    cJSON *user_msg_3 = cJSON_GetObjectItem(root, "user_msg_3");
+    if (user_msg_3 != nullptr) {
+
+        info.user_msg_3 = user_msg_3->valuestring;
+    }
+
+    cJSON *assistant_msg_1 = cJSON_GetObjectItem(root, "assistant_msg_1");
+    if (assistant_msg_1 != nullptr) {
+        info.assistant_msg_1 = assistant_msg_1->valuestring;
+    }
+
+    cJSON *assistant_msg_2 = cJSON_GetObjectItem(root, "assistant_msg_2");
+    if (assistant_msg_2 != nullptr) {
+        info.assistant_msg_2 = assistant_msg_2->valuestring;
+    }
+
+    cJSON *assistant_msg_3 = cJSON_GetObjectItem(root, "assistant_msg_3");
+    if (assistant_msg_3 != nullptr) {
+        info.assistant_msg_3 = assistant_msg_3->valuestring;
     }
 
     cJSON_Delete(root);
@@ -53,6 +100,15 @@ std::string agreement::wrapToJson(const agreementInfo &info)
     cJSON *root = cJSON_CreateObject();
     cJSON_AddNumberToObject(root, "cmd", info.cmd);
     cJSON_AddStringToObject(root, "msg", info.msg.c_str());
+    cJSON_AddStringToObject(root, "system", info.system.c_str());
+    cJSON_AddStringToObject(root, "chat_prefix", info.chat_prefix.c_str());
+    cJSON_AddStringToObject(root, "chat_suffix", info.chat_suffix.c_str());
+    cJSON_AddStringToObject(root, "user_msg_1", info.user_msg_1.c_str());
+    cJSON_AddStringToObject(root, "user_msg_2", info.user_msg_2.c_str());
+    cJSON_AddStringToObject(root, "user_msg_3", info.user_msg_3.c_str());
+    cJSON_AddStringToObject(root, "assistant_msg_1", info.assistant_msg_1.c_str());
+    cJSON_AddStringToObject(root, "assistant_msg_2", info.assistant_msg_2.c_str());
+    cJSON_AddStringToObject(root, "assistant_msg_3", info.assistant_msg_3.c_str());
 
     char *jsonStr = cJSON_Print(root);
     std::string result(jsonStr);

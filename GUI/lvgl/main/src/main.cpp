@@ -54,6 +54,22 @@ void my_timer(lv_timer_t *timer)
     }
 }
 
+/*
+struct agreementInfo {
+    int cmd;
+    std::string msg;
+    std::string system;
+    std::string chat_prefix;
+    std::string chat_suffix;
+    std::string user_msg_1;
+    std::string user_msg_2;
+    std::string user_msg_3;
+    std::string assistant_msg_1;
+    std::string assistant_msg_2;
+    std::string assistant_msg_3;
+};
+*/
+
 static void translate_button_cb(lv_event_t *e)
 {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -66,6 +82,16 @@ static void translate_button_cb(lv_event_t *e)
         agreementInfo info;
         info.cmd = (int)AgreementCmd::translate_msg;
         info.msg = src_text;
+        info.system = "translate";
+        info.chat_prefix = "英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
+        info.chat_suffix = "[待翻译内容结束]\n\n开始将英文文档翻译成简体中文。\n\n";
+        info.user_msg_1 = "Clipboard_Singleton_thread";
+        info.user_msg_2 = "getInstance";
+        info.user_msg_3 = "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
+        info.assistant_msg_1 = "剪贴板单例线程";
+        info.assistant_msg_2 = "获得实例";
+        info.assistant_msg_3 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+
         std::string msg_translate = agreement::getInstance().wrapToJson(info);
 
         MessageManager::getInstance().pushToOutputQueue(msg_translate);
