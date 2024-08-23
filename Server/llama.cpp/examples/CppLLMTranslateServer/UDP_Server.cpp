@@ -81,7 +81,7 @@ void UDP_Server::Run()
 void UDP_Server::Close() const
 {
 #ifdef _WIN32
-    closesocket(socket);
+    closesocket(socketfd);
 #else
     close(socketfd);
 #endif

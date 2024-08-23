@@ -11,7 +11,7 @@
 
 #ifdef _WIN32
 #include <winsock2.h>
-typedef int socklen_t;
+#include <ws2tcpip.h>
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
