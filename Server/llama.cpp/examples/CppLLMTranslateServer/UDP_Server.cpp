@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-20 11:26:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 15:30:21
+ * @LastEditTime: 2024-08-23 15:37:52
  * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/UDP_Server.cpp
  */
 #include "UDP_Server.h"
@@ -10,7 +10,6 @@
 #include <cstring>
 
 #include <sys/types.h>
-
 
 #include "MessageManager.h"
 
@@ -36,8 +35,13 @@ bool UDP_Server::Initialize()
         return false;
     }
 
+#ifdef _WIN32
+    char optval = 1;
+    setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+#else
     int optval = 1;
     setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
+#endif
 
     if (bind(socketfd, (struct sockaddr *)&server_addr, sizeof(server_addr)) == -1) {
         std::cerr << "bind fail" << std::endl;
@@ -53,10 +57,11 @@ void UDP_Server::Run()
     int count_get = 0;
 
     while (true) {
-        bzero(buf, sizeof(buf));
+        memset(&buf, 0, sizeof(buf));
         int ret = recvfrom(socketfd, buf, sizeof(buf), 0, (struct sockaddr *)&recv_addr, &address_len);
 
-        char *ip = inet_ntoa(recv_addr.sin_addr);
+        char ip[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &recv_addr.sin_addr, ip, sizeof(ip));
         int port = ntohs(recv_addr.sin_port);
 
         std::cout << "[" << ip << "][" << port << "]收到数据 len:" << ret << " " << ++count_get << std::endl;
@@ -75,14 +80,18 @@ void UDP_Server::Run()
 
 void UDP_Server::Close() const
 {
+#ifdef _WIN32
+    closesocket(socket);
+#else
     close(socketfd);
+#endif
 }
 
 void UDP_Server::Recv_thread()
 {
     int count_get = 0;
     while (true) {
-        bzero(buf, sizeof(buf));
+        memset(&buf, 0, sizeof(buf));
         int ret = recvfrom(socketfd, buf, sizeof(buf), 0, (struct sockaddr *)&recv_addr, &address_len);
 
         if (ret > 0) {
