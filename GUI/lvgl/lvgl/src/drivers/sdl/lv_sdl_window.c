@@ -306,7 +306,7 @@ static void window_create(lv_display_t * disp)
 
     int32_t hor_res = lv_display_get_horizontal_resolution(disp);
     int32_t ver_res = lv_display_get_vertical_resolution(disp);
-    dsc->window = SDL_CreateWindow("LVGL Simulator",
+    dsc->window = SDL_CreateWindow("CppLLMTranslate",
                                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                                    hor_res * dsc->zoom, ver_res * dsc->zoom, flag);       /*last param. SDL_WINDOW_BORDERLESS to hide borders*/
 

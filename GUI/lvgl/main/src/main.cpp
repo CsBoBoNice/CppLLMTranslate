@@ -77,7 +77,7 @@ void ui_main()
 
     /*Create a font*/
     lv_font_t *font = lv_freetype_font_create("/home/csbobo/code/lv_port_pc_vscode/SmileySans-Oblique.ttf",
-                                              LV_FREETYPE_FONT_RENDER_MODE_BITMAP, 16, LV_FREETYPE_FONT_STYLE_NORMAL);
+                                              LV_FREETYPE_FONT_RENDER_MODE_BITMAP, 20, LV_FREETYPE_FONT_STYLE_NORMAL);
 
     if (!font) {
         LV_LOG_ERROR("freetype font create failed.");
@@ -97,8 +97,8 @@ void ui_main()
     // lv_obj_center(label);
 
     ta_input = lv_textarea_create(lv_screen_active());
-    lv_obj_set_size(ta_input, 300, 500);
-    lv_obj_set_pos(ta_input, 100, 0);
+    lv_obj_set_size(ta_input, 300, 200);
+    lv_obj_set_pos(ta_input, 0, 0);
     lv_obj_add_style(ta_input, &style, 0);
 
     lv_textarea_set_placeholder_text(ta_input, "输入待翻译内容");
@@ -109,15 +109,15 @@ void ui_main()
     lv_textarea_set_text_selection(ta_input, true);
 
     ta_output = lv_textarea_create(lv_screen_active());
-    lv_obj_set_size(ta_output, 300, 500);
-    lv_obj_set_pos(ta_output, 400, 0);
+    lv_obj_set_size(ta_output, 300, 200);
+    lv_obj_set_pos(ta_output, 300, 0);
     lv_obj_add_style(ta_output, &style, 0);
 
     lv_textarea_set_text_selection(ta_output, true);
 
     lv_obj_t *translate_but = lv_btn_create(lv_screen_active());
     lv_obj_set_size(translate_but, 100, 50);
-    lv_obj_set_pos(translate_but, 300, 500);
+    lv_obj_set_pos(translate_but, 250, 200);
 
     lv_obj_t *ui_label_button = lv_label_create(translate_but);
     lv_label_set_text(ui_label_button, "翻译");
@@ -157,7 +157,7 @@ int main(int argc, char **argv)
     lv_init();
 
     /*Initialize the HAL (display, input devices, tick) for LVGL*/
-    hal_init(700, 600);
+    hal_init(600, 250);
 
     // lv_demo_widgets();
 
