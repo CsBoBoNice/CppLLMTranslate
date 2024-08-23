@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-20 11:26:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 15:37:52
+ * @LastEditTime: 2024-08-23 16:21:32
  * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/UDP_Server.cpp
  */
 #include "UDP_Server.h"
@@ -65,40 +65,15 @@ bool UDP_Server::Initialize()
         return false;
     }
 
-    std::cout << "绑定服务器IP:0.0.0.0 端口号PORT:" << ntohs(server_addr.sin_port) << std::endl;
+    std::cout << "+++++++++++ bind IP:0.0.0.0 PORT:" << ntohs(server_addr.sin_port) << std::endl;
     return true;
-}
-
-void UDP_Server::Run()
-{
-    int count_get = 0;
-
-    while (true) {
-        memset(&buf, 0, sizeof(buf));
-        int ret = recvfrom(socketfd, buf, sizeof(buf), 0, (struct sockaddr *)&recv_addr, &address_len);
-
-        char ip[INET_ADDRSTRLEN];
-        inet_ntop(AF_INET, &recv_addr.sin_addr, ip, sizeof(ip));
-        int port = ntohs(recv_addr.sin_port);
-
-        std::cout << "[" << ip << "][" << port << "]收到数据 len:" << ret << " " << ++count_get << std::endl;
-        std::cout << "数据[" << strlen(buf) << "][" << buf << "]" << std::endl;
-
-        strcat(buf, "nice");
-
-        sendto(socketfd, buf, strlen(buf), 0, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
-        std::cout << "发送数据 ret:" << ret << " " << buf << std::endl;
-
-        if (!strcmp(buf, "exit")) {
-            break;
-        }
-    }
 }
 
 void UDP_Server::Close() const
 {
 #ifdef _WIN32
     closesocket(socketfd);
+    WSACleanup();
 #else
     close(socketfd);
 #endif
@@ -120,8 +95,8 @@ void UDP_Server::Recv_thread()
         char *ip = inet_ntoa(recv_addr.sin_addr);
         int port = ntohs(recv_addr.sin_port);
 
-        std::cout << "[" << ip << "][" << port << "]收到数据 len:" << ret << " " << ++count_get << std::endl;
-        std::cout << "数据[" << strlen(buf) << "][" << buf << "]" << std::endl;
+        std::cout << "[" << ip << "][" << port << "]recv len:" << ret << " " << ++count_get << std::endl;
+        std::cout << "data[" << strlen(buf) << "][" << buf << "]" << std::endl;
     }
 }
 
@@ -134,6 +109,6 @@ void UDP_Server::Send_thread()
         manager_input.popFromOutputQueue(message);
 
         sendto(socketfd, message.c_str(), message.length(), 0, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
-        std::cout << "发送数据 " << message.length() << " " << message.c_str() << std::endl;
+        std::cout << "send " << message.length() << " " << message.c_str() << std::endl;
     }
 }

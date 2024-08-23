@@ -161,7 +161,7 @@ int main(int argc, char **argv)
 
     // lv_demo_widgets();
 
-    client_p = new UDP_Client("192.168.31.189", 59218);
+    client_p = new UDP_Client("192.168.31.122", 59218);
     client_p->Initialize();
     std::thread t_UDP_Client_Recv_thread(UDP_Client_Recv_thread);
     std::thread t_UDP_Client_Send_thread(UDP_Client_Send_thread);

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-20 11:26:18
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 15:30:25
+ * @LastEditTime: 2024-08-23 16:20:26
  * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/UDP_Server.h
  */
 #ifndef UDP_SERVER_H
@@ -36,7 +36,6 @@ class UDP_Server {
     UDP_Server(int port);
     ~UDP_Server();
     bool Initialize();
-    void Run();
     void Close() const;
 
     void Send_thread();

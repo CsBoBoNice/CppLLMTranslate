@@ -130,3 +130,6 @@ poetry.toml
 
 # Scripts
 !/scripts/install-oneapi.bat
+
+
+compile_commands.json
