@@ -19,7 +19,7 @@
 
 #include "UDP_Client.h"
 #include "MessageManager.h"
-#include "ubantu_copy.h"
+#include "clipboard_text.h"
 
 #include <cstring>
 
