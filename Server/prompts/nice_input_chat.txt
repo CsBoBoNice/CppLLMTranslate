@@ -1,7 +1,1 @@
-
-# GIF decoder
-Allow using GIF images in LVGL. Based on https://github.com/lecram/gifdec
-
-When enabled in `lv_conf.h` with `LV_USE_GIF` `lv_gif_create(parent)` can be used to create a gif widget.
-
-`lv_gif_set_src(obj, src)` works very similarly to `lv_img_set_src`. As source, it also accepts images as variables (`lv_img_dsc_t`) or files.
+Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.
