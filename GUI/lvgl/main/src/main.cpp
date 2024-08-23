@@ -20,6 +20,7 @@
 #include "UDP_Client.h"
 #include "MessageManager.h"
 #include "clipboard_text.h"
+#include "agreement.h"
 
 #include <cstring>
 
@@ -28,10 +29,9 @@ static lv_display_t *hal_init(int32_t w, int32_t h);
 lv_obj_t *ta_input = NULL;
 lv_obj_t *ta_output = NULL;
 
-std::string copy_text_last;
-
 void Clipboard_Singleton_timer(lv_timer_t *timer)
 {
+    static std::string copy_text_last;
     std::string copy_text = ClipboardSingleton::getInstance().getCopyString();
     if (copy_text != copy_text_last) {
         lv_textarea_set_text(ta_input, copy_text.c_str());
@@ -42,10 +42,15 @@ void Clipboard_Singleton_timer(lv_timer_t *timer)
 void my_timer(lv_timer_t *timer)
 {
     std::string show_text;
-    MessageManager &manager = MessageManager::getInstance();
-    if (manager.popFromInputQueueNoWait(show_text)) {
-        // lv_textarea_add_text(ta_output, show_text.c_str());
-        lv_textarea_set_text(ta_output, show_text.c_str());
+    if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
+
+        agreementInfo info = agreement::getInstance().parseJson(show_text);
+
+        if (info.cmd == (int)AgreementCmd::course_msg) {
+            lv_textarea_add_text(ta_output, info.msg.c_str()); // 过程中的信息追加
+        } else {
+            lv_textarea_set_text(ta_output, info.msg.c_str()); // 完全翻译的信息覆盖
+        }
     }
 }
 
@@ -58,8 +63,12 @@ static void translate_button_cb(lv_event_t *e)
 
         std::string src_text = lv_textarea_get_text(ta_input);
 
-        MessageManager &manager = MessageManager::getInstance();
-        manager.pushToOutputQueue(src_text);
+        agreementInfo info;
+        info.cmd = (int)AgreementCmd::translate_msg;
+        info.msg = src_text;
+        std::string msg_translate = agreement::getInstance().wrapToJson(info);
+
+        MessageManager::getInstance().pushToOutputQueue(msg_translate);
     }
 }
 
@@ -97,10 +106,14 @@ void ui_main()
     // 这会清空之前的所有文本再覆盖新的文本
     // lv_textarea_set_text(ta_input, "1234567890 100ask.net\nlvgl.100ask.net");
 
+    lv_textarea_set_text_selection(ta_input, true);
+
     ta_output = lv_textarea_create(lv_screen_active());
     lv_obj_set_size(ta_output, 300, 500);
     lv_obj_set_pos(ta_output, 400, 0);
     lv_obj_add_style(ta_output, &style, 0);
+
+    lv_textarea_set_text_selection(ta_output, true);
 
     lv_obj_t *translate_but = lv_btn_create(lv_screen_active());
     lv_obj_set_size(translate_but, 100, 50);

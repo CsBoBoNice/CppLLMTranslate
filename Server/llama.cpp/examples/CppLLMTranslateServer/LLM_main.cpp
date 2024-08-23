@@ -17,6 +17,7 @@
 
 #include "TranslationManager.h"
 #include "MessageManager.h"
+#include "agreement.h"
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 #include <signal.h>
@@ -820,8 +821,14 @@ int TranslationChat(int argc, char ** argv) {
                     output_ss << token_str;
                     g_manager.my_output_ss<<token_str;
 
-                    // MessageManager &manager = MessageManager::getInstance();
-                    // manager.pushToOutputQueue(token_str);
+                    if (token_str.length() > 0) {
+                        agreementInfo info;
+                        info.cmd = (int)AgreementCmd::course_msg;
+                        info.msg = token_str;
+                        std::string msg_translate = agreement::getInstance().wrapToJson(info);
+
+                        MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送过程中的文本
+                    }
                 }
 
                 fflush(stdout);
@@ -935,23 +942,46 @@ int TranslationChat(int argc, char ** argv) {
                 // printf("ToOutputQueue\n");
                 // 将ostringstream的内容转换为std::string
                 std::string output_str = g_manager.my_output_ss.str();
-                MessageManager::getInstance().pushToOutputQueue(output_str);
 
-                g_manager.my_output_ss.str(""); // 清空输出结果
+                if (output_str.length() > 0) {
+                    agreementInfo info_success;
+                    info_success.cmd = (int)AgreementCmd::success_msg;
+                    info_success.msg = output_str;
+                    std::string msg_translate_success = agreement::getInstance().wrapToJson(info_success);
 
-                MessageManager::getInstance().CleanFromInputQueue(); // 清空输入队列
+                    MessageManager::getInstance().pushToOutputQueue(msg_translate_success); // 发送翻译成功的文本
+
+                    g_manager.my_output_ss.str(""); // 清空输出结果
+
+                    MessageManager::getInstance().CleanFromInputQueue(); // 清空输入队列
+                }
 
                 // printf("ToOutputQueue %s\n", output_str.c_str());
 
                 /*****************************************************************/
                 /*****************************************************************/
 
+                // 待翻译文本
+                std::string input_msg;
+
                 std::string message;
-                MessageManager::getInstance().popFromInputQueue(message);
+                MessageManager::getInstance().popFromInputQueue(message); // 阻塞获取一个消息
+                agreementInfo input_info = agreement::getInstance().parseJson(message);
+                if (input_info.cmd == (int)AgreementCmd::translate_msg) {
+                    input_msg = input_info.msg; // 获取消息内容
+                } else {
+                    input_msg =
+                        "\nLife is actually like the weather, with its sunny days, cloudy days, and occasional "
+                        "rain showers. It's the natural order of things. Life isn't simple, but we should strive "
+                        "to simplify it as much as possible.\n"; // 消息类型错误 随便翻译点东西
+                }
 
-                MessageManager::getInstance().pushToOutputQueue("正在翻译中，请稍等...");
-
-                std::string input_msg = message;
+                // 取到一个消息发送一个响应
+                agreementInfo info;
+                info.cmd = (int)AgreementCmd::course_msg;
+                info.msg = "正在翻译中，请稍等...\n\n";
+                std::string msg_translate = agreement::getInstance().wrapToJson(info);
+                MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送过程中的文本
 
                 FileType file_type_input = FileType::CHAT;
 

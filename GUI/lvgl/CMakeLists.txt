@@ -36,6 +36,10 @@ add_executable(main
                     main/src/UDP_Client.h
                     main/src/clipboard_text.cpp
                     main/src/clipboard_text.h
+                    main/src/cJSON.c
+                    main/src/cJSON.h
+                    main/src/agreement.cpp
+                    main/src/agreement.h
 )
 
 target_compile_definitions(main PRIVATE LV_CONF_INCLUDE_SIMPLE)

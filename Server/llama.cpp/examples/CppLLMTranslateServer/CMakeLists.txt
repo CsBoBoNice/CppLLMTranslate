@@ -10,6 +10,8 @@ add_executable(${TARGET} main.cpp
                             UDP_Server.h
                             MessageManager.cpp
                             MessageManager.h
+                            agreement.cpp
+                            agreement.h
 )
 install(TARGETS ${TARGET} RUNTIME)
 target_link_libraries(${TARGET} PRIVATE common llama ${CMAKE_THREAD_LIBS_INIT})

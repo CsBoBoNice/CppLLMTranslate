@@ -1,0 +1,58 @@
+/*
+ * @Date: 2024-08-23 13:55:38
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-23 14:16:25
+ * @FilePath: /lvgl/main/src/agreement.h
+ */
+// agreement.h
+#ifndef AGREEMENT_H
+#define AGREEMENT_H
+
+#include <string>
+#include <mutex>
+#include "cJSON.h"
+
+enum class AgreementStatus {
+    idle,
+    busy,
+    unknown
+};
+
+enum class AgreementCmd {
+    success_msg,
+    course_msg,
+    translate_msg,
+    unknown
+};
+
+struct agreementInfo {
+    int cmd;
+    std::string msg;
+};
+
+class agreement {
+public:
+    // 获取单例对象的静态方法
+    static agreement& getInstance();
+
+    // 设置和获取状态的方法，线程安全
+    void setStatus(AgreementStatus status);
+    AgreementStatus getStatus() const;
+
+    // 解析json数据
+    agreementInfo parseJson(const std::string& jsonStr);
+
+    // 封装为json数据
+    std::string wrapToJson(const agreementInfo& info);
+
+private:
+    // 构造函数和析构函数私有化，防止外部创建和删除对象
+    agreement() {}
+    ~agreement() {}
+
+    // 状态变量
+    mutable std::mutex mtx;
+    AgreementStatus status;
+};
+
+#endif // AGREEMENT_H
