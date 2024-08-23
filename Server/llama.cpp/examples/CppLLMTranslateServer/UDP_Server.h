@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-20 11:26:18
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 15:26:45
+ * @LastEditTime: 2024-08-23 15:30:25
  * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/UDP_Server.h
  */
 #ifndef UDP_SERVER_H
@@ -16,6 +16,7 @@ typedef int socklen_t;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 #endif
 
 class UDP_Server {
