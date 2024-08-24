@@ -964,14 +964,42 @@ int TranslationChat(int argc, char ** argv) {
 
                 // 阻塞获取一个消息
                 std::string message;
-                MessageManager::getInstance().popFromInputQueue(message);
+                agreementInfo agreement_info;
+                do {
+                    // 阻塞获取消息前先清空消息，等待最新来的消息
+                    MessageManager::getInstance().CleanFromInputQueue(); 
 
-                // 取到一个消息发送一个响应
-                agreementInfo info;
-                info.cmd = (int)AgreementCmd::course_msg;
-                info.msg = "Please wait ...\n\n"; //  正在翻译请等待
-                std::string msg_translate = agreement::getInstance().wrapToJson(info);
-                MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送过程中的文本
+                    // 阻塞获取一个消息
+                    MessageManager::getInstance().popFromInputQueue(message);
+
+                    // 解包确认消息类型
+                    agreement_info = agreement::getInstance().parseJson(message);
+
+                    if (agreement_info.cmd == (int)AgreementCmd::translate_msg) {
+
+                        // 取到一个翻译消息发送一个正在翻译响应
+                        agreementInfo info;
+                        info.cmd = (int)AgreementCmd::course_msg;
+                        info.msg = "\nPlease wait ...\n\n"; //  正在翻译请等待
+                        std::string msg_translate = agreement::getInstance().wrapToJson(info);
+                        MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送消息
+
+                    } else if (agreement_info.cmd == (int)AgreementCmd::test) {
+
+                        static int msg_test_count = 0;
+                        std::string str_msg_test = "\nSuccessful communication " + std::to_string(msg_test_count++);
+
+                        agreementInfo info;
+                        info.cmd = (int)AgreementCmd::course_msg;
+                        info.msg = str_msg_test;
+                        std::string msg_translate = agreement::getInstance().wrapToJson(info);
+                        MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送消息
+                    }
+
+                    // 清空输入队列 避免发送大量消息未处理
+                    MessageManager::getInstance().CleanFromInputQueue(); 
+
+                } while (agreement_info.cmd != (int)AgreementCmd::translate_msg);
 
                 // 待翻译文本
                 std::string trans_msg;
@@ -987,24 +1015,16 @@ int TranslationChat(int argc, char ** argv) {
 
                 // 解包
                 agreementInfo input_info = agreement::getInstance().parseJson(message);
-                if (input_info.cmd == (int)AgreementCmd::translate_msg) {
-                    trans_msg = input_info.msg;                         // 获取消息内容
-                    trans_system = input_info.system;                   // 获取系统内容
-                    trans_chat_prefix = input_info.chat_prefix;         // 获取聊天前缀
-                    trans_chat_suffix = input_info.chat_suffix;         // 获取聊天后缀
-                    trans_user_msg_1 = input_info.user_msg_1;           // 获取用户消息1
-                    trans_user_msg_2 = input_info.user_msg_2;           // 获取用户消息2
-                    trans_user_msg_3 = input_info.user_msg_3;           // 获取用户消息3
-                    trans_assistant_msg_1 = input_info.assistant_msg_1; // 获取助手消息1
-                    trans_assistant_msg_2 = input_info.assistant_msg_2; // 获取助手消息2
-                    trans_assistant_msg_3 = input_info.assistant_msg_3; // 获取助手消息3
-                } else {
-                    // 消息类型错误 随便翻译点东西
-                    trans_msg =
-                        "\nLife is actually like the weather, with its sunny days, cloudy days, and occasional rain "
-                        "showers. It's the natural order of things. Life isn't simple, but we should strive "
-                        "to simplify it as much as possible.\n";
-                }
+                trans_msg = input_info.msg;                         // 获取消息内容
+                trans_system = input_info.system;                   // 获取系统内容
+                trans_chat_prefix = input_info.chat_prefix;         // 获取聊天前缀
+                trans_chat_suffix = input_info.chat_suffix;         // 获取聊天后缀
+                trans_user_msg_1 = input_info.user_msg_1;           // 获取用户消息1
+                trans_user_msg_2 = input_info.user_msg_2;           // 获取用户消息2
+                trans_user_msg_3 = input_info.user_msg_3;           // 获取用户消息3
+                trans_assistant_msg_1 = input_info.assistant_msg_1; // 获取助手消息1
+                trans_assistant_msg_2 = input_info.assistant_msg_2; // 获取助手消息2
+                trans_assistant_msg_3 = input_info.assistant_msg_3; // 获取助手消息3
 
                 // 待翻译的新字符串
                 buffer = trans_chat_prefix;
@@ -1028,18 +1048,6 @@ int TranslationChat(int argc, char ** argv) {
                 /*****************************************************************/
                 /*****************************************************************/
 
-                /*
-                std::string trans_msg;
-                std::string trans_system;
-                std::string trans_chat_prefix;
-                std::string trans_chat_suffix;
-                std::string trans_user_msg_1;
-                std::string trans_user_msg_2;
-                std::string trans_user_msg_3;
-                std::string trans_assistant_msg_1;
-                std::string trans_assistant_msg_2;
-                std::string trans_assistant_msg_3;
-*/
                 // 重新赋值历史消息 插入优质回答
 
                 std::string system_messages_str;

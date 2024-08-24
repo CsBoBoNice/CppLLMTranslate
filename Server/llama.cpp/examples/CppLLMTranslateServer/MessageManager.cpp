@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-21 09:10:44
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 17:23:28
- * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/MessageManager.cpp
+ * @LastEditTime: 2024-08-24 10:26:13
+ * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/MessageManager.cpp
  */
 // MessageManager.cpp
 #include "MessageManager.h"
@@ -96,11 +96,6 @@ bool MessageManager::popFromOutputQueueNoWait(std::string &message)
     outputQueue.pop();
     return true;
 }
-
-/*
-    // 从输出队列中移除消息
-    bool CleanFromOutputQueue(std::string &message);
-*/
 
 // 从输出队列中移除消息
 bool MessageManager::CleanFromOutputQueue()

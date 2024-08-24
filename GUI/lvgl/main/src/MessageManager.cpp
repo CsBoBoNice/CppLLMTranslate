@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-21 09:10:44
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 17:24:08
- * @FilePath: /CppLLMTranslate/GUI/lvgl/main/src/MessageManager.cpp
+ * @LastEditTime: 2024-08-24 10:26:25
+ * @FilePath: /lvgl/main/src/MessageManager.cpp
  */
 // MessageManager.cpp
 #include "MessageManager.h"
@@ -96,11 +96,6 @@ bool MessageManager::popFromOutputQueueNoWait(std::string &message)
     outputQueue.pop();
     return true;
 }
-
-/*
-    // 从输出队列中移除消息
-    bool CleanFromOutputQueue(std::string &message);
-*/
 
 // 从输出队列中移除消息
 bool MessageManager::CleanFromOutputQueue()

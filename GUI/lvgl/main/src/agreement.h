@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-23 13:55:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 17:31:10
+ * @LastEditTime: 2024-08-24 09:52:17
  * @FilePath: /lvgl/main/src/agreement.h
  */
 // agreement.h
@@ -14,7 +14,13 @@
 
 enum class AgreementStatus { idle, busy, unknown };
 
-enum class AgreementCmd { success_msg, course_msg, translate_msg, unknown };
+enum class AgreementCmd {
+    success_msg,   // 翻译成功
+    course_msg,    // 过程信息
+    translate_msg, // 待翻译信息
+    test,          // 测试连接
+    unknown
+};
 
 struct agreementInfo {
     int cmd;
