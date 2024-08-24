@@ -35,7 +35,7 @@
 #pragma warning(disable: 4244 4267) // possible loss of data
 #endif
 
-TranslationManager g_manager; // 翻译管理类
+std::ostringstream g_my_output_ss; // 用于存储翻译后的文本
 
 static llama_context           ** g_ctx;
 static llama_model             ** g_model;
@@ -819,7 +819,7 @@ int TranslationChat(int argc, char ** argv) {
                     // 输出生成的令牌
                     output_tokens.push_back(id);
                     output_ss << token_str;
-                    g_manager.my_output_ss<<token_str;
+                    g_my_output_ss<<token_str;
 
                     if (token_str.length() > 0) {
                         agreementInfo info;
@@ -941,8 +941,9 @@ int TranslationChat(int argc, char ** argv) {
 
                 // printf("ToOutputQueue\n");
                 // 将ostringstream的内容转换为std::string
-                std::string output_str = g_manager.my_output_ss.str();
+                std::string output_str = g_my_output_ss.str();
 
+                // 将翻译完成的文本发送到输出队列
                 if (output_str.length() > 0) {
                     agreementInfo info_success;
                     info_success.cmd = (int)AgreementCmd::success_msg;
@@ -951,7 +952,7 @@ int TranslationChat(int argc, char ** argv) {
 
                     MessageManager::getInstance().pushToOutputQueue(msg_translate_success); // 发送翻译成功的文本
 
-                    g_manager.my_output_ss.str(""); // 清空输出结果
+                    g_my_output_ss.str(""); // 清空输出结果
 
                     MessageManager::getInstance().CleanFromInputQueue(); // 清空输入队列
                 }
@@ -961,20 +962,9 @@ int TranslationChat(int argc, char ** argv) {
                 /*****************************************************************/
                 /*****************************************************************/
 
-                // 待翻译文本
-                std::string input_msg;
-
+                // 阻塞获取一个消息
                 std::string message;
-                MessageManager::getInstance().popFromInputQueue(message); // 阻塞获取一个消息
-                agreementInfo input_info = agreement::getInstance().parseJson(message);
-                if (input_info.cmd == (int)AgreementCmd::translate_msg) {
-                    input_msg = input_info.msg; // 获取消息内容
-                } else {
-                    input_msg =
-                        "\nLife is actually like the weather, with its sunny days, cloudy days, and occasional "
-                        "rain showers. It's the natural order of things. Life isn't simple, but we should strive "
-                        "to simplify it as much as possible.\n"; // 消息类型错误 随便翻译点东西
-                }
+                MessageManager::getInstance().popFromInputQueue(message);
 
                 // 取到一个消息发送一个响应
                 agreementInfo info;
@@ -983,17 +973,165 @@ int TranslationChat(int argc, char ** argv) {
                 std::string msg_translate = agreement::getInstance().wrapToJson(info);
                 MessageManager::getInstance().pushToOutputQueue(msg_translate); // 发送过程中的文本
 
-                FileType file_type_input = FileType::CHAT;
+                // 待翻译文本
+                std::string trans_msg;
+                std::string trans_system;
+                std::string trans_chat_prefix;
+                std::string trans_chat_suffix;
+                std::string trans_user_msg_1;
+                std::string trans_user_msg_2;
+                std::string trans_user_msg_3;
+                std::string trans_assistant_msg_1;
+                std::string trans_assistant_msg_2;
+                std::string trans_assistant_msg_3;
 
-                if (file_type_input == FileType::RST) {
-                    buffer = g_manager.string_chat_prefix_rst + input_msg + g_manager.string_chat_suffix_rst;
-                } else if (file_type_input == FileType::HPP) {
-                    buffer = g_manager.string_chat_prefix_hpp + input_msg + g_manager.string_chat_suffix_hpp;
-                } else if (file_type_input == FileType::CHAT) {
-                    buffer = g_manager.string_chat_prefix_chat + input_msg + g_manager.string_chat_suffix_chat;
+                // 解包
+                agreementInfo input_info = agreement::getInstance().parseJson(message);
+                if (input_info.cmd == (int)AgreementCmd::translate_msg) {
+                    trans_msg = input_info.msg;                         // 获取消息内容
+                    trans_system = input_info.system;                   // 获取系统内容
+                    trans_chat_prefix = input_info.chat_prefix;         // 获取聊天前缀
+                    trans_chat_suffix = input_info.chat_suffix;         // 获取聊天后缀
+                    trans_user_msg_1 = input_info.user_msg_1;           // 获取用户消息1
+                    trans_user_msg_2 = input_info.user_msg_2;           // 获取用户消息2
+                    trans_user_msg_3 = input_info.user_msg_3;           // 获取用户消息3
+                    trans_assistant_msg_1 = input_info.assistant_msg_1; // 获取助手消息1
+                    trans_assistant_msg_2 = input_info.assistant_msg_2; // 获取助手消息2
+                    trans_assistant_msg_3 = input_info.assistant_msg_3; // 获取助手消息3
                 } else {
-                    buffer = g_manager.string_chat_prefix_md + input_msg + g_manager.string_chat_suffix_md;
+                    // 消息类型错误 随便翻译点东西
+                    trans_msg =
+                        "\nLife is actually like the weather, with its sunny days, cloudy days, and occasional rain "
+                        "showers. It's the natural order of things. Life isn't simple, but we should strive "
+                        "to simplify it as much as possible.\n";
                 }
+
+                // 待翻译的新字符串
+                buffer = trans_chat_prefix;
+                buffer += trans_msg;
+                buffer += trans_chat_suffix;
+
+                /*****************************************************************/
+                /*****************************************************************/
+                // 清空历史缓存
+
+                llama_kv_cache_clear(ctx);
+
+                std::vector<llama_chat_msg> system_messages;
+                chat_msgs = system_messages;
+
+                embd_inp.clear();
+
+                n_past = 1;
+                n_remain = -1;
+                n_consumed = 0;
+                /*****************************************************************/
+                /*****************************************************************/
+
+                /*
+                std::string trans_msg;
+                std::string trans_system;
+                std::string trans_chat_prefix;
+                std::string trans_chat_suffix;
+                std::string trans_user_msg_1;
+                std::string trans_user_msg_2;
+                std::string trans_user_msg_3;
+                std::string trans_assistant_msg_1;
+                std::string trans_assistant_msg_2;
+                std::string trans_assistant_msg_3;
+*/
+                // 重新赋值历史消息 插入优质回答
+
+                std::string system_messages_str;
+                std::string user_messages_str_1;
+                std::string assistant_messages_str_1;
+                std::string user_messages_str_2;
+                std::string assistant_messages_str_2;
+                std::string user_messages_str_3;
+                std::string assistant_messages_str_3;
+
+                system_messages_str = trans_system;
+
+                user_messages_str_1 = trans_chat_prefix;
+                user_messages_str_1 += trans_user_msg_1;
+                user_messages_str_1 += trans_chat_suffix;
+
+                assistant_messages_str_1 = trans_assistant_msg_1;
+
+                user_messages_str_2 = trans_chat_prefix;
+                user_messages_str_2 += trans_user_msg_2;
+                user_messages_str_2 += trans_chat_suffix;
+
+                assistant_messages_str_2 = trans_assistant_msg_2;
+
+                user_messages_str_3 = trans_chat_prefix;
+                user_messages_str_3 += trans_user_msg_3;
+                user_messages_str_3 += trans_chat_suffix;
+
+                assistant_messages_str_3 = trans_assistant_msg_3;
+
+                std::string system_nice = chat_add_and_format(model, chat_msgs, "system", system_messages_str);
+
+                std::string user_nice_1 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_1);
+                std::string assistant_nice_1 =
+                    chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_1);
+
+                std::string user_nice_2 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_2);
+                std::string assistant_nice_2 =
+                    chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_2);
+
+                std::string user_nice_3 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_3);
+                std::string assistant_nice_3 =
+                    chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_3);
+
+                // TODO: one inconvenient of current chat template implementation is that we can't distinguish between user input and special tokens (prefix/postfix)
+                // TODO: 一个不方便的当前聊天模板实现是我们不能区分用户输入和特殊的令牌(前缀/后缀)
+                const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
+                const auto line_sfx = ::llama_tokenize(ctx, params.input_suffix, false, true);
+
+                const auto line_inp_system = ::llama_tokenize(ctx, system_nice, false, true);
+
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_system.begin(), line_inp_system.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_user_1 = ::llama_tokenize(ctx, user_nice_1, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_user_1.begin(), line_inp_user_1.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_assistant_1 = ::llama_tokenize(ctx, assistant_nice_1, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_assistant_1.begin(), line_inp_assistant_1.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_user_2 = ::llama_tokenize(ctx, user_nice_2, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_user_2.begin(), line_inp_user_2.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_assistant_2 = ::llama_tokenize(ctx, assistant_nice_2, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_assistant_2.begin(), line_inp_assistant_2.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_user_3 = ::llama_tokenize(ctx, user_nice_3, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_user_3.begin(), line_inp_user_3.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                const auto line_inp_assistant_3 = ::llama_tokenize(ctx, assistant_nice_3, false, true);
+                embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
+                embd_inp.insert(embd_inp.end(), line_inp_assistant_3.begin(), line_inp_assistant_3.end());
+                embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
+
+                printf("\nsystem \n%s", system_messages_str.c_str());
+                printf("\nuser \n%s", user_messages_str_1.c_str());
+                printf("\nassistant \n%s", assistant_messages_str_1.c_str());
+                printf("\nuser \n%s", user_messages_str_2.c_str());
+                printf("\nassistant \n%s", assistant_messages_str_2.c_str());
+                printf("\nuser \n%s", user_messages_str_3.c_str());
+                printf("\nassistant \n%s", assistant_messages_str_3.c_str());
 
                 // std::string line;
                 // bool another_line = true;
@@ -1004,252 +1142,10 @@ int TranslationChat(int argc, char ** argv) {
                 /*****************************************************************/
                 /*****************************************************************/
 
-                // 清空历史缓存 这个很重要 不然缓存爆炸会结束运行
-                llama_kv_cache_clear(ctx);
-
                 /*****************************************************************/
                 /*****************************************************************/
 
-                // 插入优质回答
-
-                FileType file_type = FileType::CHAT;
-
-                std::vector<llama_chat_msg> system_messages;
-                chat_msgs = system_messages;
-
-                embd_inp.clear();
-
-                n_past = 1;
-                n_remain = -1;
-                n_consumed = 0;
-
-                switch (file_type) {
-                    case FileType::RST: {
-
-                        std::string system_messages_str;
-                        std::string user_messages_str_1;
-                        std::string assistant_messages_str_1;
-                        std::string user_messages_str_2;
-                        std::string assistant_messages_str_2;
-                        std::string user_messages_str_3;
-                        std::string assistant_messages_str_3;
-
-                        system_messages_str = g_manager.string_systemInfo_rst;
-
-                        user_messages_str_1 = g_manager.string_chat_prefix_rst + g_manager.string_nice_input_rst_1 +
-                            g_manager.string_chat_suffix_rst;
-                        assistant_messages_str_1 = g_manager.string_nice_output_rst_1;
-
-                        user_messages_str_2 = g_manager.string_chat_prefix_rst + g_manager.string_nice_input_rst_2 +
-                            g_manager.string_chat_suffix_rst;
-                        assistant_messages_str_2 = g_manager.string_nice_output_rst_2;
-
-                        user_messages_str_3 = g_manager.string_chat_prefix_rst + g_manager.string_nice_input_rst_3 +
-                            g_manager.string_chat_suffix_rst;
-                        assistant_messages_str_3 = g_manager.string_nice_output_rst_3;                        
-
-                        std::string system_nice = chat_add_and_format(model, chat_msgs, "system", system_messages_str);
-
-                        std::string user_nice_1 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_1);
-                        std::string assistant_nice_1 =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_1);
-
-                        std::string user_nice_2 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_2);
-                        std::string assistant_nice_2 =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_2);
-
-                        std::string user_nice_3 = chat_add_and_format(model, chat_msgs, "user", user_messages_str_3);
-                        std::string assistant_nice_3 =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str_3);
-
-                        // TODO: one inconvenient of current chat template implementation is that we can't distinguish between user input and special tokens (prefix/postfix)
-                        // TODO: 一个不方便的当前聊天模板实现是我们不能区分用户输入和特殊的令牌(前缀/后缀)
-                        const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
-                        const auto line_sfx = ::llama_tokenize(ctx, params.input_suffix, false, true);
-
-                        const auto line_inp_system = ::llama_tokenize(ctx, system_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_system.begin(), line_inp_system.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user_1 = ::llama_tokenize(ctx, user_nice_1, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user_1.begin(), line_inp_user_1.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant_1 = ::llama_tokenize(ctx, assistant_nice_1, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant_1.begin(), line_inp_assistant_1.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user_2 = ::llama_tokenize(ctx, user_nice_2, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user_2.begin(), line_inp_user_2.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant_2 = ::llama_tokenize(ctx, assistant_nice_2, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant_2.begin(), line_inp_assistant_2.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user_3 = ::llama_tokenize(ctx, user_nice_3, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user_3.begin(), line_inp_user_3.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant_3 = ::llama_tokenize(ctx, assistant_nice_3, false, true);
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant_3.begin(), line_inp_assistant_3.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        printf("\n FileType::RST \n");
-                        printf("\nsystem \n%s", system_messages_str.c_str());
-                        printf("\nuser \n%s", user_messages_str_1.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str_1.c_str());
-                        printf("\nuser \n%s", user_messages_str_2.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str_2.c_str());
-                        printf("\nuser \n%s", user_messages_str_3.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str_3.c_str());
-                        break;
-                    }
-                    case FileType::HPP: {
-                        std::string system_messages_str;
-                        std::string user_messages_str;
-                        std::string assistant_messages_str;
-                        system_messages_str = g_manager.string_systemInfo_hpp;
-                        user_messages_str = g_manager.string_chat_prefix_hpp + g_manager.string_nice_input_hpp +
-                            g_manager.string_chat_suffix_hpp;
-                        assistant_messages_str = g_manager.string_nice_output_hpp;
-
-                        std::string system_nice = chat_add_and_format(model, chat_msgs, "system", system_messages_str);
-                        std::string user_nice = chat_add_and_format(model, chat_msgs, "user", user_messages_str);
-                        std::string assistant_nice =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str);
-
-                        // TODO: one inconvenient of current chat template implementation is that we can't distinguish between user input and special tokens (prefix/postfix)
-                        // TODO: 一个不方便的当前聊天模板实现是我们不能区分用户输入和特殊的令牌(前缀/后缀)
-                        const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
-                        const auto line_sfx = ::llama_tokenize(ctx, params.input_suffix, false, true);
-
-                        const auto line_inp_system = ::llama_tokenize(ctx, system_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_system.begin(), line_inp_system.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user = ::llama_tokenize(ctx, user_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user.begin(), line_inp_user.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant = ::llama_tokenize(ctx, assistant_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant.begin(), line_inp_assistant.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        printf("\n FileType::HPP \n");
-                        printf("\nsystem \n%s", system_messages_str.c_str());
-                        printf("\nuser \n%s", user_messages_str.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str.c_str());
-                        break;
-                    }
-                    case FileType::CHAT: {
-                        std::string system_messages_str;
-                        std::string user_messages_str;
-                        std::string assistant_messages_str;
-                        system_messages_str = g_manager.string_systemInfo_chat;
-                        user_messages_str = g_manager.string_chat_prefix_chat + g_manager.string_nice_input_chat +
-                            g_manager.string_chat_suffix_chat;
-                        assistant_messages_str = g_manager.string_nice_output_chat;
-
-                        std::string system_nice = chat_add_and_format(model, chat_msgs, "system", system_messages_str);
-                        std::string user_nice = chat_add_and_format(model, chat_msgs, "user", user_messages_str);
-                        std::string assistant_nice =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str);
-
-                        // TODO: one inconvenient of current chat template implementation is that we can't distinguish between user input and special tokens (prefix/postfix)
-                        // TODO: 一个不方便的当前聊天模板实现是我们不能区分用户输入和特殊的令牌(前缀/后缀)
-                        const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
-                        const auto line_sfx = ::llama_tokenize(ctx, params.input_suffix, false, true);
-
-                        const auto line_inp_system = ::llama_tokenize(ctx, system_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_system.begin(), line_inp_system.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user = ::llama_tokenize(ctx, user_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user.begin(), line_inp_user.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant = ::llama_tokenize(ctx, assistant_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant.begin(), line_inp_assistant.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        printf("\n FileType::CHAT \n");
-                        printf("\nsystem \n%s", system_messages_str.c_str());
-                        printf("\nuser \n%s", user_messages_str.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str.c_str());
-                        break;
-                    }
-                    default: {
-                        std::string system_messages_str;
-                        std::string user_messages_str;
-                        std::string assistant_messages_str;
-                        system_messages_str = g_manager.string_systemInfo_md;
-                        user_messages_str = g_manager.string_chat_prefix_md + g_manager.string_nice_input_md +
-                            g_manager.string_chat_suffix_md;
-                        assistant_messages_str = g_manager.string_nice_output_md;
-
-                        std::string system_nice = chat_add_and_format(model, chat_msgs, "system", system_messages_str);
-                        std::string user_nice = chat_add_and_format(model, chat_msgs, "user", user_messages_str);
-                        std::string assistant_nice =
-                            chat_add_and_format(model, chat_msgs, "assistant", assistant_messages_str);
-
-                        // TODO: one inconvenient of current chat template implementation is that we can't distinguish between user input and special tokens (prefix/postfix)
-                        // TODO: 一个不方便的当前聊天模板实现是我们不能区分用户输入和特殊的令牌(前缀/后缀)
-                        const auto line_pfx = ::llama_tokenize(ctx, params.input_prefix, false, true);
-                        const auto line_sfx = ::llama_tokenize(ctx, params.input_suffix, false, true);
-
-                        const auto line_inp_system = ::llama_tokenize(ctx, system_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_system.begin(), line_inp_system.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_user = ::llama_tokenize(ctx, user_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_user.begin(), line_inp_user.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        const auto line_inp_assistant = ::llama_tokenize(ctx, assistant_nice, false, true);
-
-                        embd_inp.insert(embd_inp.end(), line_pfx.begin(), line_pfx.end());
-                        embd_inp.insert(embd_inp.end(), line_inp_assistant.begin(), line_inp_assistant.end());
-                        embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
-
-                        printf("\n FileType::default \n");
-                        printf("\nsystem \n%s", system_messages_str.c_str());
-                        printf("\nuser \n%s", user_messages_str.c_str());
-                        printf("\nassistant \n%s", assistant_messages_str.c_str());
-
-                        break;
-                    }
-                }
-
-                /*****************************************************************/
-                /*****************************************************************/
-
-                /**************************************************************/
-                printf("/*****************************************************/\n");
+                printf("\n/*****************************************************/\n");
                 printf("\n %s \n", buffer.c_str());
 
                 /**************************************************************/
@@ -1366,68 +1262,17 @@ end_fxxk:
     return 0;
 }
 
-// #define TEST_CODE // 测试代码切割功能不翻译
-
-#ifdef TEST_CODE
-
-int TranslationChatTest(int argc, char **argv)
-{
-    // 将待翻译内容放入提问
-    if (g_manager.translation_cache.size() > g_manager.m_file_index)
-    {
-        printf("/*****************************************************/\n");
-
-        printf("err=%d file=[%s] size[%zd] \n", g_manager.error_count, g_manager.translation_cache[g_manager.m_file_index].path.c_str(), g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index].size());
-
-        printf("m_file_index = %zd m_file_index_all = %zd \n", g_manager.m_file_index + 1, g_manager.translation_cache.size());
-
-        printf("m_paragraph_index = %zd m_paragraph_index_all = %zd \n", g_manager.m_paragraph_index + 1,
-               g_manager.translation_cache[g_manager.m_file_index].content.size());
-
-        // 原英文未翻译段落
-        std::string en_string = g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index];
-
-        // 输出至文件
-        std::string output_to_file_string = g_manager.Separator_cut + "\n" + en_string + g_manager.Separator_cut + "\n" + en_string;
-
-        // 将翻译好的中文内容替换英文内容
-        g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index] = output_to_file_string;
-
-        g_manager.m_paragraph_index++; // 翻译有效进行下一段翻译
-        // 文件翻译成功 转到翻译下一个文件
-        if (g_manager.m_paragraph_index >= g_manager.translation_cache[g_manager.m_file_index].content.size())
-        {
-            // 将翻译内容输出至文件
-            g_manager.SaveToFilesystem(g_manager.translation_cache, g_manager.directory_en, g_manager.m_file_index);
-
-            g_manager.m_file_index++;
-            g_manager.m_paragraph_index = 0;
-
-            // 将翻译进度写入json文件
-            g_manager.writeJsonToFile(g_manager.progress_file, g_manager.m_file_index, g_manager.m_paragraph_index);
-        }
-    }
-}
-
-#endif // TEST_CODE
-
 // #include <iostream>
 // #include <thread>
 // #include <chrono>
 
 int llm_main(int argc, char **argv)
 {
-    g_manager.init_systemInfo();
 
     while (1) {
-        g_manager.my_output_ss.str(""); // 清空输出结果
-        g_manager.error_count = 0;      // 清空错误计数
+        g_my_output_ss.str(""); // 清空输出结果
 
-#ifndef TEST_CODE
         TranslationChat(argc, argv);
-#else
-        TranslationChatTest(argc, argv); /*不翻译只测试代码功能*/
-#endif
     }
     return 0;
 }
