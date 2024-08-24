@@ -1276,11 +1276,9 @@ end_fxxk:
 
 int llm_main(int argc, char **argv)
 {
+    g_my_output_ss.str(""); // 清空输出结果
 
-    while (1) {
-        g_my_output_ss.str(""); // 清空输出结果
+    TranslationChat(argc, argv);
 
-        TranslationChat(argc, argv);
-    }
     return 0;
 }

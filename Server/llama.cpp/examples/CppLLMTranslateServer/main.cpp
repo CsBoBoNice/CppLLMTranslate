@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-20 15:11:12
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 13:57:32
- * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/main.cpp
+ * @LastEditTime: 2024-08-24 16:20:39
+ * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/main.cpp
  */
 #include <iostream>
 #include <thread>
@@ -15,10 +15,6 @@ using namespace std;
 void UDP_llm_main_thread(int argc, char **argv)
 {
     llm_main(argc, argv);
-
-    while (1) {
-        ;
-    }
 }
 
 UDP_Server *server_p = nullptr;
@@ -37,7 +33,28 @@ int main(int argc, char **argv)
 {
     thread t_llm_main_thread(UDP_llm_main_thread, argc, argv);
 
-    server_p = new UDP_Server(59218);
+    int port = 59218; // 默认端口号
+    // 遍历命令行参数
+    for (int i = 1; i < argc; ++i) {
+        // 检查当前参数是否是 "-s"
+        if (std::string(argv[i]) == "--port") {
+            // 确保 "-s" 后面有参数
+            if (i + 1 < argc) {
+                // 尝试将下一个参数转换为整数
+                int num = std::atoi(argv[i + 1]);
+                if (num < 0) {
+                    std::cerr << "错误：'-s' 后面跟随的数字必须为非负数。" << std::endl;
+                    return 1;
+                }
+                port = num;
+            } else {
+                std::cerr << "错误：'-s' 后面没有跟随数字。" << std::endl;
+                return 1;
+            }
+        }
+    }
+
+    server_p = new UDP_Server(port);
     server_p->Initialize();
     thread t_UDP_Server_Recv_thread(UDP_Server_Recv_thread);
     thread t_UDP_Server_Send_thread(UDP_Server_Send_thread);
