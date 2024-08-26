@@ -12,6 +12,8 @@
 #include <QLabel>
 #include <QClipboard>
 
+#include "UDP_Client.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -51,5 +53,13 @@ class MainWindow : public QMainWindow
     QTextEdit *rightTextEdit;
 
     QClipboard *clipboard;
+
+
+
+    UDP_Client *UI_client_p = nullptr;
+
+    QTimer *copy_timer;
+    QTimer *translate_timer;
+
 };
 #endif // MAINWINDOW_H
