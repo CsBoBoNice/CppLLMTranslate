@@ -33,6 +33,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         cJSON.h cJSON.cpp
         agreement.h agreement.cpp
         UDP_Client.h UDP_Client.cpp
+        StateManager.h StateManager.cpp
+        start_page.h start_page.cpp
+
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET qt APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
