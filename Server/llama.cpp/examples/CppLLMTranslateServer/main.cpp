@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-20 15:11:12
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-24 16:20:39
+ * @LastEditTime: 2024-08-26 13:54:49
  * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/main.cpp
  */
 #include <iostream>
@@ -43,12 +43,12 @@ int main(int argc, char **argv)
                 // 尝试将下一个参数转换为整数
                 int num = std::atoi(argv[i + 1]);
                 if (num < 0) {
-                    std::cerr << "错误：'-s' 后面跟随的数字必须为非负数。" << std::endl;
+                    std::cerr << "Error: '--port' must be followed by a non-negative number." << std::endl;
                     return 1;
                 }
                 port = num;
             } else {
-                std::cerr << "错误：'-s' 后面没有跟随数字。" << std::endl;
+                std::cerr << "Error: '--port' does not follow a number." << std::endl;
                 return 1;
             }
         }
