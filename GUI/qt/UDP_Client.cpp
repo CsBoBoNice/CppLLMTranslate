@@ -50,8 +50,8 @@ void UDP_Client::Recv_thread() {
                 std::string input_str(buf_recv);
                 MessageManager::getInstance().pushToInputQueue(input_str);
 
-                qDebug()  << "[" << sender.toString().toStdString() << "][" << senderPort << "]收到数据 len:" << len ;
-                qDebug()  << "数据[" << strlen(buf_recv) << "][" << buf_recv << "]" ;
+                qDebug()  << "[" << sender.toString().toStdString() << "][" << senderPort << "]data len:" << len ;
+                qDebug()  << "data[" << strlen(buf_recv) << "][" << buf_recv << "]" ;
             }
         }
     }
@@ -78,8 +78,8 @@ QString UDP_Client::Recv(int timeout)
             std::string input_str(buf_recv);
             MessageManager::getInstance().pushToInputQueue(input_str);
 
-            qDebug()  << "[" << sender.toString().toStdString() << "][" << senderPort << "]收到数据 len:" << len ;
-            qDebug()  << "数据[" << strlen(buf_recv) << "][" << buf_recv << "]" ;
+            qDebug()  << "[" << sender.toString().toStdString() << "][" << senderPort << "]data len:" << len ;
+            qDebug()  << "data[" << strlen(buf_recv) << "][" << buf_recv << "]" ;
 
             return QString::fromStdString(input_str);
         }

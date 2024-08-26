@@ -20,9 +20,7 @@ void UDP_Client_Send_thread()
     client_p->Send_thread();
 }
 
-
-MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent)
 {
     // 创建定时器
     copy_timer = new QTimer(this);
@@ -33,18 +31,12 @@ MainWindow::MainWindow(QWidget *parent)
 
         static std::string copy_text_last;
         std::string copy_text = clipboard->text().toStdString(); // 从剪贴板获取文本;
-        if (copy_text != copy_text_last) {
+        if (copy_text != copy_text_last && !copy_text.empty()) {
             leftTextEdit->clear();
             leftTextEdit->append(copy_text.c_str());
             copy_text_last = copy_text;
         }
-
     });
-
-
-
-
-
 
     // 创建定时器
     translate_timer = new QTimer(this);
@@ -62,6 +54,9 @@ MainWindow::MainWindow(QWidget *parent)
                 // 完全翻译的信息覆盖
                 rightTextEdit->clear();
                 rightTextEdit->append(info.msg.c_str());
+                if (clipboardReplaceCheckBox->isChecked()) {
+                    clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
+                }
 
             } else if (info.cmd == (int)AgreementCmd::course_msg) {
                 // 过程中的信息追加
@@ -79,11 +74,7 @@ MainWindow::MainWindow(QWidget *parent)
                 rightTextEdit->append(info.msg.c_str());
             }
         }
-
     });
-
-
-
 
     // 初始化UI
     firstPage = new QWidget(this);
@@ -129,7 +120,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     // 创建翻译按钮和剪贴板替换复选框
     QPushButton *translateButton = new QPushButton("翻译", secondPage);
-    QCheckBox *clipboardReplaceCheckBox = new QCheckBox("剪贴板替换", secondPage);
+    clipboardReplaceCheckBox = new QCheckBox("剪贴板替换", secondPage);
+    clipboardReplaceCheckBox->setChecked(true); // 设置为选中状态
 
     // 创建聊天页面的水平布局，并添加两个 QTextEdit
     QHBoxLayout *chatLayout = new QHBoxLayout();
@@ -146,24 +138,67 @@ MainWindow::MainWindow(QWidget *parent)
     chatTabVBoxLayout->addLayout(chatLayout);
     chatTabVBoxLayout->addLayout(buttonLayout_chat);
 
+    // 创建输入框
+    textEdit_system = new QTextEdit(secondPage);
+    textEdit_chat_prefix = new QTextEdit(secondPage);
+    textEdit_chat_suffix = new QTextEdit(secondPage);
+    textEdit_user_msg_1 = new QTextEdit(secondPage);
+    textEdit_user_msg_2 = new QTextEdit(secondPage);
+    textEdit_user_msg_3 = new QTextEdit(secondPage);
+    textEdit_assistant_msg_1 = new QTextEdit(secondPage);
+    textEdit_assistant_msg_2 = new QTextEdit(secondPage);
+    textEdit_assistant_msg_3 = new QTextEdit(secondPage);
+
+    // 创建标签
+    QLabel *set_label1 = new QLabel("系统设置:", secondPage);
+    QLabel *set_label2 = new QLabel("消息前缀:", secondPage);
+    QLabel *set_label3 = new QLabel("消息后缀:", secondPage);
+    QLabel *set_label4 = new QLabel("优质提问1:", secondPage);
+    QLabel *set_label5 = new QLabel("优质回答1:", secondPage);
+    QLabel *set_label6 = new QLabel("优质提问2:", secondPage);
+    QLabel *set_label7 = new QLabel("优质回答2:", secondPage);
+    QLabel *set_label8 = new QLabel("优质提问3:", secondPage);
+    QLabel *set_label9 = new QLabel("优质回答3:", secondPage);
+
+    // 创建布局管理器
+    QVBoxLayout *set_layout = new QVBoxLayout(this);
+
+    // 添加控件到布局管理器
+    set_layout->addWidget(set_label1);
+    set_layout->addWidget(textEdit_system);
+    set_layout->addWidget(set_label2);
+    set_layout->addWidget(textEdit_chat_prefix);
+    set_layout->addWidget(set_label3);
+    set_layout->addWidget(textEdit_chat_suffix);
+    set_layout->addWidget(set_label4);
+    set_layout->addWidget(textEdit_user_msg_1);
+    set_layout->addWidget(set_label5);
+    set_layout->addWidget(textEdit_assistant_msg_1);
+    set_layout->addWidget(set_label6);
+    set_layout->addWidget(textEdit_user_msg_2);
+    set_layout->addWidget(set_label7);
+    set_layout->addWidget(textEdit_assistant_msg_2);
+    set_layout->addWidget(set_label8);
+    set_layout->addWidget(textEdit_user_msg_3);
+    set_layout->addWidget(set_label9);
+    set_layout->addWidget(textEdit_assistant_msg_3);
+
     // 创建翻译页面的 QWidget 并设置布局
     QWidget *chatTabWidgetPage = new QWidget();
     chatTabWidgetPage->setLayout(chatTabVBoxLayout);
 
+    // 创建翻译页面的设置页面 QWidget 并设置布局
+    QWidget *chatTabWidgetPageSet = new QWidget();
+    chatTabWidgetPageSet->setLayout(set_layout);
+
     // 将翻译页面添加到 copyTranslateTabWidget
     copyTranslateTabWidget->addTab(chatTabWidgetPage, "翻译");
-    copyTranslateTabWidget->addTab(new QWidget(), "设置");
+    copyTranslateTabWidget->addTab(chatTabWidgetPageSet, "设置");
 
     // 获取剪贴板对象
     clipboard = QApplication::clipboard();
     // 连接信号和槽
     connect(translateButton, &QPushButton::clicked, this, [this]() {
-
-        // QString text = clipboard->text(); // 从剪贴板获取文本
-        // leftTextEdit->setPlainText(text);
-        // text+="nuce";
-        // clipboard->setText(text); // 将文本复制到剪贴板
-
         std::string src_text = leftTextEdit->toPlainText().toStdString();
 
         agreementInfo info;
@@ -184,7 +219,6 @@ MainWindow::MainWindow(QWidget *parent)
         std::string msg_translate = agreement::getInstance().wrapToJson(info);
 
         MessageManager::getInstance().pushToOutputQueue(msg_translate);
-
     });
 
     tabWidget->addTab(copyTranslateTabWidget, "拷贝翻译");
@@ -207,7 +241,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(testButton, &QPushButton::clicked, this, &MainWindow::onTestButtonClicked);
     connect(startButton, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
 
-
     // 启动定时器，间隔时间为毫秒
     copy_timer->start(500);
 
@@ -217,23 +250,21 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {}
 
+void MainWindow::onTestButtonClicked()
+{
 
-
-void MainWindow::onTestButtonClicked() {
-
-    QString IP=ipLineEdit->text();
+    QString IP = ipLineEdit->text();
     bool ok;
-    quint16 Port=portLineEdit->text().toUShort(&ok);
+    quint16 Port = portLineEdit->text().toUShort(&ok);
 
-    if(!client_p)
-    {
+    if (!client_p) {
         client_p = new UDP_Client(IP, Port);
-        UI_client_p=client_p;
+        UI_client_p = client_p;
     }
 
     // 初始化UDP客户端
     if (!client_p->Initialize(IP, Port)) {
-        qDebug()   << "Failed to initialize UDP client.";
+        qDebug() << "Failed to initialize UDP client.";
     }
 
     agreementInfo info;
@@ -242,31 +273,30 @@ void MainWindow::onTestButtonClicked() {
 
     // 发送并接受一条消息
     client_p->Send(QString::fromStdString(msg_translate));
-    QString recv_mag=client_p->Recv(100);
-    std::string show_text=recv_mag.toStdString();
+    QString recv_mag = client_p->Recv(100);
+    std::string show_text = recv_mag.toStdString();
     agreementInfo recv_info = agreement::getInstance().parseJson(show_text);
 
-    QString mag_show=QString::fromStdString(recv_info.msg);
+    QString mag_show = QString::fromStdString(recv_info.msg);
     textEdit->clear();
     textEdit->append(mag_show);
-
 }
 
-void MainWindow::onStartButtonClicked() {
+void MainWindow::onStartButtonClicked()
+{
 
     // 创建UDP客户端实例
 
-    if(!client_p)
-    {
-        QString IP=ipLineEdit->text();
+    if (!client_p) {
+        QString IP = ipLineEdit->text();
         bool ok;
-        quint16 Port=portLineEdit->text().toUShort(&ok);
+        quint16 Port = portLineEdit->text().toUShort(&ok);
 
         client_p = new UDP_Client(IP, Port);
-        UI_client_p=client_p;
+        UI_client_p = client_p;
         // 初始化UDP客户端
         if (!client_p->Initialize(IP, Port)) {
-            qDebug()   << "Failed to initialize UDP client.";
+            qDebug() << "Failed to initialize UDP client.";
         }
     }
     std::thread t_UDP_Client_Recv_thread(UDP_Client_Recv_thread);
@@ -274,9 +304,8 @@ void MainWindow::onStartButtonClicked() {
     t_UDP_Client_Recv_thread.detach();
     t_UDP_Client_Send_thread.detach();
 
-
     // 开始按钮点击后的操作
     // 切换到第二个页面
-    QStackedLayout *stackedLayout = static_cast<QStackedLayout*>(centralWidget()->layout());
+    QStackedLayout *stackedLayout = static_cast<QStackedLayout *>(centralWidget()->layout());
     stackedLayout->setCurrentIndex(1);
 }

@@ -13,5 +13,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.resize(800, 500);
     w.show();
+    // w.hide();
     return a.exec();
 }
