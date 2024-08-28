@@ -28,8 +28,8 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent} {
 
     ipLineEdit = new QLineEdit("127.0.0.1", this);
     portLineEdit = new QLineEdit("59218", this);
-    testButton = new QPushButton("测试", this);
-    startButton = new QPushButton("开始", this);
+    testButton = new QPushButton("测试🔍", this);
+    startButton = new QPushButton("开始🌟", this);
     textEdit = new QTextEdit(this);
 
     // 页面1布局

@@ -45,7 +45,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     mainLayout->addWidget(textEdit2);
 
     // 第四行
-    translateButton = new QPushButton("翻译");
+    translateButton = new QPushButton("提交🚀(￣▽￣)σ");
     checkBox = new QCheckBox("剪贴板替换");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
@@ -83,6 +83,8 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
         std::string msg_translate = agreement::getInstance().wrapToJson(info);
 
         MessageManager::getInstance().pushToOutputQueue(msg_translate);
+
+                        textEdit2->clear();
     });
 
 
@@ -123,15 +125,23 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
                     QClipboard *clipboard = QApplication::clipboard();
                     clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
                 }
+                QTextCursor cursor = textEdit2->textCursor();
+                cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
+                textEdit2->setTextCursor(cursor);       // 更新 QTextEdit 的光标位置
 
             } else if (info.cmd == (int)AgreementCmd::course_msg) {
                 // 过程中的信息追加
 
-                // 获取QTextEdit的文本内容
-                QString currentText = textEdit2->toPlainText();
-                currentText += info.msg.c_str();
-                // 设置合并后的文本到QTextEdit
-                textEdit2->setPlainText(currentText);
+                // // 获取QTextEdit的文本内容
+                // QString currentText = textEdit2->toPlainText();
+                // currentText += info.msg.c_str();
+                // // 设置合并后的文本到QTextEdit
+                // textEdit2->setPlainText(currentText);
+                QTextCursor cursor = textEdit2->textCursor();
+                cursor.movePosition(QTextCursor::End); // 移动光标到文本末尾
+                textEdit2->setTextCursor(cursor);       // 更新 QTextEdit 的光标位置
+                textEdit2->insertPlainText(info.msg.c_str());// 插入文本
+                textEdit2->ensureCursorVisible();       // 确保光标可见，即滚动到末尾
 
             } else {
                 // 其他消息覆盖
