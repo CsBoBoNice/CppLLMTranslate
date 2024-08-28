@@ -27,6 +27,8 @@ class intricate_page : public QMainWindow {
   private slots:
     void onToggleSettingsButtonClicked();
 
+    void UpDataInfo(int index);
+
   private:
     QVBoxLayout *mainLayout;
     QComboBox *modeComboBox;

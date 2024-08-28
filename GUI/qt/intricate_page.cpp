@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 15:29:02
+ * @LastEditTime: 2024-08-28 16:17:01
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -30,6 +30,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         qDebug("index=%d", index);
         mode_index = index;
+        UpDataInfo(mode_index);
     });
 
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
@@ -47,9 +48,22 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     // 创建聊天页面的水平布局，并添加两个 QTextEdit
     textEdit1 = new QTextEdit();
     textEdit2 = new QTextEdit();
+
+    translateButton = new QPushButton("提交🚀");
+    checkBox = new QCheckBox("剪贴板替换");
+
+    QHBoxLayout *fourthRowLayout = new QHBoxLayout();
+    fourthRowLayout->addWidget(translateButton);
+    fourthRowLayout->addWidget(checkBox);
+
     QHBoxLayout *chatLayout = new QHBoxLayout();
     chatLayout->addWidget(textEdit1);
     chatLayout->addWidget(textEdit2);
+
+    QVBoxLayout *chatVBoLayout = new QVBoxLayout(this);
+    chatVBoLayout->addLayout(chatLayout);
+    chatVBoLayout->addLayout(fourthRowLayout);
+
     /********************************************************/
 
     /********************************************************/
@@ -126,11 +140,43 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     set_HBoxLayout_9->addWidget(textEdit_assistant_msg_3);
     set_layout->addLayout(set_HBoxLayout_9);
 
+    QPushButton *GetButton = new QPushButton("获取配置");
+    QPushButton *SetButton = new QPushButton("更新配置");
+
+    // 连接按钮的点击信号到槽函数
+    connect(GetButton, &QPushButton::clicked, this, &intricate_page::UpDataInfo);
+    connect(SetButton, &QPushButton::clicked, this, [this]() {
+        agreementInfo info;
+
+        info.system = textEdit_system->toPlainText().toStdString();
+        info.chat_prefix = textEdit_chat_prefix->toPlainText().toStdString();
+        info.chat_suffix = textEdit_chat_suffix->toPlainText().toStdString();
+        info.user_msg_1 = textEdit_user_msg_1->toPlainText().toStdString();
+        info.user_msg_2 = textEdit_user_msg_2->toPlainText().toStdString();
+        info.user_msg_3 = textEdit_user_msg_3->toPlainText().toStdString();
+        info.assistant_msg_1 = textEdit_assistant_msg_1->toPlainText().toStdString();
+        info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
+        info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
+
+        if (mode_index == 0) {
+            ConfigManager::getInstance().Set_config_en_to_zh(info);
+        } else if (mode_index == 1) {
+            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else {
+            ConfigManager::getInstance().Set_config_chat(info);
+        }
+    });
+
+    QHBoxLayout *SetButtonLayout = new QHBoxLayout();
+    SetButtonLayout->addWidget(GetButton);
+    SetButtonLayout->addWidget(SetButton);
+    set_layout->addLayout(SetButtonLayout);
+
     /********************************************************/
 
     // 创建翻译页面的 QWidget 并设置布局
     QWidget *chatTabWidgetPage = new QWidget();
-    chatTabWidgetPage->setLayout(chatLayout);
+    chatTabWidgetPage->setLayout(chatVBoLayout);
 
     // 创建翻译页面的设置页面 QWidget 并设置布局
     QWidget *chatTabWidgetPageSet = new QWidget();
@@ -145,17 +191,11 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     TabWidget_Layout->addWidget(TabWidget_);
     mainLayout->addLayout(TabWidget_Layout);
 
+    // 连接 QTabWidget 的 currentChanged 信号
+    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &intricate_page::UpDataInfo);
+
     /********************************************************/
     /********************************************************/
-
-    // 第四行
-    translateButton = new QPushButton("提交🚀 (￣▽￣)σ");
-    checkBox = new QCheckBox("剪贴板替换");
-
-    QHBoxLayout *fourthRowLayout = new QHBoxLayout();
-    fourthRowLayout->addWidget(translateButton);
-    fourthRowLayout->addWidget(checkBox);
-    mainLayout->addLayout(fourthRowLayout);
 
     // 设置布局到中心窗口
     QWidget *centralWidget = new QWidget();
@@ -180,6 +220,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
         }
 
         info.msg = src_text;
+        info.cmd=(int)AgreementCmd::translate_msg;
 
         std::string msg_translate = agreement::getInstance().wrapToJson(info);
 
@@ -210,43 +251,43 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
 
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
-        // 槽函数的内容
+        if (StateManager::getInstance().ShowPage == 2) {
+            std::string show_text;
+            if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
 
-        std::string show_text;
-        if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
+                agreementInfo info = agreement::getInstance().parseJson(show_text);
 
-            agreementInfo info = agreement::getInstance().parseJson(show_text);
+                if (info.cmd == (int)AgreementCmd::success_msg) {
+                    // 完全翻译的信息覆盖
+                    textEdit2->clear();
+                    textEdit2->append(info.msg.c_str());
+                    if (checkBox->isChecked()) {
+                        QClipboard *clipboard = QApplication::clipboard();
+                        clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
+                    }
+                    QTextCursor cursor = textEdit2->textCursor();
+                    cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
+                    textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
 
-            if (info.cmd == (int)AgreementCmd::success_msg) {
-                // 完全翻译的信息覆盖
-                textEdit2->clear();
-                textEdit2->append(info.msg.c_str());
-                if (checkBox->isChecked()) {
-                    QClipboard *clipboard = QApplication::clipboard();
-                    clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
+                } else if (info.cmd == (int)AgreementCmd::course_msg) {
+                    // 过程中的信息追加
+
+                    // // 获取QTextEdit的文本内容
+                    // QString currentText = textEdit2->toPlainText();
+                    // currentText += info.msg.c_str();
+                    // // 设置合并后的文本到QTextEdit
+                    // textEdit2->setPlainText(currentText);
+                    QTextCursor cursor = textEdit2->textCursor();
+                    cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
+                    textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
+                    textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
+                    textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
+
+                } else {
+                    // 其他消息覆盖
+                    textEdit2->clear();
+                    textEdit2->append(info.msg.c_str());
                 }
-                QTextCursor cursor = textEdit2->textCursor();
-                cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
-                textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
-
-            } else if (info.cmd == (int)AgreementCmd::course_msg) {
-                // 过程中的信息追加
-
-                // // 获取QTextEdit的文本内容
-                // QString currentText = textEdit2->toPlainText();
-                // currentText += info.msg.c_str();
-                // // 设置合并后的文本到QTextEdit
-                // textEdit2->setPlainText(currentText);
-                QTextCursor cursor = textEdit2->textCursor();
-                cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
-                textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
-                textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
-                textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
-
-            } else {
-                // 其他消息覆盖
-                textEdit2->clear();
-                textEdit2->append(info.msg.c_str());
             }
         }
     });
@@ -264,4 +305,29 @@ void intricate_page::onToggleSettingsButtonClicked()
 {
     // 切换 简 页面
     StateManager::getInstance().ShowPage = 1;
+}
+
+void intricate_page::UpDataInfo(int index)
+{
+    agreementInfo info;
+    if (mode_index == 0) {
+        // info = agreement::getInstance().default_en_to_zh();
+        info = ConfigManager::getInstance().Get_config_en_to_zh();
+    } else if (mode_index == 1) {
+        // info = agreement::getInstance().default_zh_to_en();
+        info = ConfigManager::getInstance().Get_config_zh_to_en();
+    } else {
+        // info = agreement::getInstance().default_chat();
+        info = ConfigManager::getInstance().Get_config_chat();
+    }
+
+    textEdit_system->setText(info.system.c_str());
+    textEdit_chat_prefix->setText(info.chat_prefix.c_str());
+    textEdit_chat_suffix->setText(info.chat_suffix.c_str());
+    textEdit_user_msg_1->setText(info.user_msg_1.c_str());
+    textEdit_user_msg_2->setText(info.user_msg_2.c_str());
+    textEdit_user_msg_3->setText(info.user_msg_3.c_str());
+    textEdit_assistant_msg_1->setText(info.assistant_msg_1.c_str());
+    textEdit_assistant_msg_2->setText(info.assistant_msg_2.c_str());
+    textEdit_assistant_msg_3->setText(info.assistant_msg_3.c_str());
 }

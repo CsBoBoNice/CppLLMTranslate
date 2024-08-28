@@ -44,7 +44,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     mainLayout->addWidget(textEdit2);
 
     // 第四行
-    translateButton = new QPushButton("提交🚀 (￣▽￣)σ");
+    translateButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
@@ -75,6 +75,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
         }
 
         info.msg = src_text;
+        info.cmd=(int)AgreementCmd::translate_msg;
 
         std::string msg_translate = agreement::getInstance().wrapToJson(info);
 
@@ -105,43 +106,43 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
-        // 槽函数的内容
+        if (StateManager::getInstance().ShowPage == 1) {
+            std::string show_text;
+            if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
 
-        std::string show_text;
-        if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
+                agreementInfo info = agreement::getInstance().parseJson(show_text);
 
-            agreementInfo info = agreement::getInstance().parseJson(show_text);
+                if (info.cmd == (int)AgreementCmd::success_msg) {
+                    // 完全翻译的信息覆盖
+                    textEdit2->clear();
+                    textEdit2->append(info.msg.c_str());
+                    if (checkBox->isChecked()) {
+                        QClipboard *clipboard = QApplication::clipboard();
+                        clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
+                    }
+                    QTextCursor cursor = textEdit2->textCursor();
+                    cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
+                    textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
 
-            if (info.cmd == (int)AgreementCmd::success_msg) {
-                // 完全翻译的信息覆盖
-                textEdit2->clear();
-                textEdit2->append(info.msg.c_str());
-                if (checkBox->isChecked()) {
-                    QClipboard *clipboard = QApplication::clipboard();
-                    clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
+                } else if (info.cmd == (int)AgreementCmd::course_msg) {
+                    // 过程中的信息追加
+
+                    // // 获取QTextEdit的文本内容
+                    // QString currentText = textEdit2->toPlainText();
+                    // currentText += info.msg.c_str();
+                    // // 设置合并后的文本到QTextEdit
+                    // textEdit2->setPlainText(currentText);
+                    QTextCursor cursor = textEdit2->textCursor();
+                    cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
+                    textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
+                    textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
+                    textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
+
+                } else {
+                    // 其他消息覆盖
+                    textEdit2->clear();
+                    textEdit2->append(info.msg.c_str());
                 }
-                QTextCursor cursor = textEdit2->textCursor();
-                cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
-                textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
-
-            } else if (info.cmd == (int)AgreementCmd::course_msg) {
-                // 过程中的信息追加
-
-                // // 获取QTextEdit的文本内容
-                // QString currentText = textEdit2->toPlainText();
-                // currentText += info.msg.c_str();
-                // // 设置合并后的文本到QTextEdit
-                // textEdit2->setPlainText(currentText);
-                QTextCursor cursor = textEdit2->textCursor();
-                cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
-                textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
-                textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
-                textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
-
-            } else {
-                // 其他消息覆盖
-                textEdit2->clear();
-                textEdit2->append(info.msg.c_str());
             }
         }
     });
