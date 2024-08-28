@@ -23,7 +23,6 @@ class simple_page : public QMainWindow {
     void onToggleSettingsButtonClicked();
 
   private:
-
     QVBoxLayout *mainLayout;
     QComboBox *modeComboBox;
     QPushButton *toggleSettingsButton;
@@ -32,10 +31,9 @@ class simple_page : public QMainWindow {
     QPushButton *translateButton;
     QCheckBox *checkBox;
 
-    int mode_index=0;
+    int mode_index = 0;
 
     QTimer *copy_timer;
     QTimer *translate_timer;
-
 };
 #endif // SIMPLE_PAGE_H

@@ -36,6 +36,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         StateManager.h StateManager.cpp
         start_page.h start_page.cpp
         simple_page.h simple_page.cpp
+        ConfigManager.h ConfigManager.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

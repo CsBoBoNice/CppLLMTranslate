@@ -1,14 +1,12 @@
 
 
-
-
-
 #include "simple_page.h"
 #include "MessageManager.h"
 #include "agreement.h"
 
 #include <QClipboard>
 #include <QApplication>
+#include "ConfigManager.h"
 
 simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 {
@@ -58,24 +56,21 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     centralWidget->setLayout(mainLayout);
     setCentralWidget(centralWidget);
 
-
     // 连接信号和槽
     connect(translateButton, &QPushButton::clicked, this, [this]() {
         std::string src_text = textEdit1->toPlainText().toStdString();
 
         agreementInfo info;
 
-        if(mode_index==0)
-        {
-            info=agreement::getInstance().default_en_to_zh();
-        }
-        else if(mode_index==1)
-        {
-            info=agreement::getInstance().default_zh_to_en();
-        }
-        else
-        {
-            info=agreement::getInstance().default_chat();
+        if (mode_index == 0) {
+            // info = agreement::getInstance().default_en_to_zh();
+            info = ConfigManager::getInstance().Get_config_en_to_zh();
+        } else if (mode_index == 1) {
+            // info = agreement::getInstance().default_zh_to_en();
+            info = ConfigManager::getInstance().Get_config_zh_to_en();
+        } else {
+            // info = agreement::getInstance().default_chat();
+            info = ConfigManager::getInstance().Get_config_chat();
         }
 
         info.msg = src_text;
@@ -84,9 +79,8 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
         MessageManager::getInstance().pushToOutputQueue(msg_translate);
 
-                        textEdit2->clear();
+        textEdit2->clear();
     });
-
 
     // 创建定时器
     copy_timer = new QTimer(this);
@@ -127,7 +121,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
                 }
                 QTextCursor cursor = textEdit2->textCursor();
                 cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
-                textEdit2->setTextCursor(cursor);       // 更新 QTextEdit 的光标位置
+                textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
 
             } else if (info.cmd == (int)AgreementCmd::course_msg) {
                 // 过程中的信息追加
@@ -138,10 +132,10 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
                 // // 设置合并后的文本到QTextEdit
                 // textEdit2->setPlainText(currentText);
                 QTextCursor cursor = textEdit2->textCursor();
-                cursor.movePosition(QTextCursor::End); // 移动光标到文本末尾
-                textEdit2->setTextCursor(cursor);       // 更新 QTextEdit 的光标位置
-                textEdit2->insertPlainText(info.msg.c_str());// 插入文本
-                textEdit2->ensureCursorVisible();       // 确保光标可见，即滚动到末尾
+                cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
+                textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
+                textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
+                textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
 
             } else {
                 // 其他消息覆盖
@@ -156,7 +150,6 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
     // 启动定时器，间隔时间为毫秒
     translate_timer->start(100);
-
 }
 
 simple_page::~simple_page() {}
@@ -165,5 +158,5 @@ void simple_page::onToggleSettingsButtonClicked()
 {
     // 切换设置按钮点击后的操作
     // 这里只是简单打印一条信息，可以根据实际需求进行扩展
-    qDebug("切换设置按钮被点击");
+    qDebug() << QCoreApplication::applicationDirPath(); // 获取程序所在路径
 }

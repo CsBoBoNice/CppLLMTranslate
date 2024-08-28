@@ -10,7 +10,6 @@
 
 #include <string>
 #include <mutex>
-#include "cJSON.h"
 
 enum class AgreementStatus { idle, busy, unknown };
 

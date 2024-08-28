@@ -6,6 +6,7 @@
  */
 // agreement.cpp
 #include "agreement.h"
+#include "cJSON.h"
 
 agreement &agreement::getInstance()
 {

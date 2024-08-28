@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-08-26 15:22:31
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-28 14:42:28
+ * @FilePath: /CppLLMTranslate/GUI/qt/start_page.h
+ */
 #ifndef START_PAGE_H
 #define START_PAGE_H
 
@@ -30,8 +36,7 @@ class start_page : public QMainWindow {
     QPushButton *startButton;
     QTextEdit *textEdit;
 
-
-    UDP_Client *UI_client_p= nullptr;
+    UDP_Client *UI_client_p = nullptr;
 
   signals:
 };
