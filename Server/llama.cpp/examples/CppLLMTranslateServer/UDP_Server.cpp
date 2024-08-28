@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-20 11:26:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 16:21:32
- * @FilePath: /llama.cpp/examples/CppLLMTranslateServer/UDP_Server.cpp
+ * @LastEditTime: 2024-08-28 16:48:12
+ * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/UDP_Server.cpp
  */
 #include "UDP_Server.h"
 
@@ -96,7 +96,10 @@ void UDP_Server::Recv_thread()
         int port = ntohs(recv_addr.sin_port);
 
         std::cout << "[" << ip << "][" << port << "]recv len:" << ret << " " << ++count_get << std::endl;
+
+        #ifdef DEBUG_SHOW
         std::cout << "data[" << strlen(buf) << "][" << buf << "]" << std::endl;
+        #endif
     }
 }
 
@@ -109,6 +112,9 @@ void UDP_Server::Send_thread()
         manager_input.popFromOutputQueue(message);
 
         sendto(socketfd, message.c_str(), message.length(), 0, (struct sockaddr *)&recv_addr, sizeof(recv_addr));
+        
+        #ifdef DEBUG_SHOW
         std::cout << "send " << message.length() << " " << message.c_str() << std::endl;
+        #endif
     }
 }

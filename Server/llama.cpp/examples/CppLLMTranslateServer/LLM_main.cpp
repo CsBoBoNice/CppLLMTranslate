@@ -1133,6 +1133,8 @@ int TranslationChat(int argc, char ** argv) {
                 embd_inp.insert(embd_inp.end(), line_inp_assistant_3.begin(), line_inp_assistant_3.end());
                 embd_inp.insert(embd_inp.end(), line_sfx.begin(), line_sfx.end());
 
+                #ifdef DEBUG_SHOW
+
                 printf("\nsystem \n%s", system_messages_str.c_str());
                 printf("\nuser \n%s", user_messages_str_1.c_str());
                 printf("\nassistant \n%s", assistant_messages_str_1.c_str());
@@ -1141,6 +1143,8 @@ int TranslationChat(int argc, char ** argv) {
                 printf("\nuser \n%s", user_messages_str_3.c_str());
                 printf("\nassistant \n%s", assistant_messages_str_3.c_str());
 
+                #endif
+                
                 // std::string line;
                 // bool another_line = true;
                 // do {
