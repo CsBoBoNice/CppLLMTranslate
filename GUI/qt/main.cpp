@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-08-28 15:21:35
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-28 15:21:55
+ * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
+ */
 #include "mainwindow.h"
 
 #include <QApplication>
@@ -8,9 +14,14 @@
 #include "start_page.h"
 #include "simple_page.h"
 
+
+#include "intricate_page.h"
+
+
 MainWindow* w;
 start_page *start_page_w;
 simple_page *simple_page_w;
+intricate_page *intricate_page_w;
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +40,11 @@ int main(int argc, char *argv[])
     simple_page_w->resize(500,300);
     simple_page_w->hide();
 
+
+    intricate_page_w = new intricate_page;
+    intricate_page_w->resize(800,1000);
+    intricate_page_w->hide();
+
     // 创建定时器
     QTimer* page_change = new QTimer();
     page_change->setInterval(100);
@@ -39,12 +55,21 @@ int main(int argc, char *argv[])
         {
             start_page_w->show();
             simple_page_w->hide();
+            intricate_page_w->hide();
         }
-        else
+        else if(1==StateManager::getInstance().ShowPage)
         {
             start_page_w->hide();
             simple_page_w->show();
+            intricate_page_w->hide();
         }
+        else if(2==StateManager::getInstance().ShowPage)
+        {
+            start_page_w->hide();
+            simple_page_w->hide();
+            intricate_page_w->show();
+        }
+
 
     });
 
