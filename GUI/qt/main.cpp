@@ -18,7 +18,6 @@
 #include "intricate_page.h"
 
 
-MainWindow* w;
 start_page *start_page_w;
 simple_page *simple_page_w;
 intricate_page *intricate_page_w;
@@ -27,23 +26,20 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-
-    //  w=new MainWindow;
-    // w->resize(800, 500);
-    // w->hide();
-
     start_page_w = new start_page;
     start_page_w->resize(350,50);
     start_page_w->hide();
+    start_page_w->setWindowTitle("CppLLMTranslate");
 
     simple_page_w = new simple_page;
     simple_page_w->resize(500,300);
     simple_page_w->hide();
-
+    simple_page_w->setWindowTitle("CppLLMTranslate");
 
     intricate_page_w = new intricate_page;
     intricate_page_w->resize(800,1000);
     intricate_page_w->hide();
+    intricate_page_w->setWindowTitle("CppLLMTranslate");
 
     // 创建定时器
     QTimer* page_change = new QTimer();
