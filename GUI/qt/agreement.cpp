@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-23 13:55:54
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-23 17:31:02
- * @FilePath: /lvgl/main/src/agreement.cpp
+ * @LastEditTime: 2024-08-28 10:33:29
+ * @FilePath: /CppLLMTranslate/GUI/qt/agreement.cpp
  */
 // agreement.cpp
 #include "agreement.h"
@@ -115,4 +115,64 @@ std::string agreement::wrapToJson(const agreementInfo &info)
     free(jsonStr);
     cJSON_Delete(root);
     return result;
+}
+
+// 默认英译中
+agreementInfo agreement::default_en_to_zh()
+{
+    agreementInfo info;
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是专业翻译员，你需要将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。";
+    info.chat_prefix = "将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
+    info.chat_suffix = "\n[待翻译内容结束]\n\n开始将英文文档翻译成简体中文。\n\n";
+    info.user_msg_1 = "Clipboard_Singleton_thread";
+    info.user_msg_2 = "getInstance";
+    info.user_msg_3 =
+        "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's "
+        "the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
+    info.assistant_msg_1 = "剪贴板单例线程";
+    info.assistant_msg_2 = "获得实例";
+    info.assistant_msg_3 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+
+    return info;
+}
+
+// 默认中译英
+agreementInfo agreement::default_zh_to_en()
+{
+    agreementInfo info;
+
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是专业翻译员，你需要将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。";
+    info.chat_prefix = "将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
+    info.chat_suffix = "\n[待翻译内容结束]\n\n开始将将简体中文翻译成英文。\n\n";
+    info.user_msg_1 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+    info.user_msg_2 = "精美";
+    info.user_msg_3 = "升级";
+
+    info.assistant_msg_1 =
+        "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's "
+        "the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
+    info.assistant_msg_2 = "exquisite";
+    info.assistant_msg_3 = "upgrades";
+
+    return info;
+}
+
+// 默认聊天
+agreementInfo agreement::default_chat()
+{
+    agreementInfo info;
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是一个乐于助人的助手。";
+    info.chat_prefix = "\n";
+    info.chat_suffix = "\n";
+    info.user_msg_1 = "你好";
+    info.user_msg_2 = "使用中文回答我的问题。";
+    info.user_msg_3 = "回答问题尽可能简短。";
+
+    info.assistant_msg_1 = "你好有什么可以帮助您。";
+    info.assistant_msg_2 = "好的，我将使用中文回答您的问题。";
+    info.assistant_msg_3 = "好的，我将使用我将尽可能简短的回答您的问题。";
+    return info;
 }

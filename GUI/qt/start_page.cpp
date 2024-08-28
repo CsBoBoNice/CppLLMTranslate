@@ -52,9 +52,6 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent} {
     setCentralWidget(firstPage);
 
 
-    // // 连接信号和槽
-    // connect(testButton, &QPushButton::clicked, this, &MainWindow::onTestButtonClicked);
-    // connect(startButton, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
 
     connect(testButton, &QPushButton::clicked, this, [this]() {
             QString IP = ipLineEdit->text();
@@ -118,62 +115,3 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent} {
 
 }
 
-// void MainWindow::onTestButtonClicked()
-// {
-
-//     QString IP = ipLineEdit->text();
-//     bool ok;
-//     quint16 Port = portLineEdit->text().toUShort(&ok);
-
-//     if (!client_p) {
-//         client_p = new UDP_Client(IP, Port);
-//         UI_client_p = client_p;
-//     }
-
-//     // 初始化UDP客户端
-//     if (!client_p->Initialize(IP, Port)) {
-//         qDebug() << "Failed to initialize UDP client.";
-//     }
-
-//     agreementInfo info;
-//     info.cmd = (int)AgreementCmd::test;
-//     std::string msg_translate = agreement::getInstance().wrapToJson(info);
-
-//     // 发送并接受一条消息
-//     client_p->Send(QString::fromStdString(msg_translate));
-//     QString recv_mag = client_p->Recv(100);
-//     std::string show_text = recv_mag.toStdString();
-//     agreementInfo recv_info = agreement::getInstance().parseJson(show_text);
-
-//     QString mag_show = QString::fromStdString(recv_info.msg);
-//     textEdit->clear();
-//     textEdit->append(mag_show);
-// }
-
-// void MainWindow::onStartButtonClicked()
-// {
-
-//     // 创建UDP客户端实例
-
-//     if (!client_p) {
-//         QString IP = ipLineEdit->text();
-//         bool ok;
-//         quint16 Port = portLineEdit->text().toUShort(&ok);
-
-//         client_p = new UDP_Client(IP, Port);
-//         UI_client_p = client_p;
-//         // 初始化UDP客户端
-//         if (!client_p->Initialize(IP, Port)) {
-//             qDebug() << "Failed to initialize UDP client.";
-//         }
-//     }
-//     std::thread t_UDP_Client_Recv_thread(UDP_Client_Recv_thread);
-//     std::thread t_UDP_Client_Send_thread(UDP_Client_Send_thread);
-//     t_UDP_Client_Recv_thread.detach();
-//     t_UDP_Client_Send_thread.detach();
-
-//     // 开始按钮点击后的操作
-//     // 切换到第二个页面
-//     QStackedLayout *stackedLayout = static_cast<QStackedLayout *>(centralWidget()->layout());
-//     stackedLayout->setCurrentIndex(1);
-// }

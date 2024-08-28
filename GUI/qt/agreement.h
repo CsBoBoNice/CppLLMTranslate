@@ -51,6 +51,12 @@ class agreement {
     // 封装为json数据
     std::string wrapToJson(const agreementInfo &info);
 
+    agreementInfo default_en_to_zh();
+
+    agreementInfo default_zh_to_en();
+
+    agreementInfo default_chat();
+
   private:
     // 构造函数和析构函数私有化，防止外部创建和删除对象
     agreement() {}
