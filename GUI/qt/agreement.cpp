@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-23 13:55:54
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 10:33:29
+ * @LastEditTime: 2024-08-28 10:55:30
  * @FilePath: /CppLLMTranslate/GUI/qt/agreement.cpp
  */
 // agreement.cpp
@@ -146,15 +146,17 @@ agreementInfo agreement::default_zh_to_en()
     info.system = "你是专业翻译员，你需要将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。";
     info.chat_prefix = "将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
     info.chat_suffix = "\n[待翻译内容结束]\n\n开始将将简体中文翻译成英文。\n\n";
-    info.user_msg_1 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
-    info.user_msg_2 = "精美";
-    info.user_msg_3 = "升级";
+    info.user_msg_1 = "精美";
+    info.user_msg_2 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+    info.user_msg_3 = "帮助";
 
     info.assistant_msg_1 =
+        "exquisite\n精致的，精美的；\nelegant\n（人）高雅的，举止优雅的；\nfineness\n美好；纯度；细微；优雅；";
+    info.assistant_msg_2 =
         "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's "
         "the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
-    info.assistant_msg_2 = "exquisite";
-    info.assistant_msg_3 = "upgrades";
+    info.assistant_msg_3 =
+        "help\n帮助，援助；\nassist\n帮助，协助；\nassistance\n帮助，援助；\naid\n帮助；援助，救助；";
 
     return info;
 }
