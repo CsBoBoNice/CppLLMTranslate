@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 16:17:01
+ * @LastEditTime: 2024-08-29 10:02:54
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -203,31 +203,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(centralWidget);
 
     // 连接信号和槽
-    connect(translateButton, &QPushButton::clicked, this, [this]() {
-        std::string src_text = textEdit1->toPlainText().toStdString();
-
-        agreementInfo info;
-
-        if (mode_index == 0) {
-            // info = agreement::getInstance().default_en_to_zh();
-            info = ConfigManager::getInstance().Get_config_en_to_zh();
-        } else if (mode_index == 1) {
-            // info = agreement::getInstance().default_zh_to_en();
-            info = ConfigManager::getInstance().Get_config_zh_to_en();
-        } else {
-            // info = agreement::getInstance().default_chat();
-            info = ConfigManager::getInstance().Get_config_chat();
-        }
-
-        info.msg = src_text;
-        info.cmd=(int)AgreementCmd::translate_msg;
-
-        std::string msg_translate = agreement::getInstance().wrapToJson(info);
-
-        MessageManager::getInstance().pushToOutputQueue(msg_translate);
-
-        textEdit2->clear();
-    });
+    connect(translateButton, &QPushButton::clicked, this, &intricate_page::SendtoServer);
 
     // 创建定时器
     copy_timer = new QTimer(this);
@@ -330,4 +306,40 @@ void intricate_page::UpDataInfo(int index)
     textEdit_assistant_msg_1->setText(info.assistant_msg_1.c_str());
     textEdit_assistant_msg_2->setText(info.assistant_msg_2.c_str());
     textEdit_assistant_msg_3->setText(info.assistant_msg_3.c_str());
+}
+
+void intricate_page::SendtoServer()
+{
+    std::string src_text = textEdit1->toPlainText().toStdString();
+
+    agreementInfo info;
+
+    if (mode_index == 0) {
+        // info = agreement::getInstance().default_en_to_zh();
+        info = ConfigManager::getInstance().Get_config_en_to_zh();
+    } else if (mode_index == 1) {
+        // info = agreement::getInstance().default_zh_to_en();
+        info = ConfigManager::getInstance().Get_config_zh_to_en();
+    } else {
+        // info = agreement::getInstance().default_chat();
+        info = ConfigManager::getInstance().Get_config_chat();
+    }
+
+    info.msg = src_text;
+    info.cmd = (int)AgreementCmd::translate_msg;
+
+    std::string msg_translate = agreement::getInstance().wrapToJson(info);
+
+    MessageManager::getInstance().pushToOutputQueue(msg_translate);
+
+    textEdit2->clear();
+}
+
+void intricate_page::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return && event->modifiers().testFlag(Qt::ControlModifier)) {
+        SendtoServer();
+    } else {
+        QWidget::keyPressEvent(event);
+    }
 }

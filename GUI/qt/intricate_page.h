@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 14:57:49
+ * @LastEditTime: 2024-08-29 10:03:21
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.h
  */
 
@@ -16,6 +16,7 @@
 #include <QTextEdit>
 #include <QCheckBox>
 #include <QTimer>
+#include <QKeyEvent>
 
 class intricate_page : public QMainWindow {
     Q_OBJECT
@@ -28,6 +29,8 @@ class intricate_page : public QMainWindow {
     void onToggleSettingsButtonClicked();
 
     void UpDataInfo(int index);
+
+    void SendtoServer();
 
   private:
     QVBoxLayout *mainLayout;
@@ -43,12 +46,6 @@ class intricate_page : public QMainWindow {
     QTimer *copy_timer;
     QTimer *translate_timer;
 
-
-
-
-
-
-
     QTextEdit *textEdit_system;
     QTextEdit *textEdit_chat_prefix;
     QTextEdit *textEdit_chat_suffix;
@@ -58,5 +55,8 @@ class intricate_page : public QMainWindow {
     QTextEdit *textEdit_assistant_msg_1;
     QTextEdit *textEdit_assistant_msg_2;
     QTextEdit *textEdit_assistant_msg_3;
+
+  protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // INTRICATE_PAGE_H
