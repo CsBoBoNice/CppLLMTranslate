@@ -17,6 +17,8 @@
 
 #include "intricate_page.h"
 
+#include <QFontDatabase>
+#include <QFont>
 
 start_page *start_page_w;
 simple_page *simple_page_w;
@@ -25,6 +27,23 @@ intricate_page *intricate_page_w;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // 加载自定义字体
+    QString font_path = QCoreApplication::applicationDirPath() + "/font.ttf";
+    int fontId = QFontDatabase::addApplicationFont(font_path);
+    if (fontId != -1) {
+        QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+        if (!fontFamilies.empty()) {
+            // 使用第一个字体家族名称
+            QFont customFont(fontFamilies.at(0));
+            customFont.setPointSize(13); // 设置默认字体大小
+
+            a.setFont(customFont);
+
+            QApplication::setFont(customFont);
+            // QApplication::setStyle("fusion"); // 设置样式为fusion或其他支持抗锯齿的样式
+        }
+    }
 
     start_page_w = new start_page;
     start_page_w->resize(350,50);
