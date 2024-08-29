@@ -19,7 +19,8 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     modeComboBox->addItem("英译中");
     modeComboBox->addItem("中译英");
     modeComboBox->addItem("聊天");
-    toggleSettingsButton = new QPushButton("繁");
+    toggleSettingsButton = new QPushButton("简");
+    toggleSettingsButton->setToolTip("切换到可以设置提示词的页面");
 
     // 使用lambda表达式连接信号和槽
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
@@ -46,6 +47,10 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 第四行
     translateButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
+
+    // 设置工具提示
+    translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交");
+    checkBox->setToolTip("是否替换剪贴板粘贴 (Ctrl+V) 的内容");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
     fourthRowLayout->addWidget(translateButton);
