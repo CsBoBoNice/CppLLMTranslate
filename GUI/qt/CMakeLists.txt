@@ -19,8 +19,8 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
         main.cpp
-        mainwindow.cpp
-        mainwindow.h
+
+
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

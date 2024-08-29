@@ -4,7 +4,6 @@
  * @LastEditTime: 2024-08-28 15:21:55
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
-#include "mainwindow.h"
 
 #include <QApplication>
 #include <QTimer>
