@@ -293,10 +293,10 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     });
 
     // 启动定时器，间隔时间为毫秒
-    copy_timer->start(500);
+    copy_timer->start(100);
 
     // 启动定时器，间隔时间为毫秒
-    translate_timer->start(100);
+    translate_timer->start(1);
 }
 
 intricate_page::~intricate_page() {}

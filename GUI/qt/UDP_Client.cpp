@@ -1,6 +1,6 @@
 #include "UDP_Client.h"
 #include "MessageManager.h"
-
+#include <QThread>
 
 UDP_Client::UDP_Client(const QString& ip, quint16 port) : udpSocket(nullptr), serverAddress(ip), serverPort(port) {}
 
@@ -54,6 +54,7 @@ void UDP_Client::Recv_thread() {
                 qDebug()  << "data[" << strlen(buf_recv) << "][" << buf_recv << "]" ;
             }
         }
+        QThread::msleep(1);
     }
 }
 

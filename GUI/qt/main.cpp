@@ -43,7 +43,6 @@ int main(int argc, char *argv[])
 
     // 创建定时器
     QTimer* page_change = new QTimer();
-    page_change->setInterval(100);
 
     // 连接定时器的timeout信号到槽函数
     QObject::connect(page_change, &QTimer::timeout,start_page_w, [&]() {
@@ -69,9 +68,8 @@ int main(int argc, char *argv[])
 
     });
 
-
     // 启动定时器
-    page_change->start();
+    page_change->start(100);
 
     return a.exec();
 }
