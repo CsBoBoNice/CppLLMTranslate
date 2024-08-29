@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 10:02:54
+ * @LastEditTime: 2024-08-29 11:40:55
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -53,7 +53,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     translateButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
 
-    translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交");
+    translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
     checkBox->setToolTip("是否替换剪贴板粘贴 (Ctrl+V) 的内容");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
@@ -343,7 +343,27 @@ void intricate_page::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return && event->modifiers().testFlag(Qt::ControlModifier)) {
         SendtoServer();
+    } else if (event->key() == Qt::Key_Equal && event->modifiers().testFlag(Qt::ControlModifier)) {
+        ChangeFontSize(1);
+    } else if (event->key() == Qt::Key_Minus && event->modifiers().testFlag(Qt::ControlModifier)) {
+        ChangeFontSize(-1); // 减小字体大小
     } else {
         QWidget::keyPressEvent(event);
     }
+}
+
+void intricate_page::ChangeFontSize(int delta)
+{
+    QFont font = QApplication::font();
+    int newSize = font.pointSize() + delta; // 调整字体大小
+    if (newSize < 5) {
+        newSize = 5;
+    }
+
+    if (newSize > 30) {
+        newSize = 30;
+    }
+
+    font.setPointSize(newSize);
+    QApplication::setFont(font);
 }

@@ -1,10 +1,9 @@
 /*
  * @Date: 2024-08-29 09:52:10
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 09:56:28
+ * @LastEditTime: 2024-08-29 11:40:50
  * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
  */
-
 
 #ifndef SIMPLE_PAGE_H
 #define SIMPLE_PAGE_H
@@ -30,6 +29,8 @@ class simple_page : public QMainWindow {
     void onToggleSettingsButtonClicked();
 
     void SendtoServer();
+
+    void ChangeFontSize(int delta);
 
   private:
     QVBoxLayout *mainLayout;

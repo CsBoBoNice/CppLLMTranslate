@@ -32,6 +32,8 @@ class intricate_page : public QMainWindow {
 
     void SendtoServer();
 
+    void ChangeFontSize(int delta);
+
   private:
     QVBoxLayout *mainLayout;
     QComboBox *modeComboBox;
