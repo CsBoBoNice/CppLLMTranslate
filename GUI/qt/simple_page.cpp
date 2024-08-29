@@ -58,31 +58,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(centralWidget);
 
     // 连接信号和槽
-    connect(translateButton, &QPushButton::clicked, this, [this]() {
-        std::string src_text = textEdit1->toPlainText().toStdString();
-
-        agreementInfo info;
-
-        if (mode_index == 0) {
-            // info = agreement::getInstance().default_en_to_zh();
-            info = ConfigManager::getInstance().Get_config_en_to_zh();
-        } else if (mode_index == 1) {
-            // info = agreement::getInstance().default_zh_to_en();
-            info = ConfigManager::getInstance().Get_config_zh_to_en();
-        } else {
-            // info = agreement::getInstance().default_chat();
-            info = ConfigManager::getInstance().Get_config_chat();
-        }
-
-        info.msg = src_text;
-        info.cmd=(int)AgreementCmd::translate_msg;
-
-        std::string msg_translate = agreement::getInstance().wrapToJson(info);
-
-        MessageManager::getInstance().pushToOutputQueue(msg_translate);
-
-        textEdit2->clear();
-    });
+    connect(translateButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
 
     // 创建定时器
     copy_timer = new QTimer(this);
@@ -160,4 +136,40 @@ void simple_page::onToggleSettingsButtonClicked()
 {
     // 切换 繁 页面
     StateManager::getInstance().ShowPage = 2;
+}
+
+void simple_page::SendtoServer()
+{
+    std::string src_text = textEdit1->toPlainText().toStdString();
+
+    agreementInfo info;
+
+    if (mode_index == 0) {
+        // info = agreement::getInstance().default_en_to_zh();
+        info = ConfigManager::getInstance().Get_config_en_to_zh();
+    } else if (mode_index == 1) {
+        // info = agreement::getInstance().default_zh_to_en();
+        info = ConfigManager::getInstance().Get_config_zh_to_en();
+    } else {
+        // info = agreement::getInstance().default_chat();
+        info = ConfigManager::getInstance().Get_config_chat();
+    }
+
+    info.msg = src_text;
+    info.cmd = (int)AgreementCmd::translate_msg;
+
+    std::string msg_translate = agreement::getInstance().wrapToJson(info);
+
+    MessageManager::getInstance().pushToOutputQueue(msg_translate);
+
+    textEdit2->clear();
+}
+
+void simple_page::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Return && event->modifiers().testFlag(Qt::ControlModifier)) {
+        SendtoServer();
+    } else {
+        QWidget::keyPressEvent(event);
+    }
 }

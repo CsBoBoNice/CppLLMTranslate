@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-08-29 09:52:10
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-29 09:56:28
+ * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
+ */
 
 
 #ifndef SIMPLE_PAGE_H
@@ -11,6 +17,7 @@
 #include <QTextEdit>
 #include <QCheckBox>
 #include <QTimer>
+#include <QKeyEvent>
 
 class simple_page : public QMainWindow {
     Q_OBJECT
@@ -21,6 +28,8 @@ class simple_page : public QMainWindow {
 
   private slots:
     void onToggleSettingsButtonClicked();
+
+    void SendtoServer();
 
   private:
     QVBoxLayout *mainLayout;
@@ -35,5 +44,8 @@ class simple_page : public QMainWindow {
 
     QTimer *copy_timer;
     QTimer *translate_timer;
+
+  protected:
+    void keyPressEvent(QKeyEvent *event) override;
 };
 #endif // SIMPLE_PAGE_H
