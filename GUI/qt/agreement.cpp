@@ -176,6 +176,6 @@ agreementInfo agreement::default_chat()
 
     info.assistant_msg_1 = "你好有什么可以帮助您。";
     info.assistant_msg_2 = "好的，我将使用中文回答您的问题。";
-    info.assistant_msg_3 = "好的，我将使用我将尽可能简短的回答您的问题。";
+    info.assistant_msg_3 = "好的，我将尽可能简短的回答您的问题。";
     return info;
 }

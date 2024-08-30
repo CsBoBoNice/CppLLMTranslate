@@ -130,37 +130,47 @@ void HttpManager::sendRequestJson(std::string json_msg)
     std::string assistant_msg_1 = info.assistant_msg_1;
     std::string assistant_msg_2 = info.assistant_msg_2;
     std::string assistant_msg_3 = info.assistant_msg_3;
-    std::string msg = info.msg;
+    std::string msg = info.chat_prefix + info.msg + info.chat_suffix;
 
     QJsonArray messages;
     messages.append(QJsonObject{
         {   "role",       "system"},
         {"content", system.c_str()}
     });
-    messages.append(QJsonObject{
-        {   "role",             "user"},
-        {"content", user_msg_1.c_str()}
-    });
-    messages.append(QJsonObject{
-        {   "role",             "assistant"},
-        {"content", assistant_msg_1.c_str()}
-    });
-    messages.append(QJsonObject{
-        {   "role",             "user"},
-        {"content", user_msg_2.c_str()}
-    });
-    messages.append(QJsonObject{
-        {   "role",             "assistant"},
-        {"content", assistant_msg_2.c_str()}
-    });
-    messages.append(QJsonObject{
-        {   "role",             "user"},
-        {"content", user_msg_3.c_str()}
-    });
-    messages.append(QJsonObject{
-        {   "role",             "assistant"},
-        {"content", assistant_msg_3.c_str()}
-    });
+
+    if (!user_msg_1.empty() && !assistant_msg_1.empty()) {
+        messages.append(QJsonObject{
+            {   "role",             "user"},
+            {"content", user_msg_1.c_str()}
+        });
+        messages.append(QJsonObject{
+            {   "role",             "assistant"},
+            {"content", assistant_msg_1.c_str()}
+        });
+    }
+
+    if (!user_msg_2.empty() && !assistant_msg_2.empty()) {
+        messages.append(QJsonObject{
+            {   "role",             "user"},
+            {"content", user_msg_2.c_str()}
+        });
+        messages.append(QJsonObject{
+            {   "role",             "assistant"},
+            {"content", assistant_msg_2.c_str()}
+        });
+    }
+
+    if (!user_msg_3.empty() && !assistant_msg_3.empty()) {
+        messages.append(QJsonObject{
+            {   "role",             "user"},
+            {"content", user_msg_3.c_str()}
+        });
+        messages.append(QJsonObject{
+            {   "role",             "assistant"},
+            {"content", assistant_msg_3.c_str()}
+        });
+    }
+
     messages.append(QJsonObject{
         {   "role",      "user"},
         {"content", msg.c_str()}
@@ -172,7 +182,8 @@ void HttpManager::sendRequestJson(std::string json_msg)
     };
 
     QJsonDocument doc(requestObj);
-    // qDebug() << "Request JSON:" << doc.toJson(); // 打印请求的JSON数据
+    // 打印请求的JSON数据
+    qDebug() << "Request JSON:\n" << QString::fromUtf8(doc.toJson());
     QString retString = sendRequest(doc);
 
     agreementInfo retInfo;

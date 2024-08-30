@@ -78,7 +78,8 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
 
         HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
         agreementInfo info_send;
-        info_send = agreement::getInstance().default_chat();
+        // info_send = agreement::getInstance().default_chat();
+        info_send.system="You are a helpful assistant. ";
         info_send.cmd = (int)AgreementCmd::translate_msg;
         info_send.msg = "hi";
         std::string msg_translate = agreement::getInstance().wrapToJson(info_send);
