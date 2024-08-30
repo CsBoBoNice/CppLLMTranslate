@@ -168,6 +168,7 @@ void simple_page::SendtoServer()
     MessageManager::getInstance().pushToOutputQueue(msg_translate);
 
     textEdit2->clear();
+    textEdit2->append("Please wait ...");
 }
 
 void simple_page::keyPressEvent(QKeyEvent *event)

@@ -34,6 +34,7 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     urlLineEdit = new QLineEdit(server_info.url.c_str(), this);
     modelLineEdit = new QLineEdit(server_info.model.c_str(), this);
     apiKeyLineEdit = new QLineEdit(server_info.apiKey.c_str(), this);
+    defaultButton = new QPushButton("默认🔄", this);
     testButton = new QPushButton("测试🔍", this);
     startButton = new QPushButton("开始🌟", this);
     textEdit = new QTextEdit(this);
@@ -58,6 +59,7 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     firstPageLayout->addLayout(inputLayout_3);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
+    buttonLayout->addWidget(defaultButton);
     buttonLayout->addWidget(testButton);
     buttonLayout->addWidget(startButton);
     firstPageLayout->addLayout(buttonLayout);
@@ -68,9 +70,13 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     // 设置主窗口的布局
     setCentralWidget(firstPage);
 
-    connect(testButton, &QPushButton::clicked, this, [this]() {
-        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
 
+    connect(testButton, &QPushButton::clicked, this, [this]() {
+
+        textEdit->clear();
+        textEdit->append("Please wait ...");
+
+        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
         agreementInfo info_send;
         info_send = agreement::getInstance().default_chat();
         info_send.cmd = (int)AgreementCmd::translate_msg;
@@ -108,4 +114,15 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
 
         ConfigManager::getInstance().SetServerIP(newServerInfo);
     });
+
+    connect(defaultButton, &QPushButton::clicked, this, [this]() {
+
+        ServerInfo defaultServerInfo=ConfigManager::getInstance().DefaultGetServerIP();
+
+        urlLineEdit->setText(defaultServerInfo.url.c_str());
+        apiKeyLineEdit->setText(defaultServerInfo.apiKey.c_str());
+        modelLineEdit->setText(defaultServerInfo.model.c_str());
+
+    });
+
 }

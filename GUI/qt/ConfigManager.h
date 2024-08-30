@@ -36,6 +36,7 @@ class ConfigManager {
     // 将字符串内容保存到文件
     bool saveFile(const QString &filePath, const std::string &content);
 
+    ServerInfo DefaultGetServerIP();
     ServerInfo GetServerIP();
     void SetServerIP(const ServerInfo &newServerInfo);
 

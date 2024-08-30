@@ -31,6 +31,7 @@ class start_page : public QMainWindow {
     QLineEdit *urlLineEdit;
     QLineEdit *modelLineEdit;
     QLineEdit *apiKeyLineEdit;
+    QPushButton *defaultButton;
     QPushButton *testButton;
     QPushButton *startButton;
     QTextEdit *textEdit;

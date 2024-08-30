@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
     }
 
     start_page_w = new start_page;
-    start_page_w->resize(350,50);
+    start_page_w->resize(500,50);
     start_page_w->hide();
     start_page_w->setWindowTitle("CppLLMTranslate");
 

@@ -337,6 +337,7 @@ void intricate_page::SendtoServer()
     MessageManager::getInstance().pushToOutputQueue(msg_translate);
 
     textEdit2->clear();
+    textEdit2->append("Please wait ...");
 }
 
 void intricate_page::keyPressEvent(QKeyEvent *event)

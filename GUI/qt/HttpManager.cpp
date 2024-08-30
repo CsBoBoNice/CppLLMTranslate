@@ -72,7 +72,7 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
                 qDebug() << "Network error else:" << reply->errorString();
             }
 
-            retString = reply->errorString();
+            retString = "ERROR: "+reply->errorString();
 
             reply->abort();
             reply->deleteLater();
@@ -87,7 +87,7 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
             QJsonDocument doc = QJsonDocument::fromJson(responseStr.toUtf8(), &parseError);
             if (parseError.error != QJsonParseError::NoError) {
                 qDebug() << "JSON parse error:" << parseError.errorString();
-                retString = "JSON parse error:" + parseError.errorString();
+                retString = "ERROR: JSON parse error:" + parseError.errorString();
                 return retString;
             }
 
