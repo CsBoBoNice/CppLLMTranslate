@@ -20,8 +20,6 @@
 #include <QClipboard>
 #include <QCheckBox>
 
-#include "UDP_Client.h"
-
 class start_page : public QMainWindow {
     Q_OBJECT
   public:
@@ -30,13 +28,12 @@ class start_page : public QMainWindow {
   private:
     QWidget *firstPage;
 
-    QLineEdit *ipLineEdit;
-    QLineEdit *portLineEdit;
+    QLineEdit *urlLineEdit;
+    QLineEdit *modelLineEdit;
+    QLineEdit *apiKeyLineEdit;
     QPushButton *testButton;
     QPushButton *startButton;
     QTextEdit *textEdit;
-
-    UDP_Client *UI_client_p = nullptr;
 
   signals:
 };

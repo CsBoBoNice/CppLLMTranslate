@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 14:47:28
+ * @LastEditTime: 2024-08-30 10:45:23
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -44,9 +44,9 @@ bool ConfigManager::saveFile(const QString &filePath, const std::string &content
 
 ServerInfo ConfigManager::GetServerIP()
 {
-    ServerInfo server_info{.ip = "127.0.0.1", .port = "59218"};
+    ServerInfo server_info{.url="http://172.0.0.1:59218/v1/chat/completions",.apiKey="888888", .model="glm-4-flash" };
     std::string ip_json;
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/IP_config.json";
+    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
     QFile file(ipconfig);
     if (file.exists() == true) {
         ip_json = readFile(ipconfig);
@@ -56,14 +56,19 @@ ServerInfo ConfigManager::GetServerIP()
             goto return_info;
         }
 
-        cJSON *IP_str = cJSON_GetObjectItem(root, "IP");
-        if (IP_str != nullptr) {
-            server_info.ip = IP_str->valuestring;
+        cJSON *url_str = cJSON_GetObjectItem(root, "url");
+        if (url_str != nullptr) {
+            server_info.url = url_str->valuestring;
         }
 
-        cJSON *Port_str = cJSON_GetObjectItem(root, "Port");
-        if (Port_str != nullptr) {
-            server_info.port = Port_str->valuestring;
+        cJSON *apiKey_str = cJSON_GetObjectItem(root, "apiKey");
+        if (apiKey_str != nullptr) {
+            server_info.apiKey = apiKey_str->valuestring;
+        }
+
+        cJSON *model_str = cJSON_GetObjectItem(root, "model");
+        if (model_str != nullptr) {
+            server_info.model = model_str->valuestring;
         }
 
         cJSON_Delete(root);
@@ -76,11 +81,12 @@ return_info:
 
 void ConfigManager::SetServerIP(const ServerInfo &newServerInfo)
 {
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/IP_config.json";
+    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
 
     cJSON *root = cJSON_CreateObject();
-    cJSON_AddStringToObject(root, "IP", newServerInfo.ip.c_str());
-    cJSON_AddStringToObject(root, "Port", newServerInfo.port.c_str());
+    cJSON_AddStringToObject(root, "url", newServerInfo.url.c_str());
+    cJSON_AddStringToObject(root, "apiKey", newServerInfo.apiKey.c_str());
+    cJSON_AddStringToObject(root, "model", newServerInfo.model.c_str());
 
     char *jsonStr = cJSON_Print(root);
     std::string result(jsonStr);

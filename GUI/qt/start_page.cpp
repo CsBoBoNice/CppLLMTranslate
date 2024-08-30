@@ -8,21 +8,20 @@
 
 #include <QThread>
 
+#include "HttpManager.h"
+#include "MessageManager.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
 }
 QT_END_NAMESPACE
 
-static void UDP_Client_Recv_thread()
+static void Http_thread()
 {
-    StateManager::getInstance().client_p->Recv_thread();
+    HttpManager::instance().SendRequest_thread();
 }
 
-static void UDP_Client_Send_thread()
-{
-    StateManager::getInstance().client_p->Send_thread();
-}
 
 start_page::start_page(QWidget *parent) : QMainWindow{parent}
 {
@@ -32,20 +31,32 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     // 初始化UI
     firstPage = new QWidget(this);
 
-    ipLineEdit = new QLineEdit(server_info.ip.c_str(), this);
-    portLineEdit = new QLineEdit(server_info.port.c_str(), this);
+    urlLineEdit = new QLineEdit(server_info.url.c_str(), this);
+    modelLineEdit = new QLineEdit(server_info.model.c_str(), this);
+    apiKeyLineEdit = new QLineEdit(server_info.apiKey.c_str(), this);
     testButton = new QPushButton("测试🔍", this);
     startButton = new QPushButton("开始🌟", this);
     textEdit = new QTextEdit(this);
 
     // 页面1布局
     QVBoxLayout *firstPageLayout = new QVBoxLayout(centralWidget());
-    QHBoxLayout *inputLayout = new QHBoxLayout();
-    inputLayout->addWidget(new QLabel("IP: ", this));
-    inputLayout->addWidget(ipLineEdit);
-    inputLayout->addWidget(new QLabel("Port: ", this));
-    inputLayout->addWidget(portLineEdit);
-    firstPageLayout->addLayout(inputLayout);
+
+    QHBoxLayout *inputLayout_1 = new QHBoxLayout();
+    inputLayout_1->addWidget(new QLabel("URL: ", this));
+    inputLayout_1->addWidget(urlLineEdit);
+    firstPageLayout->addLayout(inputLayout_1);
+
+
+    QHBoxLayout *inputLayout_2 = new QHBoxLayout();
+    inputLayout_2->addWidget(new QLabel("Model: ", this));
+    inputLayout_2->addWidget(modelLineEdit);
+    firstPageLayout->addLayout(inputLayout_2);
+
+    QHBoxLayout *inputLayout_3 = new QHBoxLayout();
+    inputLayout_3->addWidget(new QLabel("API Key: ", this));
+    inputLayout_3->addWidget(apiKeyLineEdit);
+    firstPageLayout->addLayout(inputLayout_3);
+
     QHBoxLayout *buttonLayout = new QHBoxLayout();
     buttonLayout->addWidget(testButton);
     buttonLayout->addWidget(startButton);
@@ -58,65 +69,43 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     setCentralWidget(firstPage);
 
     connect(testButton, &QPushButton::clicked, this, [this]() {
-        QString IP = ipLineEdit->text();
-        bool ok;
-        quint16 Port = portLineEdit->text().toUShort(&ok);
+        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
 
-        UI_client_p = StateManager::getInstance().client_p;
-        if (!UI_client_p) {
-            UI_client_p = new UDP_Client(IP, Port);
-            StateManager::getInstance().client_p = UI_client_p;
+        agreementInfo info_send;
+        info_send = agreement::getInstance().default_chat();
+        info_send.cmd = (int)AgreementCmd::translate_msg;
+        info_send.msg = "hi";
+        std::string msg_translate = agreement::getInstance().wrapToJson(info_send);
+
+        HttpManager::instance().sendRequestJson(msg_translate);
+
+
+        std::string show_text;
+        MessageManager::getInstance().popFromInputQueueNoWait(show_text);
+        agreementInfo info = agreement::getInstance().parseJson(show_text);
+
+        if (info.cmd == (int)AgreementCmd::success_msg) {
+            textEdit->clear();
+            textEdit->append(info.msg.c_str());
         }
-
-        // 初始化UDP客户端
-        if (!UI_client_p->Initialize(IP, Port)) {
-            qDebug() << "Failed to initialize UDP client.";
-        }
-
-        agreementInfo info;
-        info.cmd = (int)AgreementCmd::test;
-        std::string msg_translate = agreement::getInstance().wrapToJson(info);
-
-        // 发送并接受一条消息
-        UI_client_p->Send(QString::fromStdString(msg_translate));
-        QString recv_mag = UI_client_p->Recv(100);
-        std::string show_text = recv_mag.toStdString();
-        agreementInfo recv_info = agreement::getInstance().parseJson(show_text);
-
-        QString mag_show = QString::fromStdString(recv_info.msg);
-        textEdit->clear();
-        textEdit->append(mag_show);
     });
 
     connect(startButton, &QPushButton::clicked, this, [this]() {
-        // 创建UDP客户端实例
 
-        UI_client_p = StateManager::getInstance().client_p;
-        if (!UI_client_p) {
-            QString IP = ipLineEdit->text();
-            bool ok;
-            quint16 Port = portLineEdit->text().toUShort(&ok);
+        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
 
-            UI_client_p = new UDP_Client(IP, Port);
-            StateManager::getInstance().client_p = UI_client_p;
-            // 初始化UDP客户端
-            if (!UI_client_p->Initialize(IP, Port)) {
-                qDebug() << "Failed to initialize UDP client.";
-            }
-        }
-
-        std::thread t_UDP_Client_Recv_thread(UDP_Client_Recv_thread);
-        std::thread t_UDP_Client_Send_thread(UDP_Client_Send_thread);
-        t_UDP_Client_Recv_thread.detach();
-        t_UDP_Client_Send_thread.detach();
+        std::thread t_HTTP_thread(Http_thread);
+        t_HTTP_thread.detach();
 
         // 开始按钮点击后的操作
         // 切换到第二个页面
         StateManager::getInstance().ShowPage = 1;
 
         ServerInfo newServerInfo;
-        newServerInfo.ip = ipLineEdit->text().toStdString();
-        newServerInfo.port = portLineEdit->text().toStdString();
+        newServerInfo.url=urlLineEdit->text().toStdString();
+        newServerInfo.apiKey=apiKeyLineEdit->text().toStdString();
+        newServerInfo.model=modelLineEdit->text().toStdString();
+
         ConfigManager::getInstance().SetServerIP(newServerInfo);
     });
 }

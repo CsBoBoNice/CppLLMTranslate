@@ -16,8 +16,9 @@
 #include "agreement.h"
 
 struct ServerInfo {
-    std::string ip;
-    std::string port;
+    std::string url;
+    std::string apiKey;
+    std::string model;
 };
 
 class ConfigManager {

@@ -32,12 +32,12 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         MessageManager.h MessageManager.cpp
         cJSON.h cJSON.cpp
         agreement.h agreement.cpp
-        UDP_Client.h UDP_Client.cpp
         StateManager.h StateManager.cpp
         start_page.h start_page.cpp
         simple_page.h simple_page.cpp
         ConfigManager.h ConfigManager.cpp
         intricate_page.h intricate_page.cpp
+        HttpManager.h HttpManager.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
