@@ -494,7 +494,8 @@ static void test_special_chars() {
         {
             "abcabcabc",
             "aaaabcccc",
-
+            // NOTE: Also ensures that multi-byte characters still count as a single character
+            "🔵🟠✅abc❌🟠🔵"
         },
         // Failing strings
         {
@@ -502,7 +503,7 @@ static void test_special_chars() {
             "aaaaabcccc",
             "aaaabccc",
             "aaaabccccc",
-            "🔵🟠✅❌abc❌✅🟠🔵"
+            "🔵🟠✅❌abc❌✅🟠🔵",
             "🔵🟠abc🟠🔵"
         }
     );
