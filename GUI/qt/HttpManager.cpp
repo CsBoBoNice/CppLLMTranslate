@@ -23,8 +23,8 @@ HttpManager &HttpManager::instance()
 }
 
 HttpManager::HttpManager()
-    : m_maxRetries(3), m_timeout(60000), m_model("glm-4-flash"), m_apiKey("888888"),
-      m_url("http://172.0.0.1:59218/v1/chat/completions")
+    : m_maxRetries(3), m_timeout(60000), m_model("gpt-4o"), m_apiKey("888888"),
+      m_url("http://127.0.0.1:59218/v1/chat/completions")
 {
 }
 
