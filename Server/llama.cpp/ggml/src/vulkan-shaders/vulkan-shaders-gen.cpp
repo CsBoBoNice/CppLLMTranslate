@@ -22,6 +22,7 @@
 #ifdef _WIN32
     #include <windows.h>
     #include <direct.h> // For _mkdir on Windows
+    #include <algorithm> // For std::replace on w64devkit
 #else
     #include <unistd.h>
     #include <sys/wait.h>
@@ -368,6 +369,10 @@ void process_shaders(std::vector<std::future<void>>& tasks) {
     }));
 
     tasks.push_back(std::async(std::launch::async, [] {
+        string_to_spv("acc_f32", "acc.comp", {{"A_TYPE", "float"}, {"B_TYPE", "float"}, {"D_TYPE", "float"}, {"FLOAT_TYPE", "float"}});
+    }));
+
+    tasks.push_back(std::async(std::launch::async, [] {
         string_to_spv("split_k_reduce", "mul_mat_split_k_reduce.comp", {});
     }));
 
@@ -380,11 +385,23 @@ void process_shaders(std::vector<std::future<void>>& tasks) {
     }));
 
     tasks.push_back(std::async(std::launch::async, [] {
+        string_to_spv("repeat_f32", "repeat.comp", {{"A_TYPE", "float"}, {"D_TYPE", "float"}});
+    }));
+
+    tasks.push_back(std::async(std::launch::async, [] {
         string_to_spv("scale_f32", "scale.comp", {{"A_TYPE", "float"}, {"D_TYPE", "float"}, {"FLOAT_TYPE", "float"}});
     }));
 
     tasks.push_back(std::async(std::launch::async, [] {
         string_to_spv("sqr_f32", "square.comp", {{"A_TYPE", "float"}, {"D_TYPE", "float"}, {"FLOAT_TYPE", "float"}});
+    }));
+
+    tasks.push_back(std::async(std::launch::async, [] {
+        string_to_spv("sin_f32", "sin.comp", {{"A_TYPE", "float"}, {"D_TYPE", "float"}, {"FLOAT_TYPE", "float"}});
+    }));
+
+    tasks.push_back(std::async(std::launch::async, [] {
+        string_to_spv("cos_f32", "cos.comp", {{"A_TYPE", "float"}, {"D_TYPE", "float"}, {"FLOAT_TYPE", "float"}});
     }));
 
     tasks.push_back(std::async(std::launch::async, [] {

@@ -79,7 +79,6 @@ models-mnt
 !models/ggml-vocab-*.gguf*
 
 # Zig
-
 zig-out/
 zig-cache/
 
@@ -131,5 +130,5 @@ poetry.toml
 # Scripts
 !/scripts/install-oneapi.bat
 
-
-compile_commands.json
+# Test models for lora adapters
+/lora-tests
