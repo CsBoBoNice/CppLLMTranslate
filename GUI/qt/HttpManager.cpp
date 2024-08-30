@@ -72,7 +72,7 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
                 qDebug() << "Network error else:" << reply->errorString();
             }
 
-            retString = "ERROR: "+reply->errorString();
+            retString = "ERROR: " + reply->errorString();
 
             reply->abort();
             reply->deleteLater();

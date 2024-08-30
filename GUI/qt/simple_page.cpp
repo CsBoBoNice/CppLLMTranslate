@@ -47,6 +47,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 第四行
     translateButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
+    reconnectButton = new QPushButton("重连🔗");
 
     // 设置工具提示
     translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
@@ -55,6 +56,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
     fourthRowLayout->addWidget(translateButton);
     fourthRowLayout->addWidget(checkBox);
+    fourthRowLayout->addWidget(reconnectButton);
     mainLayout->addLayout(fourthRowLayout);
 
     // 设置布局到中心窗口
@@ -64,6 +66,13 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
     // 连接信号和槽
     connect(translateButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
+
+    // 连接信号和槽
+    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
+        // 开始按钮点击后的操作
+        // 切换到开始页面
+        StateManager::getInstance().ShowPage = 0;
+    });
 
     // 创建定时器
     copy_timer = new QTimer(this);

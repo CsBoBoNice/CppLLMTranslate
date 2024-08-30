@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-08-30 11:01:26
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-30 13:41:42
+ * @FilePath: /CppLLMTranslate/GUI/qt/HttpManager.h
+ */
 #ifndef HTTPMANAGER_H
 #define HTTPMANAGER_H
 
@@ -5,25 +11,22 @@
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 
-
-class HttpManager : public QObject
-{
+class HttpManager : public QObject {
     Q_OBJECT
 
   public:
-    static HttpManager& instance();
+    static HttpManager &instance();
     ~HttpManager();
 
-    void InitHttpManager(QString url,QString apiKey,QString model,int timeout,int maxRetries);
+    void InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries);
     QString sendRequest(const QJsonDocument &doc);
     void sendRequestJson(std::string json_msg);
     void SendRequest_thread();
 
-
   private:
     HttpManager();
 
-    static HttpManager* m_instance;
+    static HttpManager *m_instance;
 
     QNetworkAccessManager m_networkManager;
     QString m_apiKey;

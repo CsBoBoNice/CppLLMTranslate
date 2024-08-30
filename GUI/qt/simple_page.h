@@ -40,6 +40,7 @@ class simple_page : public QMainWindow {
     QTextEdit *textEdit2;
     QPushButton *translateButton;
     QCheckBox *checkBox;
+    QPushButton *reconnectButton;
 
     int mode_index = 0;
 

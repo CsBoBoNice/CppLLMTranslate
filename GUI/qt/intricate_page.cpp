@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 11:40:55
+ * @LastEditTime: 2024-08-30 13:41:17
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -52,6 +52,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
 
     translateButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
+    reconnectButton = new QPushButton("重连🔗");
 
     translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
     checkBox->setToolTip("是否替换剪贴板粘贴 (Ctrl+V) 的内容");
@@ -59,6 +60,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
     fourthRowLayout->addWidget(translateButton);
     fourthRowLayout->addWidget(checkBox);
+    fourthRowLayout->addWidget(reconnectButton);
 
     QHBoxLayout *chatLayout = new QHBoxLayout();
     chatLayout->addWidget(textEdit1);
@@ -270,6 +272,13 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
                 }
             }
         }
+    });
+
+    // 连接信号和槽
+    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
+        // 开始按钮点击后的操作
+        // 切换到开始页面
+        StateManager::getInstance().ShowPage = 0;
     });
 
     // 启动定时器，间隔时间为毫秒

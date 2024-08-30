@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-30 10:45:23
+ * @LastEditTime: 2024-08-30 13:41:32
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -44,13 +44,15 @@ bool ConfigManager::saveFile(const QString &filePath, const std::string &content
 
 ServerInfo ConfigManager::DefaultGetServerIP()
 {
-    ServerInfo server_info{.url="http://172.0.0.1:59218/v1/chat/completions",.apiKey="888888", .model="glm-4-flash" };
+    ServerInfo server_info{
+        .url = "http://172.0.0.1:59218/v1/chat/completions", .apiKey = "888888", .model = "glm-4-flash"};
     return server_info;
 }
 
 ServerInfo ConfigManager::GetServerIP()
 {
-    ServerInfo server_info{.url="http://172.0.0.1:59218/v1/chat/completions",.apiKey="888888", .model="glm-4-flash" };
+    ServerInfo server_info{
+        .url = "http://172.0.0.1:59218/v1/chat/completions", .apiKey = "888888", .model = "glm-4-flash"};
     std::string ip_json;
     QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
     QFile file(ipconfig);

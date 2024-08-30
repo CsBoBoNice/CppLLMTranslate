@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-21 09:08:21
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-22 17:23:37
- * @FilePath: /CppLLMTranslate/Server/llama.cpp/examples/CppLLMTranslateServer/MessageManager.h
+ * @LastEditTime: 2024-08-30 13:41:26
+ * @FilePath: /CppLLMTranslate/GUI/qt/MessageManager.h
  */
 // MessageManager.h
 #ifndef MESSAGEMANAGER_H
@@ -40,7 +40,6 @@ class MessageManager {
     bool popFromOutputQueueNoWait(std::string &message);
     // 从输出队列中移除消息
     bool CleanFromOutputQueue();
-
 
   private:
     // 私有构造函数和析构函数

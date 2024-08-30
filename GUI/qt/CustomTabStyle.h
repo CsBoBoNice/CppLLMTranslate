@@ -1,8 +1,11 @@
+/*
+ * @Date: 2024-08-26 08:35:34
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-08-30 13:41:37
+ * @FilePath: /CppLLMTranslate/GUI/qt/CustomTabStyle.h
+ */
 #ifndef CUSTOMTABSTYLE_H
 #define CUSTOMTABSTYLE_H
-
-
-
 
 #include <QApplication>
 #include <QTabWidget>
@@ -11,19 +14,17 @@
 #include <QProxyStyle>
 #include <QPainter>
 #include <QTextOption>
-#include <QTabBar> // 包含 QStyleOptionTab 的定义
+#include <QTabBar>      // 包含 QStyleOptionTab 的定义
 #include <QStyleOption> // 包含 qstyleoption_cast 的定义
 #include <QPainter>
 #include <QProxyStyle>
 #include <QLabel>
 #include <QCheckBox>
 
-
-class CustomTabStyle : public QProxyStyle
-{
+class CustomTabStyle : public QProxyStyle {
   public:
-    QSize sizeFromContents(ContentsType type, const QStyleOption *option,
-                           const QSize &size, const QWidget *widget) const
+    QSize
+    sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const
     {
         QSize s = QProxyStyle::sizeFromContents(type, option, size, widget);
         if (type == QStyle::CT_TabBarTab) {
@@ -51,8 +52,7 @@ class CustomTabStyle : public QProxyStyle
                 option.setAlignment(Qt::AlignCenter);
                 if (tab->state & QStyle::State_Selected) {
                     painter->setPen(0xf8fcff);
-                }
-                else {
+                } else {
                     painter->setPen(0x5d5d5d);
                 }
 
@@ -66,9 +66,5 @@ class CustomTabStyle : public QProxyStyle
         }
     }
 };
-
-
-
-
 
 #endif // CUSTOMTABSTYLE_H
