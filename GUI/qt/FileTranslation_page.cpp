@@ -22,17 +22,13 @@
 
 FileManager fileManager;
 
-std::mutex fileManagerLock;
-
 static void FileTranslation_thread()
 {
     while (1) {
-        fileManagerLock.lock();
+
         if (fileManager.translation_cache.size() > 0) {
-            fileManagerLock.unlock();
-            qDebug() << "fileManagerLock.unlock";
+            qDebug() << "fileManager.translation_cache.size() > 0";
         } else {
-            fileManagerLock.unlock();
             // qDebug() << "QThread::msleep(1000)";
             QThread::msleep(1000);
             continue;
@@ -106,7 +102,16 @@ static void FileTranslation_thread()
         }else{
             if(fileManager.translation_cache.size()>0)
             {
-                fileManager.translation_cache.clear();
+                // 将翻译好的段落放入缓冲区
+                fileManager.ProcessFilesRecursive(fileManager.directory_en, fileManager.directory_ok, fileManager.directory_en,
+                                                  fileManager.translation_cache);
+
+                // 所有文件翻译完毕 将中文提取放入指定文件夹
+                fileManager.SaveTranslatedFiles(fileManager.translation_cache,fileManager.directory_ok);
+
+                // 清除缓冲等待下一次翻译
+                fileManager.CleanAll();
+
                 qDebug() << "22222 fileManager.translation_cache.clear()"<<fileManager.translation_cache.size();
             }
         }
@@ -137,14 +142,14 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     cutButton = new QPushButton("切割📏");
     translateButton = new QPushButton("提交🚀");
 
-    // 设置工具提示
-    translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
-
-
     // 连接信号和槽
     connect(cutButton, &QPushButton::clicked, this, [this]() {
+        if(fileManager.translation_cache.size()==0)
+        {
         fileManager.ProcessFilesCut(fileManager.directory, fileManager.directory_cut,
                                   fileManager.directory); // 切割段落
+            fileManager.m_cut_sign=true;
+        }
     });
 
     // 连接信号和槽
@@ -152,10 +157,15 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
         qDebug() << "111111 fileManager.translation_cache.size()"<<fileManager.translation_cache.size();
         if(fileManager.translation_cache.size()==0)
         {
+            if(fileManager.m_cut_sign!=true)
+            {
+                fileManager.ProcessFilesCut(fileManager.directory, fileManager.directory_cut,
+                                            fileManager.directory); // 切割段落
+            }
+            // 将切割好的段落放入缓冲区
             fileManager.ProcessFilesRecursive(fileManager.directory_cut, fileManager.directory_en, fileManager.directory_cut,
-                                              fileManager.translation_cache); // 切割段落
-            fileManager.m_file_index=0;
-            fileManager.m_paragraph_index = 0;
+                                              fileManager.translation_cache);
+
             qDebug() << "22222 fileManager.translation_cache.size()"<<fileManager.translation_cache.size();
         }
 

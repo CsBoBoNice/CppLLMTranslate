@@ -33,8 +33,9 @@ class FileManager {
 
     std::filesystem::path directory = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/ttt/";              // 原输入路径
     std::filesystem::path directory_output = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/";      // 输出路径
-    std::filesystem::path directory_cut = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_cut"; // 切割输出路径
-    std::filesystem::path directory_en = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_en"; // 翻译输出路径(中英对照)
+    std::filesystem::path directory_cut = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_cut/"; // 切割输出路径
+    std::filesystem::path directory_en = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_en/"; // 翻译输出路径(中英对照)
+    std::filesystem::path directory_ok = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_ok/"; // 翻译输出路径(中文)
 
     std::string progress_file = "../file_processing/datasheet_output/progress.json"; // 进度文件
     std::string paragraph_info_file = "../prompts/paragraph_info.json";              // 段落分割阈值文件
@@ -45,6 +46,8 @@ class FileManager {
 
     size_t m_file_index = 0;      // 文件计数
     size_t m_paragraph_index = 0; // 段落计数
+
+    bool m_cut_sign=false;
 
   public:
     FileManager();
@@ -80,6 +83,11 @@ class FileManager {
     void SaveToFilesystem(const std::vector<FileContent> &result,
                           const std::filesystem::path &out_root_directory,
                           size_t index);
+
+    // 将翻译好的中英比对带切割符号的文件 提取中文 保存到指定文件夹
+    void SaveTranslatedFiles(const std::vector<FileContent> &result, const std::filesystem::path &out_root_directory);
+
+    void CleanAll();
 
     // 判断字符串末尾的文件类型
     FileType checkFileType(const std::string &filename);

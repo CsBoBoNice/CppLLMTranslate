@@ -329,6 +329,50 @@ void FileManager::SaveToFilesystem(const std::vector<FileContent> &result,
     }
 }
 
+void FileManager::SaveTranslatedFiles(const std::vector<FileContent> &result, const std::filesystem::path &out_root_directory)
+{
+    // 创建输出目录
+    if (!std::filesystem::exists(out_root_directory))
+    {
+        std::filesystem::create_directory(out_root_directory);
+    }
+
+    // 使用数组下标的方式遍历result并将内容保存至out_root_directory文件夹中
+    for (size_t file_index = 0; file_index < result.size(); ++file_index)
+    {
+        std::filesystem::path out_path = out_root_directory / result[file_index].path;
+        // 创建输出文件的目录
+        if (!std::filesystem::exists(out_path.parent_path()))
+        {
+            std::filesystem::create_directories(out_path.parent_path());
+        }
+        std::ofstream output(out_path);
+        if (!output.is_open())
+        {
+            std::cerr << "无法创建文件: " << out_path << std::endl;
+            continue;
+        }
+        // 使用传统的for循环遍历content向量
+        for (size_t paragraph_index = 0; paragraph_index < result[file_index].content.size(); ++paragraph_index)
+        {
+            if (paragraph_index % 2 != 0) // 检查paragraph_index是否为奇数
+            {
+                output << result[file_index].content[paragraph_index];
+            }
+        }
+        output.close();
+    }
+}
+
+void FileManager::CleanAll()
+{
+    // 清空翻译缓冲
+    translation_cache.clear();
+    m_file_index=0;
+    m_paragraph_index = 0;
+    m_cut_sign=false;
+}
+
 // 判断字符串末尾的文件类型
 FileType FileManager::checkFileType(const std::string &filename)
 {
