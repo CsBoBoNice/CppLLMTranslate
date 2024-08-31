@@ -38,6 +38,9 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         ConfigManager.h ConfigManager.cpp
         intricate_page.h intricate_page.cpp
         HttpManager.h HttpManager.cpp
+        FileManager.h FileManager.cpp
+        FileTranslation_page.h FileTranslation_page.cpp
+
 
     )
 # Define target properties for Android with Qt 6 as:

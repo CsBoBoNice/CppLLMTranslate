@@ -333,7 +333,7 @@ void intricate_page::SendtoServer()
     } else if (mode_index == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else {
+    } else if (mode_index == 2){
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }

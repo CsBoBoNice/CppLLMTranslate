@@ -19,6 +19,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     modeComboBox->addItem("英译中");
     modeComboBox->addItem("中译英");
     modeComboBox->addItem("聊天");
+    modeComboBox->addItem("文件翻译");
     toggleSettingsButton = new QPushButton("简");
     toggleSettingsButton->setToolTip("切换到可以设置提示词的页面");
 
@@ -26,6 +27,11 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         qDebug("index=%d", index);
         mode_index = index;
+        if(index==3)
+        {
+            // 切换页面
+            StateManager::getInstance().ShowPage = 3;
+        }
     });
 
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
@@ -164,7 +170,7 @@ void simple_page::SendtoServer()
     } else if (mode_index == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else {
+    } else if (mode_index == 2){
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }

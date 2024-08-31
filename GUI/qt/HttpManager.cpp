@@ -10,7 +10,7 @@
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
 #include "MessageManager.h"
-#include "agreement.h"
+
 
 HttpManager *HttpManager::m_instance = nullptr;
 
@@ -43,9 +43,8 @@ void HttpManager::InitHttpManager(QString url, QString apiKey, QString model, in
     m_model = model;
 }
 
-QString HttpManager::sendRequest(const QJsonDocument &doc)
+bool HttpManager::sendRequest(const QJsonDocument &doc,QString &ret_msg)
 {
-    QString retString;
 
     QUrl url(m_url);
     QNetworkRequest request(url);
@@ -72,7 +71,7 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
                 qDebug() << "Network error else:" << reply->errorString();
             }
 
-            retString = "ERROR: " + reply->errorString();
+            ret_msg = "ERROR: " + reply->errorString();
 
             reply->abort();
             reply->deleteLater();
@@ -87,8 +86,8 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
             QJsonDocument doc = QJsonDocument::fromJson(responseStr.toUtf8(), &parseError);
             if (parseError.error != QJsonParseError::NoError) {
                 qDebug() << "JSON parse error:" << parseError.errorString();
-                retString = "ERROR: JSON parse error:" + parseError.errorString();
-                return retString;
+                ret_msg = "ERROR: JSON parse error:" + parseError.errorString();
+                return false;
             }
 
             QJsonObject jsonObj = doc.object();
@@ -103,7 +102,7 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
                 qDebug() << "Message Content:" << messageContent;
                 qDebug() << "Role:" << role;
 
-                retString = messageContent;
+                ret_msg = messageContent;
             }
 
             reply->deleteLater();
@@ -116,12 +115,26 @@ QString HttpManager::sendRequest(const QJsonDocument &doc)
         qDebug() << "Failed to parse JSON after" << m_maxRetries << "retries.";
     }
 
-    return retString;
+    return true;
 }
 
 void HttpManager::sendRequestJson(std::string json_msg)
 {
     agreementInfo info = agreement::getInstance().parseJson(json_msg);
+
+    std::string Request_string;
+    sendRequestAgreementInfo(info,Request_string);
+
+    agreementInfo retInfo;
+    retInfo.cmd = (int)AgreementCmd::success_msg;
+    retInfo.msg = Request_string;
+    std::string retInfoJson = agreement::getInstance().wrapToJson(retInfo);
+    MessageManager::getInstance().pushToInputQueue(retInfoJson);
+}
+
+bool HttpManager::sendRequestAgreementInfo(agreementInfo info,std::string& ret_msg)
+{
+    bool ret=true;
 
     std::string system = info.system;
     std::string user_msg_1 = info.chat_prefix + info.user_msg_1 + info.chat_suffix;
@@ -184,13 +197,10 @@ void HttpManager::sendRequestJson(std::string json_msg)
     QJsonDocument doc(requestObj);
     // 打印请求的JSON数据
     qDebug() << "Request JSON:\n" << QString::fromUtf8(doc.toJson());
-    QString retString = sendRequest(doc);
-
-    agreementInfo retInfo;
-    retInfo.cmd = (int)AgreementCmd::success_msg;
-    retInfo.msg = retString.toStdString();
-    std::string retInfoJson = agreement::getInstance().wrapToJson(retInfo);
-    MessageManager::getInstance().pushToInputQueue(retInfoJson);
+    QString retString;
+    ret= sendRequest(doc,retString);
+    ret_msg=retString.toStdString();
+    return ret;
 }
 
 void HttpManager::SendRequest_thread()

@@ -10,6 +10,7 @@
 #include <QObject>
 #include <QJsonDocument>
 #include <QNetworkAccessManager>
+#include "agreement.h"
 
 class HttpManager : public QObject {
     Q_OBJECT
@@ -19,8 +20,14 @@ class HttpManager : public QObject {
     ~HttpManager();
 
     void InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries);
-    QString sendRequest(const QJsonDocument &doc);
+
+    bool sendRequest(const QJsonDocument &doc,QString &ret_msg);
+
     void sendRequestJson(std::string json_msg);
+    bool sendRequestAgreementInfo(agreementInfo info,std::string& ret_msg);
+
+    bool sendRequest_AgreementInfo(agreementInfo info);
+
     void SendRequest_thread();
 
   private:

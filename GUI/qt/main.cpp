@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-30 13:41:23
+ * @LastEditTime: 2024-08-31 14:22:31
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -14,6 +14,7 @@
 #include "simple_page.h"
 
 #include "intricate_page.h"
+#include "FileTranslation_page.h"
 
 #include <QFontDatabase>
 #include <QFont>
@@ -21,6 +22,7 @@
 start_page *start_page_w;
 simple_page *simple_page_w;
 intricate_page *intricate_page_w;
+FileTranslation_page *FileTranslation_page_w;
 
 int main(int argc, char *argv[])
 {
@@ -58,6 +60,12 @@ int main(int argc, char *argv[])
     intricate_page_w->hide();
     intricate_page_w->setWindowTitle("CppLLMTranslate");
 
+    FileTranslation_page_w = new FileTranslation_page;
+    FileTranslation_page_w->resize(500, 300);
+    FileTranslation_page_w->hide();
+    FileTranslation_page_w->setWindowTitle("CppLLMTranslate");
+
+
     // 创建定时器
     QTimer *page_change = new QTimer();
 
@@ -67,14 +75,22 @@ int main(int argc, char *argv[])
             start_page_w->show();
             simple_page_w->hide();
             intricate_page_w->hide();
+            FileTranslation_page_w->hide();
         } else if (1 == StateManager::getInstance().ShowPage) {
             start_page_w->hide();
             simple_page_w->show();
             intricate_page_w->hide();
+            FileTranslation_page_w->hide();
         } else if (2 == StateManager::getInstance().ShowPage) {
             start_page_w->hide();
             simple_page_w->hide();
             intricate_page_w->show();
+            FileTranslation_page_w->hide();
+        } else if (3 == StateManager::getInstance().ShowPage) {
+            start_page_w->hide();
+            simple_page_w->hide();
+            intricate_page_w->hide();
+            FileTranslation_page_w->show();
         }
     });
 
