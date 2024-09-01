@@ -17,10 +17,7 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-static void Http_thread()
-{
-    HttpManager::instance().SendRequest_thread();
-}
+
 
 
 start_page::start_page(QWidget *parent) : QMainWindow{parent}
@@ -76,7 +73,8 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
         textEdit->clear();
         textEdit->append("Please wait ...");
 
-        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
+        HttpManager::InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
+
         agreementInfo info_send;
         // info_send = agreement::getInstance().default_chat();
         info_send.system="You are a helpful assistant. ";
@@ -84,7 +82,8 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
         info_send.msg = "hi";
         std::string msg_translate = agreement::getInstance().wrapToJson(info_send);
 
-        HttpManager::instance().sendRequestJson(msg_translate);
+        HttpManager httpManager;
+        httpManager.sendRequestJson(msg_translate);
 
 
         std::string show_text;
@@ -99,10 +98,7 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
 
     connect(startButton, &QPushButton::clicked, this, [this]() {
 
-        HttpManager::instance().InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
-
-        std::thread t_HTTP_thread(Http_thread);
-        t_HTTP_thread.detach();
+        HttpManager::InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
 
         // 开始按钮点击后的操作
         // 切换到第二个页面
