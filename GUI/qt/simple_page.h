@@ -25,6 +25,8 @@ class simple_page : public QMainWindow {
     simple_page(QWidget *parent = nullptr);
     ~simple_page();
 
+    void updataModeComboBox();
+
   private slots:
     void onToggleSettingsButtonClicked();
 

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-30 13:41:17
+ * @LastEditTime: 2024-09-02 10:46:44
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -24,14 +24,23 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     modeComboBox->addItem("英译中");
     modeComboBox->addItem("中译英");
     modeComboBox->addItem("聊天");
+    modeComboBox->addItem("文件翻译");
     toggleSettingsButton = new QPushButton("繁");
     toggleSettingsButton->setToolTip("切换到简易页面");
 
     // 使用lambda表达式连接信号和槽
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
-        qDebug("index=%d", index);
-        mode_index = index;
-        UpDataInfo(mode_index);
+        if (StateManager::getInstance().ShowPage == 2) {
+            qDebug("intricate_page index=%d", index);
+
+            StateManager::getInstance().ModeIndex = index;
+            if (index == 3) {
+                // 切换页面
+                StateManager::getInstance().ShowPage = 3;
+            }
+
+            UpDataInfo(index);
+        }
     });
 
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
@@ -164,11 +173,11 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
         info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
         info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
 
-        if (mode_index == 0) {
+        if (StateManager::getInstance().ModeIndex == 0) {
             ConfigManager::getInstance().Set_config_en_to_zh(info);
-        } else if (mode_index == 1) {
+        } else if (StateManager::getInstance().ModeIndex == 1) {
             ConfigManager::getInstance().Set_config_zh_to_en(info);
-        } else {
+        } else if (StateManager::getInstance().ModeIndex == 2) {
             ConfigManager::getInstance().Set_config_chat(info);
         }
     });
@@ -290,6 +299,13 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
 
 intricate_page::~intricate_page() {}
 
+void intricate_page::updataModeComboBox()
+{
+    if (StateManager::getInstance().ShowPage == 2) {
+        modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
+    }
+}
+
 void intricate_page::onToggleSettingsButtonClicked()
 {
     // 切换 简 页面
@@ -299,13 +315,13 @@ void intricate_page::onToggleSettingsButtonClicked()
 void intricate_page::UpDataInfo(int index)
 {
     agreementInfo info;
-    if (mode_index == 0) {
+    if (StateManager::getInstance().ModeIndex == 0) {
         // info = agreement::getInstance().default_en_to_zh();
         info = ConfigManager::getInstance().Get_config_en_to_zh();
-    } else if (mode_index == 1) {
+    } else if (StateManager::getInstance().ModeIndex == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else {
+    } else if (StateManager::getInstance().ModeIndex == 2) {
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }
@@ -327,13 +343,13 @@ void intricate_page::SendtoServer()
 
     agreementInfo info;
 
-    if (mode_index == 0) {
+    if (StateManager::getInstance().ModeIndex == 0) {
         // info = agreement::getInstance().default_en_to_zh();
         info = ConfigManager::getInstance().Get_config_en_to_zh();
-    } else if (mode_index == 1) {
+    } else if (StateManager::getInstance().ModeIndex == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else if (mode_index == 2){
+    } else if (StateManager::getInstance().ModeIndex == 2) {
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }

@@ -20,6 +20,7 @@ class StateManager {
     UDP_Client *client_p = nullptr;
 
     int ShowPage = 0; // 显示哪一个页面
+    int ModeIndex = 0; // 当前处于哪个模式
 
   private:
     // 私有构造函数和析构函数

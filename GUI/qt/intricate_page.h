@@ -25,6 +25,8 @@ class intricate_page : public QMainWindow {
     intricate_page(QWidget *parent = nullptr);
     ~intricate_page();
 
+    void updataModeComboBox();
+
   private slots:
     void onToggleSettingsButtonClicked();
 
@@ -43,8 +45,6 @@ class intricate_page : public QMainWindow {
     QPushButton *translateButton;
     QCheckBox *checkBox;
     QPushButton *reconnectButton;
-
-    int mode_index = 0;
 
     QTimer *copy_timer;
     QTimer *translate_timer;

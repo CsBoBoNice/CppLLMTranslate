@@ -34,11 +34,13 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
     // 使用lambda表达式连接信号和槽
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
-        qDebug("index=%d", index);
-        mode_index = index;
-        if (index == 3) {
-            // 切换页面
-            StateManager::getInstance().ShowPage = 3;
+        if (StateManager::getInstance().ShowPage == 1) {
+            qDebug("simple_page index=%d", index);
+            StateManager::getInstance().ModeIndex = index;
+            if (index == 3) {
+                // 切换页面
+                StateManager::getInstance().ShowPage = 3;
+            }
         }
     });
 
@@ -164,6 +166,13 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
 simple_page::~simple_page() {}
 
+void simple_page::updataModeComboBox()
+{
+    if (StateManager::getInstance().ShowPage == 1) {
+        modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
+    }
+}
+
 void simple_page::onToggleSettingsButtonClicked()
 {
     // 切换 繁 页面
@@ -176,13 +185,13 @@ void simple_page::SendtoServer()
 
     agreementInfo info;
 
-    if (mode_index == 0) {
+    if (StateManager::getInstance().ModeIndex == 0) {
         // info = agreement::getInstance().default_en_to_zh();
         info = ConfigManager::getInstance().Get_config_en_to_zh();
-    } else if (mode_index == 1) {
+    } else if (StateManager::getInstance().ModeIndex == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else if (mode_index == 2) {
+    } else if (StateManager::getInstance().ModeIndex == 2) {
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }

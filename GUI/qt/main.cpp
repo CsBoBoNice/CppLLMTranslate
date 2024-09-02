@@ -91,6 +91,11 @@ int main(int argc, char *argv[])
             intricate_page_w->hide();
             FileTranslation_page_w->show();
         }
+
+        simple_page_w->updataModeComboBox();
+        intricate_page_w->updataModeComboBox();
+        FileTranslation_page_w->updataModeComboBox();
+
     });
 
     // 启动定时器

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-31 13:42:22
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-31 14:11:30
+ * @LastEditTime: 2024-09-02 10:47:21
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 #include "FileTranslation_page.h"
@@ -133,12 +133,19 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     modeComboBox->addItem("聊天");
     modeComboBox->addItem("文件翻译");
 
-    modeComboBox->setCurrentIndex(3);
+    // modeComboBox->setCurrentIndex(3);
 
     // 使用lambda表达式连接信号和槽
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
-        qDebug("index=%d", index);
-        mode_index = index;
+        if (StateManager::getInstance().ShowPage == 3) {
+            qDebug("FileTranslation_page index=%d", index);
+            StateManager::getInstance().ModeIndex = index;
+            if (index != 3) {
+                // 切换页面
+                StateManager::getInstance().ShowPage = 1;
+                modeComboBox->setCurrentIndex(index);
+            }
+        }
     });
 
     // 第四行
@@ -191,3 +198,11 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
 }
 
 FileTranslation_page::~FileTranslation_page() {}
+
+void FileTranslation_page::updataModeComboBox()
+{
+
+    if (StateManager::getInstance().ShowPage == 3) {
+        modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
+    }
+}

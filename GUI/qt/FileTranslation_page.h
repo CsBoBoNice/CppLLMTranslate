@@ -17,6 +17,8 @@ class FileTranslation_page : public QMainWindow {
     FileTranslation_page(QWidget *parent = nullptr);
     ~FileTranslation_page();
 
+    void updataModeComboBox();
+
   private:
     QVBoxLayout *mainLayout;
     QComboBox *modeComboBox;
@@ -24,8 +26,6 @@ class FileTranslation_page : public QMainWindow {
     QPushButton *cutButton;
     QPushButton *translateButton;
     QPushButton *reconnectButton;
-
-    int mode_index = 0;
 
     QTimer *translate_timer;
 };
