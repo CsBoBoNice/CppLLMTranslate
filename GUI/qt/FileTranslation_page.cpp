@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 14:46:59
+ * @LastEditTime: 2024-09-02 15:17:07
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -21,11 +21,40 @@
 
 #include <QClipboard>
 #include <QApplication>
+#include <QDir>
 #include "ConfigManager.h"
 #include "StateManager.h"
 #include "HttpManager.h"
 
 FileManager fileManager;
+
+bool deleteFolder(const QString &path)
+{
+    QDir dir(path);
+    if (!dir.exists()) {
+        // 文件夹不存在，无需删除
+        return true;
+    }
+
+    // 遍历文件夹中的所有条目
+    QFileInfoList entries = dir.entryInfoList(QDir::AllEntries | QDir::NoDotAndDotDot);
+    for (const QFileInfo &entryInfo : entries) {
+        if (entryInfo.isDir()) {
+            // 如果是文件夹，递归删除
+            if (!deleteFolder(entryInfo.absoluteFilePath())) {
+                return false; // 如果删除失败，返回false
+            }
+        } else {
+            // 如果是文件，直接删除
+            if (!dir.remove(entryInfo.fileName())) {
+                return false; // 如果删除失败，返回false
+            }
+        }
+    }
+
+    // 删除当前文件夹
+    return dir.rmdir(path);
+}
 
 static void FileTranslation_thread()
 {
@@ -329,7 +358,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     std::thread t_FileTranslation_thread(FileTranslation_thread);
     t_FileTranslation_thread.detach();
 
-    // 使用lambda表达式连接信号和槽
+    // 模式选择
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 3) {
             qDebug("FileTranslation_page index=%d", index);
@@ -342,20 +371,48 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
         }
     });
 
-    // 连接信号和槽
+    // 切割按钮按下
     connect(cutButton, &QPushButton::clicked, this, [this]() {
         if (fileManager.translation_cache.size() == 0) {
+
+            // 更新文件路径
+            fileManager.directory = Input_file_path->text().toStdString();
+            fileManager.directory_output = Output_file_path->text().toStdString();
+            fileManager.directory_cut = Cut_file_path->text().toStdString();
+            fileManager.directory_en = Reference_file_path->text().toStdString();
+            fileManager.directory_ok = Success_file_path->text().toStdString();
+
+            // 删除输出路径
+            deleteFolder(Cut_file_path->text());
+            deleteFolder(Reference_file_path->text());
+            deleteFolder(Success_file_path->text());
+            deleteFolder(Output_file_path->text());
+
             fileManager.ProcessFilesCut(fileManager.directory, fileManager.directory_cut,
                                         fileManager.directory); // 切割段落
             fileManager.m_cut_sign = true;
         }
     });
 
-    // 连接信号和槽
+    // 翻译按钮按下
     connect(translateButton, &QPushButton::clicked, this, [this]() {
         qDebug() << "111111 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
         if (fileManager.translation_cache.size() == 0) {
+
+            // 更新文件路径
+            fileManager.directory = Input_file_path->text().toStdString();
+            fileManager.directory_output = Output_file_path->text().toStdString();
+            fileManager.directory_cut = Cut_file_path->text().toStdString();
+            fileManager.directory_en = Reference_file_path->text().toStdString();
+            fileManager.directory_ok = Success_file_path->text().toStdString();
+
             if (fileManager.m_cut_sign != true) {
+                // 删除输出路径
+                deleteFolder(Cut_file_path->text());
+                deleteFolder(Reference_file_path->text());
+                deleteFolder(Success_file_path->text());
+                deleteFolder(Output_file_path->text());
+
                 fileManager.ProcessFilesCut(fileManager.directory, fileManager.directory_cut,
                                             fileManager.directory); // 切割段落
             }
