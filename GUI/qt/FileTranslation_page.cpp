@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 17:10:12
+ * @LastEditTime: 2024-09-02 17:34:24
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -486,23 +486,31 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
 
         if (fileTypeComboBoxIndex == 0) {
             ConfigManager::getInstance().set_prompt_md_file(info);
-        } /*else if (fileTypeComboBoxIndex == 1) {
-            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (fileTypeComboBoxIndex == 1) {
+            ConfigManager::getInstance().set_prompt_txt_file(info);
         } else if (fileTypeComboBoxIndex == 2) {
-            ConfigManager::getInstance().Set_config_chat(info);
-        }*/
+            ConfigManager::getInstance().set_prompt_rst_file(info);
+        }else if (fileTypeComboBoxIndex == 3) {
+            ConfigManager::getInstance().set_prompt_h_file(info);
+        }
     });
 
     connect(RstButton, &QPushButton::clicked, this, [this]() {
         agreementInfo info;
-        info = ConfigManager::getInstance().default_get_prompt_md_file();
+
         if (fileTypeComboBoxIndex == 0) {
+            info = ConfigManager::getInstance().default_get_prompt_md_file();
             ConfigManager::getInstance().set_prompt_md_file(info);
-        } /*else if (fileTypeComboBoxIndex == 1) {
-            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (fileTypeComboBoxIndex == 1) {
+            info = ConfigManager::getInstance().default_get_prompt_txt_file();
+            ConfigManager::getInstance().set_prompt_txt_file(info);
         } else if (fileTypeComboBoxIndex == 2) {
-            ConfigManager::getInstance().Set_config_chat(info);
-        }*/
+            info = ConfigManager::getInstance().default_get_prompt_rst_file();
+            ConfigManager::getInstance().set_prompt_rst_file(info);
+        }else if (fileTypeComboBoxIndex == 3) {
+            info = ConfigManager::getInstance().default_get_prompt_h_file();
+            ConfigManager::getInstance().set_prompt_h_file(info);
+        }
 
         UpdataPrompt(0); // 传0单纯是为了不报错
     });
@@ -556,13 +564,13 @@ void FileTranslation_page::UpdataPrompt(int index)
     agreementInfo info;
     if (fileTypeComboBoxIndex == 0) {
         info = ConfigManager::getInstance().get_prompt_md_file();
-    } /*else if (fileTypeComboBoxIndex == 1) {
+    } else if (fileTypeComboBoxIndex == 1) {
         info = ConfigManager::getInstance().get_prompt_txt_file();
     } else if (fileTypeComboBoxIndex == 2) {
         info = ConfigManager::getInstance().get_prompt_rst_file();
     }else if (fileTypeComboBoxIndex == 3) {
         info = ConfigManager::getInstance().get_prompt_h_file();
-    }*/
+    }
 
     textEdit_system->setText(info.system.c_str());
     textEdit_chat_prefix->setText(info.chat_prefix.c_str());
