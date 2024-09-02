@@ -144,7 +144,53 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     mainLayout->addWidget(modeComboBox);
 
     /********************************************************/
-    // 创建页面的水平布局，并添加两个 QTextEdit
+
+    cutButton = new QPushButton("切割📏");
+    translateButton = new QPushButton("提交🚀");
+
+    QHBoxLayout *RowLayout = new QHBoxLayout();
+    RowLayout->addWidget(cutButton);
+    RowLayout->addWidget(translateButton);
+
+    QString InputPath = QCoreApplication::applicationDirPath() + "/input";
+    QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
+    QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
+    QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
+    QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
+
+    Input_file_path = new QLineEdit(InputPath);
+    Output_file_path = new QLineEdit(OutputPath);
+    Cut_file_path = new QLineEdit(CutPath);
+    Reference_file_path = new QLineEdit(ReferencePath);
+    Success_file_path = new QLineEdit(SuccessPath);
+
+    QVBoxLayout *infoPageLayout = new QVBoxLayout();
+
+    QHBoxLayout *inputLayout_1 = new QHBoxLayout();
+    inputLayout_1->addWidget(new QLabel("输入路径: "));
+    inputLayout_1->addWidget(Input_file_path);
+    infoPageLayout->addLayout(inputLayout_1);
+
+    QHBoxLayout *inputLayout_2 = new QHBoxLayout();
+    inputLayout_2->addWidget(new QLabel("输出路径: "));
+    inputLayout_2->addWidget(Output_file_path);
+    infoPageLayout->addLayout(inputLayout_2);
+
+    QHBoxLayout *inputLayout_3 = new QHBoxLayout();
+    inputLayout_3->addWidget(new QLabel("切割路径: "));
+    inputLayout_3->addWidget(Cut_file_path);
+    infoPageLayout->addLayout(inputLayout_3);
+
+    QHBoxLayout *inputLayout_4 = new QHBoxLayout();
+    inputLayout_4->addWidget(new QLabel("对照路径: "));
+    inputLayout_4->addWidget(Reference_file_path);
+    infoPageLayout->addLayout(inputLayout_4);
+
+    QHBoxLayout *inputLayout_5 = new QHBoxLayout();
+    inputLayout_5->addWidget(new QLabel("完成路径: "));
+    inputLayout_5->addWidget(Success_file_path);
+    infoPageLayout->addLayout(inputLayout_5);
+
     textEdit1 = new QTextEdit();
     textEdit2 = new QTextEdit();
     progressEdit = new QTextEdit();
@@ -158,9 +204,14 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     progressLayout->addWidget(progressEdit);
     progressLayout->addLayout(chatLayout);
 
+    QVBoxLayout *filePatLayout = new QVBoxLayout();
+    filePatLayout->addLayout(RowLayout);
+    filePatLayout->addLayout(infoPageLayout);
+    filePatLayout->addLayout(progressLayout);
+
     // 创建页面并设置布局
     QWidget *progressWidgetPage = new QWidget();
-    progressWidgetPage->setLayout(progressLayout);
+    progressWidgetPage->setLayout(filePatLayout);
 
     /********************************************************/
 
@@ -260,71 +311,10 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
 
     /********************************************************/
 
-    /********************************************************/
-    // 页面布局
-
-    cutButton = new QPushButton("切割📏");
-    translateButton = new QPushButton("提交🚀");
-
-    QHBoxLayout *RowLayout = new QHBoxLayout();
-    RowLayout->addWidget(cutButton);
-    RowLayout->addWidget(translateButton);
-
-    QString InputPath = QCoreApplication::applicationDirPath() + "/input";
-    QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
-    QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
-    QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
-    QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
-
-    Input_file_path = new QLineEdit(InputPath);
-    Output_file_path = new QLineEdit(OutputPath);
-    Cut_file_path = new QLineEdit(CutPath);
-    Reference_file_path = new QLineEdit(ReferencePath);
-    Success_file_path = new QLineEdit(SuccessPath);
-
-    QVBoxLayout *infoPageLayout = new QVBoxLayout();
-
-    QHBoxLayout *inputLayout_1 = new QHBoxLayout();
-    inputLayout_1->addWidget(new QLabel("输入路径: "));
-    inputLayout_1->addWidget(Input_file_path);
-    infoPageLayout->addLayout(inputLayout_1);
-
-    QHBoxLayout *inputLayout_2 = new QHBoxLayout();
-    inputLayout_2->addWidget(new QLabel("输出路径: "));
-    inputLayout_2->addWidget(Output_file_path);
-    infoPageLayout->addLayout(inputLayout_2);
-
-    QHBoxLayout *inputLayout_3 = new QHBoxLayout();
-    inputLayout_3->addWidget(new QLabel("切割路径: "));
-    inputLayout_3->addWidget(Cut_file_path);
-    infoPageLayout->addLayout(inputLayout_3);
-
-    QHBoxLayout *inputLayout_4 = new QHBoxLayout();
-    inputLayout_4->addWidget(new QLabel("对照路径: "));
-    inputLayout_4->addWidget(Reference_file_path);
-    infoPageLayout->addLayout(inputLayout_4);
-
-    QHBoxLayout *inputLayout_5 = new QHBoxLayout();
-    inputLayout_5->addWidget(new QLabel("完成路径: "));
-    inputLayout_5->addWidget(Success_file_path);
-    infoPageLayout->addLayout(inputLayout_5);
-
-    QVBoxLayout *filePatLayout = new QVBoxLayout();
-    filePatLayout->addLayout(infoPageLayout);
-    filePatLayout->addLayout(RowLayout);
-
-    // 创建页面并设置布局
-    QWidget *filePathWidgetPage = new QWidget();
-    filePathWidgetPage->setLayout(filePatLayout);
-
-    /********************************************************/
-
-
     // 页面布局
     QTabWidget *TabWidget_ = new QTabWidget();
-    TabWidget_->addTab(filePathWidgetPage, "路径");
-    TabWidget_->addTab(promptsWidgetPage, "提示");
     TabWidget_->addTab(progressWidgetPage, "进度");
+    TabWidget_->addTab(promptsWidgetPage, "提示");
 
     QHBoxLayout *TabWidget_Layout = new QHBoxLayout();
     TabWidget_Layout->addWidget(TabWidget_);

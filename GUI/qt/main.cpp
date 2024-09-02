@@ -56,12 +56,12 @@ int main(int argc, char *argv[])
     simple_page_w->setWindowTitle("CppLLMTranslate");
 
     intricate_page_w = new intricate_page;
-    intricate_page_w->resize(800, 1000);
+    intricate_page_w->resize(800, 800);
     intricate_page_w->hide();
     intricate_page_w->setWindowTitle("CppLLMTranslate");
 
     FileTranslation_page_w = new FileTranslation_page;
-    FileTranslation_page_w->resize(500, 300);
+    FileTranslation_page_w->resize(800, 800);
     FileTranslation_page_w->hide();
     FileTranslation_page_w->setWindowTitle("CppLLMTranslate");
 
