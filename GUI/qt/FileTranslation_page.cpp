@@ -1,7 +1,13 @@
 /*
+ * @Date: 2024-09-02 14:46:46
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-09-02 14:46:59
+ * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
+ */
+/*
  * @Date: 2024-08-31 13:42:22
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 11:01:05
+ * @LastEditTime: 2024-09-02 14:44:39
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 #include "FileTranslation_page.h"
@@ -135,23 +141,203 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     modeComboBox->addItem("聊天");
     modeComboBox->addItem("文件翻译");
 
-    // 第四行
+    mainLayout->addWidget(modeComboBox);
+
+    /********************************************************/
+    // 创建页面的水平布局，并添加两个 QTextEdit
+    textEdit1 = new QTextEdit();
+    textEdit2 = new QTextEdit();
+    progressEdit = new QTextEdit();
+
+    QVBoxLayout *progressLayout = new QVBoxLayout();
+
+    QHBoxLayout *chatLayout = new QHBoxLayout();
+    chatLayout->addWidget(textEdit1);
+    chatLayout->addWidget(textEdit2);
+
+    progressLayout->addWidget(progressEdit);
+    progressLayout->addLayout(chatLayout);
+
+    // 创建页面并设置布局
+    QWidget *progressWidgetPage = new QWidget();
+    progressWidgetPage->setLayout(progressLayout);
+
+    /********************************************************/
+
+    /********************************************************/
+
+    fileTypeComboBox = new QComboBox();
+    fileTypeComboBox->addItem(".md");
+    fileTypeComboBox->addItem(".txt");
+    fileTypeComboBox->addItem(".rst");
+    fileTypeComboBox->addItem(".h");
+
+    // 创建输入框
+    textEdit_system = new QTextEdit();
+    textEdit_chat_prefix = new QTextEdit();
+    textEdit_chat_suffix = new QTextEdit();
+    textEdit_user_msg_1 = new QTextEdit();
+    textEdit_user_msg_2 = new QTextEdit();
+    textEdit_user_msg_3 = new QTextEdit();
+    textEdit_assistant_msg_1 = new QTextEdit();
+    textEdit_assistant_msg_2 = new QTextEdit();
+    textEdit_assistant_msg_3 = new QTextEdit();
+
+    // 创建标签
+    QLabel *set_label1 = new QLabel("系统设置  :");
+    QLabel *set_label2 = new QLabel("消息前缀  :");
+    QLabel *set_label3 = new QLabel("消息后缀  :");
+    QLabel *set_label4 = new QLabel("优质提问1:");
+    QLabel *set_label5 = new QLabel("优质回答1:");
+    QLabel *set_label6 = new QLabel("优质提问2:");
+    QLabel *set_label7 = new QLabel("优质回答2:");
+    QLabel *set_label8 = new QLabel("优质提问3:");
+    QLabel *set_label9 = new QLabel("优质回答3:");
+
+    // 创建布局管理器
+    QVBoxLayout *set_layout = new QVBoxLayout();
+
+    set_layout->addWidget(fileTypeComboBox);
+
+    // 添加控件到布局管理器
+
+    QHBoxLayout *set_HBoxLayout_1 = new QHBoxLayout();
+    set_HBoxLayout_1->addWidget(set_label1);
+    set_HBoxLayout_1->addWidget(textEdit_system);
+    set_layout->addLayout(set_HBoxLayout_1);
+
+    QHBoxLayout *set_HBoxLayout_2 = new QHBoxLayout();
+    set_HBoxLayout_2->addWidget(set_label2);
+    set_HBoxLayout_2->addWidget(textEdit_chat_prefix);
+    set_layout->addLayout(set_HBoxLayout_2);
+
+    QHBoxLayout *set_HBoxLayout_3 = new QHBoxLayout();
+    set_HBoxLayout_3->addWidget(set_label3);
+    set_HBoxLayout_3->addWidget(textEdit_chat_suffix);
+    set_layout->addLayout(set_HBoxLayout_3);
+
+    QHBoxLayout *set_HBoxLayout_4 = new QHBoxLayout();
+    set_HBoxLayout_4->addWidget(set_label4);
+    set_HBoxLayout_4->addWidget(textEdit_user_msg_1);
+    set_layout->addLayout(set_HBoxLayout_4);
+
+    QHBoxLayout *set_HBoxLayout_5 = new QHBoxLayout();
+    set_HBoxLayout_5->addWidget(set_label5);
+    set_HBoxLayout_5->addWidget(textEdit_assistant_msg_1);
+    set_layout->addLayout(set_HBoxLayout_5);
+
+    QHBoxLayout *set_HBoxLayout_6 = new QHBoxLayout();
+    set_HBoxLayout_6->addWidget(set_label6);
+    set_HBoxLayout_6->addWidget(textEdit_user_msg_2);
+    set_layout->addLayout(set_HBoxLayout_6);
+
+    QHBoxLayout *set_HBoxLayout_7 = new QHBoxLayout();
+    set_HBoxLayout_7->addWidget(set_label7);
+    set_HBoxLayout_7->addWidget(textEdit_assistant_msg_2);
+    set_layout->addLayout(set_HBoxLayout_7);
+
+    QHBoxLayout *set_HBoxLayout_8 = new QHBoxLayout();
+    set_HBoxLayout_8->addWidget(set_label8);
+    set_HBoxLayout_8->addWidget(textEdit_user_msg_3);
+    set_layout->addLayout(set_HBoxLayout_8);
+
+    QHBoxLayout *set_HBoxLayout_9 = new QHBoxLayout();
+    set_HBoxLayout_9->addWidget(set_label9);
+    set_HBoxLayout_9->addWidget(textEdit_assistant_msg_3);
+    set_layout->addLayout(set_HBoxLayout_9);
+
+    QPushButton *GetButton = new QPushButton("获取配置");
+    QPushButton *SetButton = new QPushButton("更新配置");
+
+    QHBoxLayout *SetButtonLayout = new QHBoxLayout();
+    SetButtonLayout->addWidget(GetButton);
+    SetButtonLayout->addWidget(SetButton);
+    set_layout->addLayout(SetButtonLayout);
+
+    // 创建页面并设置布局
+    QWidget *promptsWidgetPage = new QWidget();
+    promptsWidgetPage->setLayout(set_layout);
+
+    /********************************************************/
+
+    /********************************************************/
+    // 页面布局
+
     cutButton = new QPushButton("切割📏");
     translateButton = new QPushButton("提交🚀");
 
     QHBoxLayout *RowLayout = new QHBoxLayout();
     RowLayout->addWidget(cutButton);
     RowLayout->addWidget(translateButton);
-    mainLayout->addWidget(modeComboBox);
-    mainLayout->addLayout(RowLayout);
 
-    std::thread t_FileTranslation_thread(FileTranslation_thread);
-    t_FileTranslation_thread.detach();
+    QString InputPath = QCoreApplication::applicationDirPath() + "/input";
+    QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
+    QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
+    QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
+    QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
+
+    Input_file_path = new QLineEdit(InputPath);
+    Output_file_path = new QLineEdit(OutputPath);
+    Cut_file_path = new QLineEdit(CutPath);
+    Reference_file_path = new QLineEdit(ReferencePath);
+    Success_file_path = new QLineEdit(SuccessPath);
+
+    QVBoxLayout *infoPageLayout = new QVBoxLayout();
+
+    QHBoxLayout *inputLayout_1 = new QHBoxLayout();
+    inputLayout_1->addWidget(new QLabel("输入路径: "));
+    inputLayout_1->addWidget(Input_file_path);
+    infoPageLayout->addLayout(inputLayout_1);
+
+    QHBoxLayout *inputLayout_2 = new QHBoxLayout();
+    inputLayout_2->addWidget(new QLabel("输出路径: "));
+    inputLayout_2->addWidget(Output_file_path);
+    infoPageLayout->addLayout(inputLayout_2);
+
+    QHBoxLayout *inputLayout_3 = new QHBoxLayout();
+    inputLayout_3->addWidget(new QLabel("切割路径: "));
+    inputLayout_3->addWidget(Cut_file_path);
+    infoPageLayout->addLayout(inputLayout_3);
+
+    QHBoxLayout *inputLayout_4 = new QHBoxLayout();
+    inputLayout_4->addWidget(new QLabel("对照路径: "));
+    inputLayout_4->addWidget(Reference_file_path);
+    infoPageLayout->addLayout(inputLayout_4);
+
+    QHBoxLayout *inputLayout_5 = new QHBoxLayout();
+    inputLayout_5->addWidget(new QLabel("完成路径: "));
+    inputLayout_5->addWidget(Success_file_path);
+    infoPageLayout->addLayout(inputLayout_5);
+
+    QVBoxLayout *filePatLayout = new QVBoxLayout();
+    filePatLayout->addLayout(infoPageLayout);
+    filePatLayout->addLayout(RowLayout);
+
+    // 创建页面并设置布局
+    QWidget *filePathWidgetPage = new QWidget();
+    filePathWidgetPage->setLayout(filePatLayout);
+
+    /********************************************************/
+
+
+    // 页面布局
+    QTabWidget *TabWidget_ = new QTabWidget();
+    TabWidget_->addTab(filePathWidgetPage, "路径");
+    TabWidget_->addTab(promptsWidgetPage, "提示");
+    TabWidget_->addTab(progressWidgetPage, "进度");
+
+    QHBoxLayout *TabWidget_Layout = new QHBoxLayout();
+    TabWidget_Layout->addWidget(TabWidget_);
+
+    mainLayout->addLayout(TabWidget_Layout);
 
     // 设置布局到中心窗口
     QWidget *centralWidget = new QWidget();
     centralWidget->setLayout(mainLayout);
     setCentralWidget(centralWidget);
+
+    std::thread t_FileTranslation_thread(FileTranslation_thread);
+    t_FileTranslation_thread.detach();
 
     // 使用lambda表达式连接信号和槽
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
