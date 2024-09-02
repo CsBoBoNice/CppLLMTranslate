@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 10:46:44
+ * @LastEditTime: 2024-09-02 11:01:00
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -28,28 +28,10 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     toggleSettingsButton = new QPushButton("繁");
     toggleSettingsButton->setToolTip("切换到简易页面");
 
-    // 使用lambda表达式连接信号和槽
-    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
-        if (StateManager::getInstance().ShowPage == 2) {
-            qDebug("intricate_page index=%d", index);
-
-            StateManager::getInstance().ModeIndex = index;
-            if (index == 3) {
-                // 切换页面
-                StateManager::getInstance().ShowPage = 3;
-            }
-
-            UpDataInfo(index);
-        }
-    });
-
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
     firstRowLayout->addWidget(modeComboBox);
     firstRowLayout->addWidget(toggleSettingsButton);
     mainLayout->addLayout(firstRowLayout);
-
-    // 连接按钮的点击信号到槽函数
-    connect(toggleSettingsButton, &QPushButton::clicked, this, &intricate_page::onToggleSettingsButtonClicked);
 
     /********************************************************/
     /********************************************************/
@@ -158,30 +140,6 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     QPushButton *GetButton = new QPushButton("获取配置");
     QPushButton *SetButton = new QPushButton("更新配置");
 
-    // 连接按钮的点击信号到槽函数
-    connect(GetButton, &QPushButton::clicked, this, &intricate_page::UpDataInfo);
-    connect(SetButton, &QPushButton::clicked, this, [this]() {
-        agreementInfo info;
-
-        info.system = textEdit_system->toPlainText().toStdString();
-        info.chat_prefix = textEdit_chat_prefix->toPlainText().toStdString();
-        info.chat_suffix = textEdit_chat_suffix->toPlainText().toStdString();
-        info.user_msg_1 = textEdit_user_msg_1->toPlainText().toStdString();
-        info.user_msg_2 = textEdit_user_msg_2->toPlainText().toStdString();
-        info.user_msg_3 = textEdit_user_msg_3->toPlainText().toStdString();
-        info.assistant_msg_1 = textEdit_assistant_msg_1->toPlainText().toStdString();
-        info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
-        info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
-
-        if (StateManager::getInstance().ModeIndex == 0) {
-            ConfigManager::getInstance().Set_config_en_to_zh(info);
-        } else if (StateManager::getInstance().ModeIndex == 1) {
-            ConfigManager::getInstance().Set_config_zh_to_en(info);
-        } else if (StateManager::getInstance().ModeIndex == 2) {
-            ConfigManager::getInstance().Set_config_chat(info);
-        }
-    });
-
     QHBoxLayout *SetButtonLayout = new QHBoxLayout();
     SetButtonLayout->addWidget(GetButton);
     SetButtonLayout->addWidget(SetButton);
@@ -206,9 +164,6 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     TabWidget_Layout->addWidget(TabWidget_);
     mainLayout->addLayout(TabWidget_Layout);
 
-    // 连接 QTabWidget 的 currentChanged 信号
-    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &intricate_page::UpDataInfo);
-
     /********************************************************/
     /********************************************************/
 
@@ -217,11 +172,11 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     centralWidget->setLayout(mainLayout);
     setCentralWidget(centralWidget);
 
-    // 连接信号和槽
-    connect(translateButton, &QPushButton::clicked, this, &intricate_page::SendtoServer);
-
     // 创建定时器
     copy_timer = new QTimer(this);
+
+    // 创建定时器
+    translate_timer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
     connect(copy_timer, &QTimer::timeout, this, [=]() {
@@ -236,9 +191,6 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
             copy_text_last = copy_text;
         }
     });
-
-    // 创建定时器
-    translate_timer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
@@ -289,6 +241,54 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
         // 切换到开始页面
         StateManager::getInstance().ShowPage = 0;
     });
+
+    // 使用lambda表达式连接信号和槽
+    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+        if (StateManager::getInstance().ShowPage == 2) {
+            qDebug("intricate_page index=%d", index);
+
+            StateManager::getInstance().ModeIndex = index;
+            if (index == 3) {
+                // 切换页面
+                StateManager::getInstance().ShowPage = 3;
+            }
+
+            UpDataInfo(index);
+        }
+    });
+
+    // 连接按钮的点击信号到槽函数
+    connect(toggleSettingsButton, &QPushButton::clicked, this, &intricate_page::onToggleSettingsButtonClicked);
+
+    // 连接按钮的点击信号到槽函数
+    connect(GetButton, &QPushButton::clicked, this, &intricate_page::UpDataInfo);
+    connect(SetButton, &QPushButton::clicked, this, [this]() {
+        agreementInfo info;
+
+        info.system = textEdit_system->toPlainText().toStdString();
+        info.chat_prefix = textEdit_chat_prefix->toPlainText().toStdString();
+        info.chat_suffix = textEdit_chat_suffix->toPlainText().toStdString();
+        info.user_msg_1 = textEdit_user_msg_1->toPlainText().toStdString();
+        info.user_msg_2 = textEdit_user_msg_2->toPlainText().toStdString();
+        info.user_msg_3 = textEdit_user_msg_3->toPlainText().toStdString();
+        info.assistant_msg_1 = textEdit_assistant_msg_1->toPlainText().toStdString();
+        info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
+        info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
+
+        if (StateManager::getInstance().ModeIndex == 0) {
+            ConfigManager::getInstance().Set_config_en_to_zh(info);
+        } else if (StateManager::getInstance().ModeIndex == 1) {
+            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (StateManager::getInstance().ModeIndex == 2) {
+            ConfigManager::getInstance().Set_config_chat(info);
+        }
+    });
+
+    // 连接 QTabWidget 的 currentChanged 信号
+    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &intricate_page::UpDataInfo);
+
+    // 连接信号和槽
+    connect(translateButton, &QPushButton::clicked, this, &intricate_page::SendtoServer);
 
     // 启动定时器，间隔时间为毫秒
     copy_timer->start(100);

@@ -32,25 +32,10 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     toggleSettingsButton = new QPushButton("简");
     toggleSettingsButton->setToolTip("切换到可以设置提示词的页面");
 
-    // 使用lambda表达式连接信号和槽
-    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
-        if (StateManager::getInstance().ShowPage == 1) {
-            qDebug("simple_page index=%d", index);
-            StateManager::getInstance().ModeIndex = index;
-            if (index == 3) {
-                // 切换页面
-                StateManager::getInstance().ShowPage = 3;
-            }
-        }
-    });
-
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
     firstRowLayout->addWidget(modeComboBox);
     firstRowLayout->addWidget(toggleSettingsButton);
     mainLayout->addLayout(firstRowLayout);
-
-    // 连接按钮的点击信号到槽函数
-    connect(toggleSettingsButton, &QPushButton::clicked, this, &simple_page::onToggleSettingsButtonClicked);
 
     // 第二行
     textEdit1 = new QTextEdit();
@@ -80,18 +65,11 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     centralWidget->setLayout(mainLayout);
     setCentralWidget(centralWidget);
 
-    // 连接信号和槽
-    connect(translateButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
-
-    // 连接信号和槽
-    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
-        // 开始按钮点击后的操作
-        // 切换到开始页面
-        StateManager::getInstance().ShowPage = 0;
-    });
-
     // 创建定时器
     copy_timer = new QTimer(this);
+
+    // 创建定时器
+    translate_timer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
     connect(copy_timer, &QTimer::timeout, this, [=]() {
@@ -106,9 +84,6 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
             copy_text_last = copy_text;
         }
     });
-
-    // 创建定时器
-    translate_timer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
@@ -152,6 +127,31 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
                 }
             }
         }
+    });
+
+    // 使用lambda表达式连接信号和槽
+    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+        if (StateManager::getInstance().ShowPage == 1) {
+            qDebug("simple_page index=%d", index);
+            StateManager::getInstance().ModeIndex = index;
+            if (index == 3) {
+                // 切换页面
+                StateManager::getInstance().ShowPage = 3;
+            }
+        }
+    });
+
+    // 连接按钮的点击信号到槽函数
+    connect(toggleSettingsButton, &QPushButton::clicked, this, &simple_page::onToggleSettingsButtonClicked);
+
+    // 连接信号和槽
+    connect(translateButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
+
+    // 连接信号和槽
+    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
+        // 开始按钮点击后的操作
+        // 切换到开始页面
+        StateManager::getInstance().ShowPage = 0;
     });
 
     // 启动定时器，间隔时间为毫秒
