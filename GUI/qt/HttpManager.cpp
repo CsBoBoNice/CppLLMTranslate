@@ -18,9 +18,7 @@ int HttpManager::m_timeout = 60000;
 QString HttpManager::m_url = "http://127.0.0.1:59218/v1/chat/completions";
 QString HttpManager::m_model = "gpt-4o";
 
-HttpManager::HttpManager()
-{
-}
+HttpManager::HttpManager() {}
 
 HttpManager::~HttpManager()
 {
@@ -37,7 +35,7 @@ void HttpManager::InitHttpManager(QString url, QString apiKey, QString model, in
     m_model = model;
 }
 
-bool HttpManager::sendRequest(const QJsonDocument &doc,QString &ret_msg)
+bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
 {
 
     QUrl url(m_url);
@@ -120,7 +118,7 @@ void HttpManager::sendRequestJson(std::string json_msg)
     agreementInfo info = agreement::getInstance().parseJson(json_msg);
 
     std::string Request_string;
-    sendRequestAgreementInfo(info,Request_string);
+    sendRequestAgreementInfo(info, Request_string);
 
     agreementInfo retInfo;
     retInfo.cmd = (int)AgreementCmd::success_msg;
@@ -129,9 +127,9 @@ void HttpManager::sendRequestJson(std::string json_msg)
     MessageManager::getInstance().pushToInputQueue(retInfoJson);
 }
 
-bool HttpManager::sendRequestAgreementInfo(agreementInfo info,std::string& ret_msg)
+bool HttpManager::sendRequestAgreementInfo(agreementInfo info, std::string &ret_msg)
 {
-    bool ret=true;
+    bool ret = true;
 
     std::string system = info.system;
     std::string user_msg_1 = info.chat_prefix + info.user_msg_1 + info.chat_suffix;
@@ -195,8 +193,8 @@ bool HttpManager::sendRequestAgreementInfo(agreementInfo info,std::string& ret_m
     // 打印请求的JSON数据
     qDebug() << "Request JSON:\n" << QString::fromUtf8(doc.toJson());
     QString retString;
-    ret= sendRequest(doc,retString);
-    ret_msg=retString.toStdString();
+    ret = sendRequest(doc, retString);
+    ret_msg = retString.toStdString();
     return ret;
 }
 
@@ -204,8 +202,7 @@ void HttpManager::SendRequest_thread()
 {
     while (1) {
         std::string json_msg;
-        if(MessageManager::getInstance().popFromOutputQueueNoWait(json_msg))
-        {
+        if (MessageManager::getInstance().popFromOutputQueue(json_msg)) {
             sendRequestJson(json_msg);
         }
     }

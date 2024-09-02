@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-31 14:22:31
+ * @LastEditTime: 2024-09-02 09:47:05
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -64,7 +64,6 @@ int main(int argc, char *argv[])
     FileTranslation_page_w->resize(500, 300);
     FileTranslation_page_w->hide();
     FileTranslation_page_w->setWindowTitle("CppLLMTranslate");
-
 
     // 创建定时器
     QTimer *page_change = new QTimer();

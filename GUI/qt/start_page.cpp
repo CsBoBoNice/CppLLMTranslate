@@ -17,9 +17,6 @@ class MainWindow;
 }
 QT_END_NAMESPACE
 
-
-
-
 start_page::start_page(QWidget *parent) : QMainWindow{parent}
 {
 
@@ -44,7 +41,6 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     inputLayout_1->addWidget(urlLineEdit);
     firstPageLayout->addLayout(inputLayout_1);
 
-
     QHBoxLayout *inputLayout_2 = new QHBoxLayout();
     inputLayout_2->addWidget(new QLabel("Model: ", this));
     inputLayout_2->addWidget(modelLineEdit);
@@ -67,24 +63,21 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     // 设置主窗口的布局
     setCentralWidget(firstPage);
 
-
     connect(testButton, &QPushButton::clicked, this, [this]() {
-
         textEdit->clear();
         textEdit->append("Please wait ...");
 
-        HttpManager::InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
+        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 60000, 3);
 
         agreementInfo info_send;
         // info_send = agreement::getInstance().default_chat();
-        info_send.system="You are a helpful assistant. ";
+        info_send.system = "You are a helpful assistant. ";
         info_send.cmd = (int)AgreementCmd::translate_msg;
         info_send.msg = "hi";
         std::string msg_translate = agreement::getInstance().wrapToJson(info_send);
 
         HttpManager httpManager;
         httpManager.sendRequestJson(msg_translate);
-
 
         std::string show_text;
         MessageManager::getInstance().popFromInputQueueNoWait(show_text);
@@ -97,29 +90,25 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     });
 
     connect(startButton, &QPushButton::clicked, this, [this]() {
-
-        HttpManager::InitHttpManager(urlLineEdit->text(),apiKeyLineEdit->text(),modelLineEdit->text(),60000,3);
+        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 60000, 3);
 
         // 开始按钮点击后的操作
         // 切换到第二个页面
         StateManager::getInstance().ShowPage = 1;
 
         ServerInfo newServerInfo;
-        newServerInfo.url=urlLineEdit->text().toStdString();
-        newServerInfo.apiKey=apiKeyLineEdit->text().toStdString();
-        newServerInfo.model=modelLineEdit->text().toStdString();
+        newServerInfo.url = urlLineEdit->text().toStdString();
+        newServerInfo.apiKey = apiKeyLineEdit->text().toStdString();
+        newServerInfo.model = modelLineEdit->text().toStdString();
 
         ConfigManager::getInstance().SetServerIP(newServerInfo);
     });
 
     connect(defaultButton, &QPushButton::clicked, this, [this]() {
-
-        ServerInfo defaultServerInfo=ConfigManager::getInstance().DefaultGetServerIP();
+        ServerInfo defaultServerInfo = ConfigManager::getInstance().DefaultGetServerIP();
 
         urlLineEdit->setText(defaultServerInfo.url.c_str());
         apiKeyLineEdit->setText(defaultServerInfo.apiKey.c_str());
         modelLineEdit->setText(defaultServerInfo.model.c_str());
-
     });
-
 }

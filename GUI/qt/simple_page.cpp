@@ -13,10 +13,10 @@
 
 HttpManager httpManager;
 
-// static void Http_thread()
-// {
-//     httpManager.SendRequest_thread();
-// }
+static void Http_thread()
+{
+    httpManager.SendRequest_thread();
+}
 
 simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 {
@@ -36,8 +36,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         qDebug("index=%d", index);
         mode_index = index;
-        if(index==3)
-        {
+        if (index == 3) {
             // 切换页面
             StateManager::getInstance().ShowPage = 3;
         }
@@ -112,13 +111,6 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
         if (StateManager::getInstance().ShowPage == 1) {
-            std::string json_msg;
-            if(MessageManager::getInstance().popFromOutputQueueNoWait(json_msg))
-            {
-                httpManager.sendRequestJson(json_msg);
-            }
-
-
 
             std::string show_text;
             if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
@@ -166,8 +158,8 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 启动定时器，间隔时间为毫秒
     translate_timer->start(1);
 
-    // std::thread t_HTTP_thread(Http_thread);
-    // t_HTTP_thread.detach();
+    std::thread t_HTTP_thread(Http_thread);
+    t_HTTP_thread.detach();
 }
 
 simple_page::~simple_page() {}
@@ -190,7 +182,7 @@ void simple_page::SendtoServer()
     } else if (mode_index == 1) {
         // info = agreement::getInstance().default_zh_to_en();
         info = ConfigManager::getInstance().Get_config_zh_to_en();
-    } else if (mode_index == 2){
+    } else if (mode_index == 2) {
         // info = agreement::getInstance().default_chat();
         info = ConfigManager::getInstance().Get_config_chat();
     }
