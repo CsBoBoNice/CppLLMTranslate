@@ -40,6 +40,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         HttpManager.h HttpManager.cpp
         FileManager.h FileManager.cpp
         FileTranslation_page.h FileTranslation_page.cpp
+        ThreadSafeString.h ThreadSafeString.cpp
 
 
     )

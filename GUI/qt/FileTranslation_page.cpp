@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 15:17:07
+ * @LastEditTime: 2024-09-02 15:51:19
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -26,7 +26,18 @@
 #include "StateManager.h"
 #include "HttpManager.h"
 
+#include "ThreadSafeString.h"
+
 FileManager fileManager;
+
+// 进度信息
+ThreadSafeString progress_info;
+
+// 待翻译内容
+ThreadSafeString translation_content;
+
+// 翻译结果
+ThreadSafeString translation_result;
 
 bool deleteFolder(const QString &path)
 {
@@ -60,6 +71,8 @@ static void FileTranslation_thread()
 {
     while (1) {
 
+        std::ostringstream content_ss;
+
         if (fileManager.translation_cache.size() > 0) {
             qDebug() << "fileManager.translation_cache.size() > 0";
         } else {
@@ -72,6 +85,18 @@ static void FileTranslation_thread()
 
             qDebug() << "fileManager.translation_cache.size()" << fileManager.translation_cache.size();
             qDebug() << "fileManager.m_file_index" << fileManager.m_file_index;
+
+            content_ss << "file count " << fileManager.translation_cache.size() << "\n";
+            content_ss << "file index " << fileManager.m_file_index << "\n";
+            content_ss << "paragraph count " << fileManager.m_paragraph_index << "\n";
+            content_ss << "paragraph index " << fileManager.translation_cache[fileManager.m_file_index].content.size()
+                       << "\n";
+            content_ss << "file name " << fileManager.translation_cache[fileManager.m_file_index].path.c_str() << "\n";
+
+            // 将ostringstream的内容转换为std::string
+            std::string content_str = content_ss.str();
+            // 界面输出日志
+            progress_info.set(content_str);
 
             // 原英文未翻译段落
             std::string en_string =
@@ -120,6 +145,10 @@ static void FileTranslation_thread()
 
             httpManager_.sendRequestAgreementInfo(info, zh_string);
 
+            // 界面输出日志
+            translation_content.set(en_string);
+            translation_result.set(zh_string);
+
             // 输出至文件
             std::string output_to_file_string =
                 fileManager.Separator_cut + "\n" + en_string + fileManager.Separator_cut + "\n" + zh_string + "\n";
@@ -153,6 +182,9 @@ static void FileTranslation_thread()
                 fileManager.CleanAll();
 
                 qDebug() << "22222 fileManager.translation_cache.clear()" << fileManager.translation_cache.size();
+
+                // 界面输出日志
+                progress_info.set("翻译完成");
             }
         }
     }
@@ -391,6 +423,8 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileManager.ProcessFilesCut(fileManager.directory, fileManager.directory_cut,
                                         fileManager.directory); // 切割段落
             fileManager.m_cut_sign = true;
+
+            progress_info.set("切割完成");
         }
     });
 
@@ -421,8 +455,40 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
                                               fileManager.directory_cut, fileManager.translation_cache);
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
+
+            progress_info.set("开始翻译");
         }
     });
+
+    // 创建定时器
+    translate_timer = new QTimer(this);
+
+    // 连接定时器的timeout信号到槽函数
+    connect(translate_timer, &QTimer::timeout, this, [=]() {
+        // 完全翻译的信息覆盖
+        textEdit1->clear();
+        textEdit1->append(translation_content.get().c_str());
+        QTextCursor cursor1 = textEdit1->textCursor();
+        cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
+        textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
+
+        // 完全翻译的信息覆盖
+        textEdit2->clear();
+        textEdit2->append(translation_result.get().c_str());
+        QTextCursor cursor2 = textEdit2->textCursor();
+        cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
+        textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
+
+        // 完全翻译的信息覆盖
+        progressEdit->clear();
+        progressEdit->append(progress_info.get().c_str());
+        QTextCursor cursor3 = progressEdit->textCursor();
+        cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
+        progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+    });
+
+    // 启动定时器，间隔时间为毫秒
+    translate_timer->start(100);
 }
 
 FileTranslation_page::~FileTranslation_page() {}
