@@ -79,7 +79,10 @@ static void FileTranslation_thread()
             info.msg=en_string;
             // 已翻译中文段落
             std::string zh_string;
-            HttpManager::instance().sendRequestAgreementInfo(info,zh_string);
+
+            HttpManager httpManager_;
+
+            httpManager_.sendRequestAgreementInfo(info,zh_string);
 
             // 输出至文件
             std::string output_to_file_string = fileManager.Separator_cut + "\n" + en_string + fileManager.Separator_cut + "\n" + zh_string + "\n";

@@ -16,10 +16,11 @@ class HttpManager : public QObject {
     Q_OBJECT
 
   public:
-    static HttpManager &instance();
+
+    HttpManager();
     ~HttpManager();
 
-    void InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries);
+    static void InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries);
 
     bool sendRequest(const QJsonDocument &doc,QString &ret_msg);
 
@@ -30,17 +31,13 @@ class HttpManager : public QObject {
 
     void SendRequest_thread();
 
-  private:
-    HttpManager();
+    static QString m_apiKey;
+    static int m_maxRetries;
+    static int m_timeout;
+    static QString m_url;
+    static QString m_model;
 
-    static HttpManager *m_instance;
 
-    QNetworkAccessManager m_networkManager;
-    QString m_apiKey;
-    int m_maxRetries;
-    int m_timeout;
-    QString m_url;
-    QString m_model;
 };
 
 #endif // HTTPMANAGER_H

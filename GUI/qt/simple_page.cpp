@@ -1,6 +1,7 @@
 
 
 #include "simple_page.h"
+#include "HttpManager.h"
 #include "MessageManager.h"
 #include "agreement.h"
 
@@ -8,6 +9,14 @@
 #include <QApplication>
 #include "ConfigManager.h"
 #include "StateManager.h"
+#include <QThread>
+
+HttpManager httpManager;
+
+// static void Http_thread()
+// {
+//     httpManager.SendRequest_thread();
+// }
 
 simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 {
@@ -103,6 +112,14 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
         if (StateManager::getInstance().ShowPage == 1) {
+            std::string json_msg;
+            if(MessageManager::getInstance().popFromOutputQueueNoWait(json_msg))
+            {
+                httpManager.sendRequestJson(json_msg);
+            }
+
+
+
             std::string show_text;
             if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
 
@@ -148,6 +165,9 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
     // 启动定时器，间隔时间为毫秒
     translate_timer->start(1);
+
+    // std::thread t_HTTP_thread(Http_thread);
+    // t_HTTP_thread.detach();
 }
 
 simple_page::~simple_page() {}

@@ -11,20 +11,14 @@
 #include <QNetworkAccessManager>
 #include "MessageManager.h"
 
-
-HttpManager *HttpManager::m_instance = nullptr;
-
-HttpManager &HttpManager::instance()
-{
-    if (!m_instance) {
-        m_instance = new HttpManager();
-    }
-    return *m_instance;
-}
+// 初始化静态成员变量
+QString HttpManager::m_apiKey = "888888";
+int HttpManager::m_maxRetries = 3;
+int HttpManager::m_timeout = 60000;
+QString HttpManager::m_url = "http://127.0.0.1:59218/v1/chat/completions";
+QString HttpManager::m_model = "gpt-4o";
 
 HttpManager::HttpManager()
-    : m_maxRetries(3), m_timeout(60000), m_model("gpt-4o"), m_apiKey("888888"),
-      m_url("http://127.0.0.1:59218/v1/chat/completions")
 {
 }
 
@@ -53,7 +47,10 @@ bool HttpManager::sendRequest(const QJsonDocument &doc,QString &ret_msg)
 
     int retries = 0;
     while (retries < m_maxRetries) {
-        QNetworkReply *reply = m_networkManager.post(request, doc.toJson());
+
+        QNetworkAccessManager manager;
+
+        QNetworkReply *reply = manager.post(request, doc.toJson());
 
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -207,8 +204,9 @@ void HttpManager::SendRequest_thread()
 {
     while (1) {
         std::string json_msg;
-        MessageManager::getInstance().popFromOutputQueue(json_msg);
-
-        sendRequestJson(json_msg);
+        if(MessageManager::getInstance().popFromOutputQueueNoWait(json_msg))
+        {
+            sendRequestJson(json_msg);
+        }
     }
 }
