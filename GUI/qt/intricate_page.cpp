@@ -66,7 +66,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     chatLayout->addWidget(textEdit1);
     chatLayout->addWidget(textEdit2);
 
-    QVBoxLayout *chatVBoLayout = new QVBoxLayout(this);
+    QVBoxLayout *chatVBoLayout = new QVBoxLayout();
     chatVBoLayout->addLayout(chatLayout);
     chatVBoLayout->addLayout(fourthRowLayout);
 
@@ -97,7 +97,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     QLabel *set_label9 = new QLabel("优质回答3:");
 
     // 创建布局管理器
-    QVBoxLayout *set_layout = new QVBoxLayout(this);
+    QVBoxLayout *set_layout = new QVBoxLayout();
 
     // 添加控件到布局管理器
 
