@@ -47,7 +47,10 @@ bool HttpManager::sendRequest(const QJsonDocument &doc,QString &ret_msg)
 
     int retries = 0;
     while (retries < m_maxRetries) {
-        QNetworkReply *reply = m_networkManager.post(request, doc.toJson());
+
+        QNetworkAccessManager manager;
+
+        QNetworkReply *reply = manager.post(request, doc.toJson());
 
         QEventLoop loop;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);

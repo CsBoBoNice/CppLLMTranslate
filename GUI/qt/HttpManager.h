@@ -37,9 +37,6 @@ class HttpManager : public QObject {
     static QString m_url;
     static QString m_model;
 
-  private:
-
-    QNetworkAccessManager m_networkManager;
 
 };
 
