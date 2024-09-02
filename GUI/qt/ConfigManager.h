@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:27:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 14:39:04
+ * @LastEditTime: 2024-09-02 16:30:10
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.h
  */
 #ifndef CONFIGMANAGER_H
@@ -56,6 +56,30 @@ class ConfigManager {
     bool en_to_zh_change = true;
     bool zh_to_en_change = true;
     bool chat_change = true;
+
+    bool md_file_change = true;
+    agreementInfo md_file_info;
+    agreementInfo default_get_prompt_md_file();
+    agreementInfo get_prompt_md_file();
+    void set_prompt_md_file(const agreementInfo &Info);
+
+    bool txt_file_change = true;
+    agreementInfo txt_file_info;
+    agreementInfo default_get_prompt_txt_file();
+    agreementInfo get_prompt_txt_file();
+    void set_prompt_txt_file(const agreementInfo &Info);
+
+    bool rst_file_change = true;
+    agreementInfo rst_file_info;
+    agreementInfo default_get_prompt_rst_file();
+    agreementInfo get_prompt_rst_file();
+    void set_prompt_rst_file(const agreementInfo &Info);
+
+    bool h_file_change = true;
+    agreementInfo h_file_info;
+    agreementInfo default_get_prompt_h_file();
+    agreementInfo get_prompt_h_file();
+    void set_prompt_h_file(const agreementInfo &Info);
 
   private:
     // 私有构造函数

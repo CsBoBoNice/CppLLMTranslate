@@ -20,6 +20,8 @@ class FileTranslation_page : public QMainWindow {
 
     void updataModeComboBox();
 
+    void UpdataPrompt(int index);
+
   private:
     QVBoxLayout *mainLayout;
     QComboBox *modeComboBox;
@@ -35,6 +37,7 @@ class FileTranslation_page : public QMainWindow {
     QTextEdit *progressEdit;
 
     QComboBox *fileTypeComboBox;
+    int fileTypeComboBoxIndex = 0;
 
     QTextEdit *textEdit_system;
     QTextEdit *textEdit_chat_prefix;

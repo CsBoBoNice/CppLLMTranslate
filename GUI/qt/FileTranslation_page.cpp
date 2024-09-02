@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 15:51:19
+ * @LastEditTime: 2024-09-02 17:10:12
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -84,14 +84,15 @@ static void FileTranslation_thread()
         if (fileManager.translation_cache.size() > fileManager.m_file_index) {
 
             qDebug() << "fileManager.translation_cache.size()" << fileManager.translation_cache.size();
-            qDebug() << "fileManager.m_file_index" << fileManager.m_file_index;
+            qDebug() << "fileManager.m_file_index" << fileManager.m_file_index + 1;
 
             content_ss << "file count " << fileManager.translation_cache.size() << "\n";
-            content_ss << "file index " << fileManager.m_file_index << "\n";
-            content_ss << "paragraph count " << fileManager.m_paragraph_index << "\n";
-            content_ss << "paragraph index " << fileManager.translation_cache[fileManager.m_file_index].content.size()
+            content_ss << "file index " << fileManager.m_file_index + 1 << "\n";
+            content_ss << "paragraph count " << fileManager.translation_cache[fileManager.m_file_index].content.size()
                        << "\n";
+            content_ss << "paragraph index " << fileManager.m_paragraph_index + 1 << "\n";
             content_ss << "file name " << fileManager.translation_cache[fileManager.m_file_index].path.c_str() << "\n";
+            content_ss << "translating ..." << "\n";
 
             // 将ostringstream的内容转换为std::string
             std::string content_str = content_ss.str();
@@ -102,8 +103,13 @@ static void FileTranslation_thread()
             std::string en_string =
                 fileManager.translation_cache[fileManager.m_file_index].content[fileManager.m_paragraph_index];
 
-            // // 确认文件类型
-            // FileType file_type = fileManager.checkFileType(fileManager.translation_cache[fileManager.m_file_index].path);
+            agreementInfo prompt_info;
+            // 确认文件类型
+            FileType file_type =
+                fileManager.checkFileType(fileManager.translation_cache[fileManager.m_file_index].path);
+            if (file_type == FileType::MD) {
+                prompt_info = ConfigManager::getInstance().get_prompt_md_file();
+            }
             // if (file_type == FileType::RST)
             // {
             //     buffer = fileManager.string_chat_prefix_rst +
@@ -122,28 +128,16 @@ static void FileTranslation_thread()
             //         g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index] +
             //         g_manager.string_chat_suffix_md;
             // }
-            agreementInfo info;
-            info.cmd = (int)AgreementCmd::translate_msg;
-            info.system = "你是专业翻译员，你需要将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。";
-            info.chat_prefix =
-                "将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
-            info.chat_suffix = "\n[待翻译内容结束]\n\n开始将英文文档翻译成简体中文。\n\n";
-            info.user_msg_1 = "Clipboard_Singleton_thread";
-            info.user_msg_2 = "getInstance";
-            info.user_msg_3 = "Life is actually like the weather, with its sunny days, cloudy days, and occasional "
-                              "rain showers. It's "
-                              "the natural order of things. Life isn't simple, but we should strive to simplify it as "
-                              "much as  possible.";
-            info.assistant_msg_1 = "剪贴板单例线程";
-            info.assistant_msg_2 = "获得实例";
-            info.assistant_msg_3 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
-            info.msg = en_string;
+
+            prompt_info.cmd = (int)AgreementCmd::translate_msg;
+            prompt_info.msg = en_string;
+
             // 已翻译中文段落
             std::string zh_string;
 
             HttpManager httpManager_;
 
-            httpManager_.sendRequestAgreementInfo(info, zh_string);
+            httpManager_.sendRequestAgreementInfo(prompt_info, zh_string);
 
             // 界面输出日志
             translation_content.set(en_string);
@@ -358,10 +352,12 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     set_HBoxLayout_9->addWidget(textEdit_assistant_msg_3);
     set_layout->addLayout(set_HBoxLayout_9);
 
-    QPushButton *GetButton = new QPushButton("获取配置");
-    QPushButton *SetButton = new QPushButton("更新配置");
+    QPushButton *RstButton = new QPushButton("重置prompt");
+    QPushButton *GetButton = new QPushButton("获取prompt");
+    QPushButton *SetButton = new QPushButton("更新prompt");
 
     QHBoxLayout *SetButtonLayout = new QHBoxLayout();
+    SetButtonLayout->addWidget(RstButton);
     SetButtonLayout->addWidget(GetButton);
     SetButtonLayout->addWidget(SetButton);
     set_layout->addLayout(SetButtonLayout);
@@ -460,6 +456,60 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
         }
     });
 
+    // 模式选择
+    connect(fileTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+        if (StateManager::getInstance().ShowPage == 3) {
+            qDebug("fileTypeComboBox index=%d", index);
+            fileTypeComboBoxIndex = index;
+            // 更新提示
+            UpdataPrompt(index);
+        }
+    });
+
+    // 连接按钮的点击信号到槽函数
+    connect(GetButton, &QPushButton::clicked, this, [this]() {
+        UpdataPrompt(0); // 传0单纯是为了不报错
+    });
+
+    connect(SetButton, &QPushButton::clicked, this, [this]() {
+        agreementInfo info;
+
+        info.system = textEdit_system->toPlainText().toStdString();
+        info.chat_prefix = textEdit_chat_prefix->toPlainText().toStdString();
+        info.chat_suffix = textEdit_chat_suffix->toPlainText().toStdString();
+        info.user_msg_1 = textEdit_user_msg_1->toPlainText().toStdString();
+        info.user_msg_2 = textEdit_user_msg_2->toPlainText().toStdString();
+        info.user_msg_3 = textEdit_user_msg_3->toPlainText().toStdString();
+        info.assistant_msg_1 = textEdit_assistant_msg_1->toPlainText().toStdString();
+        info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
+        info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
+
+        if (fileTypeComboBoxIndex == 0) {
+            ConfigManager::getInstance().set_prompt_md_file(info);
+        } /*else if (fileTypeComboBoxIndex == 1) {
+            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (fileTypeComboBoxIndex == 2) {
+            ConfigManager::getInstance().Set_config_chat(info);
+        }*/
+    });
+
+    connect(RstButton, &QPushButton::clicked, this, [this]() {
+        agreementInfo info;
+        info = ConfigManager::getInstance().default_get_prompt_md_file();
+        if (fileTypeComboBoxIndex == 0) {
+            ConfigManager::getInstance().set_prompt_md_file(info);
+        } /*else if (fileTypeComboBoxIndex == 1) {
+            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (fileTypeComboBoxIndex == 2) {
+            ConfigManager::getInstance().Set_config_chat(info);
+        }*/
+
+        UpdataPrompt(0); // 传0单纯是为了不报错
+    });
+
+    // 连接 QTabWidget 的 currentChanged 信号
+    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &FileTranslation_page::UpdataPrompt);
+
     // 创建定时器
     translate_timer = new QTimer(this);
 
@@ -499,4 +549,28 @@ void FileTranslation_page::updataModeComboBox()
     if (StateManager::getInstance().ShowPage == 3) {
         modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
     }
+}
+
+void FileTranslation_page::UpdataPrompt(int index)
+{
+    agreementInfo info;
+    if (fileTypeComboBoxIndex == 0) {
+        info = ConfigManager::getInstance().get_prompt_md_file();
+    } /*else if (fileTypeComboBoxIndex == 1) {
+        info = ConfigManager::getInstance().get_prompt_txt_file();
+    } else if (fileTypeComboBoxIndex == 2) {
+        info = ConfigManager::getInstance().get_prompt_rst_file();
+    }else if (fileTypeComboBoxIndex == 3) {
+        info = ConfigManager::getInstance().get_prompt_h_file();
+    }*/
+
+    textEdit_system->setText(info.system.c_str());
+    textEdit_chat_prefix->setText(info.chat_prefix.c_str());
+    textEdit_chat_suffix->setText(info.chat_suffix.c_str());
+    textEdit_user_msg_1->setText(info.user_msg_1.c_str());
+    textEdit_user_msg_2->setText(info.user_msg_2.c_str());
+    textEdit_user_msg_3->setText(info.user_msg_3.c_str());
+    textEdit_assistant_msg_1->setText(info.assistant_msg_1.c_str());
+    textEdit_assistant_msg_2->setText(info.assistant_msg_2.c_str());
+    textEdit_assistant_msg_3->setText(info.assistant_msg_3.c_str());
 }

@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 11:01:00
+ * @LastEditTime: 2024-09-02 17:10:17
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -261,7 +261,10 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     connect(toggleSettingsButton, &QPushButton::clicked, this, &intricate_page::onToggleSettingsButtonClicked);
 
     // 连接按钮的点击信号到槽函数
-    connect(GetButton, &QPushButton::clicked, this, &intricate_page::UpDataInfo);
+    connect(GetButton, &QPushButton::clicked, this, [this]() {
+        UpDataInfo(0); // 传0单纯是为了不报错
+    });
+
     connect(SetButton, &QPushButton::clicked, this, [this]() {
         agreementInfo info;
 
