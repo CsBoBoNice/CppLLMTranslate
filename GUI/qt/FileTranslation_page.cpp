@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 17:34:24
+ * @LastEditTime: 2024-09-03 09:22:55
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -22,6 +22,8 @@
 #include <QClipboard>
 #include <QApplication>
 #include <QDir>
+#include <QIntValidator>
+
 #include "ConfigManager.h"
 #include "StateManager.h"
 #include "HttpManager.h"
@@ -109,25 +111,13 @@ static void FileTranslation_thread()
                 fileManager.checkFileType(fileManager.translation_cache[fileManager.m_file_index].path);
             if (file_type == FileType::MD) {
                 prompt_info = ConfigManager::getInstance().get_prompt_md_file();
+            } else if (file_type == FileType::TXT) {
+                prompt_info = ConfigManager::getInstance().get_prompt_txt_file();
+            } else if (file_type == FileType::RST) {
+                prompt_info = ConfigManager::getInstance().get_prompt_rst_file();
+            } else if (file_type == FileType::HPP) {
+                prompt_info = ConfigManager::getInstance().get_prompt_h_file();
             }
-            // if (file_type == FileType::RST)
-            // {
-            //     buffer = fileManager.string_chat_prefix_rst +
-            //         fileManager.translation_cache[fileManager.m_file_index].content[g_manager.m_paragraph_index] +
-            //         fileManager.string_chat_suffix_rst;
-            // }
-            // else if (file_type == FileType::HPP)
-            // {
-            //     buffer = g_manager.string_chat_prefix_hpp +
-            //         g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index] +
-            //         g_manager.string_chat_suffix_hpp;
-            // }
-            // else
-            // {
-            //     buffer = g_manager.string_chat_prefix_md +
-            //         g_manager.translation_cache[g_manager.m_file_index].content[g_manager.m_paragraph_index] +
-            //         g_manager.string_chat_suffix_md;
-            // }
 
             prompt_info.cmd = (int)AgreementCmd::translate_msg;
             prompt_info.msg = en_string;
@@ -213,11 +203,32 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
     QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
 
+    /*
+    int paragraph_effective = 1 * 128;  // 段落有效值
+    int paragraph_min = 1 * 1024 + 128; // 段落最小值
+    int paragraph_max = 2 * 1024 + 128; // 段落最大值
+    QLineEdit *paragraph_effective;
+    QLineEdit *paragraph_min;
+    QLineEdit *paragraph_max;
+*/
+
     Input_file_path = new QLineEdit(InputPath);
     Output_file_path = new QLineEdit(OutputPath);
     Cut_file_path = new QLineEdit(CutPath);
     Reference_file_path = new QLineEdit(ReferencePath);
     Success_file_path = new QLineEdit(SuccessPath);
+    paragraph_effective = new QLineEdit(std::to_string(fileManager.paragraph_effective).c_str());
+    paragraph_min = new QLineEdit(std::to_string(fileManager.paragraph_min).c_str());
+    paragraph_max = new QLineEdit(std::to_string(fileManager.paragraph_max).c_str());
+
+    QIntValidator *validator = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
+    paragraph_effective->setValidator(validator);
+
+    QIntValidator *validator1 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
+    paragraph_min->setValidator(validator1);
+
+    QIntValidator *validator2 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
+    paragraph_max->setValidator(validator2);
 
     QVBoxLayout *infoPageLayout = new QVBoxLayout();
 
@@ -245,6 +256,21 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     inputLayout_5->addWidget(new QLabel("完成路径: "));
     inputLayout_5->addWidget(Success_file_path);
     infoPageLayout->addLayout(inputLayout_5);
+
+    QHBoxLayout *inputLayout_6 = new QHBoxLayout();
+    inputLayout_6->addWidget(new QLabel("段落有效值: "));
+    inputLayout_6->addWidget(paragraph_effective);
+    infoPageLayout->addLayout(inputLayout_6);
+
+    QHBoxLayout *inputLayout_7 = new QHBoxLayout();
+    inputLayout_7->addWidget(new QLabel("段落最小值: "));
+    inputLayout_7->addWidget(paragraph_min);
+    infoPageLayout->addLayout(inputLayout_7);
+
+    QHBoxLayout *inputLayout_8 = new QHBoxLayout();
+    inputLayout_8->addWidget(new QLabel("段落最大值: "));
+    inputLayout_8->addWidget(paragraph_max);
+    infoPageLayout->addLayout(inputLayout_8);
 
     textEdit1 = new QTextEdit();
     textEdit2 = new QTextEdit();
@@ -410,6 +436,11 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileManager.directory_en = Reference_file_path->text().toStdString();
             fileManager.directory_ok = Success_file_path->text().toStdString();
 
+            // 更新段落切割参数
+            fileManager.paragraph_effective = paragraph_effective->text().toInt();
+            fileManager.paragraph_min = paragraph_min->text().toInt();
+            fileManager.paragraph_max = paragraph_max->text().toInt();
+
             // 删除输出路径
             deleteFolder(Cut_file_path->text());
             deleteFolder(Reference_file_path->text());
@@ -435,6 +466,11 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileManager.directory_cut = Cut_file_path->text().toStdString();
             fileManager.directory_en = Reference_file_path->text().toStdString();
             fileManager.directory_ok = Success_file_path->text().toStdString();
+
+            // 更新段落切割参数
+            fileManager.paragraph_effective = paragraph_effective->text().toInt();
+            fileManager.paragraph_min = paragraph_min->text().toInt();
+            fileManager.paragraph_max = paragraph_max->text().toInt();
 
             if (fileManager.m_cut_sign != true) {
                 // 删除输出路径
@@ -490,7 +526,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             ConfigManager::getInstance().set_prompt_txt_file(info);
         } else if (fileTypeComboBoxIndex == 2) {
             ConfigManager::getInstance().set_prompt_rst_file(info);
-        }else if (fileTypeComboBoxIndex == 3) {
+        } else if (fileTypeComboBoxIndex == 3) {
             ConfigManager::getInstance().set_prompt_h_file(info);
         }
     });
@@ -507,7 +543,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
         } else if (fileTypeComboBoxIndex == 2) {
             info = ConfigManager::getInstance().default_get_prompt_rst_file();
             ConfigManager::getInstance().set_prompt_rst_file(info);
-        }else if (fileTypeComboBoxIndex == 3) {
+        } else if (fileTypeComboBoxIndex == 3) {
             info = ConfigManager::getInstance().default_get_prompt_h_file();
             ConfigManager::getInstance().set_prompt_h_file(info);
         }
@@ -568,7 +604,7 @@ void FileTranslation_page::UpdataPrompt(int index)
         info = ConfigManager::getInstance().get_prompt_txt_file();
     } else if (fileTypeComboBoxIndex == 2) {
         info = ConfigManager::getInstance().get_prompt_rst_file();
-    }else if (fileTypeComboBoxIndex == 3) {
+    } else if (fileTypeComboBoxIndex == 3) {
         info = ConfigManager::getInstance().get_prompt_h_file();
     }
 

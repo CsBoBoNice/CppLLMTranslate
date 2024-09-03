@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-09-02 16:50:22
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-09-03 09:08:40
+ * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.h
+ */
 #ifndef FILETRANSLATION_PAGE_H
 #define FILETRANSLATION_PAGE_H
 
@@ -49,11 +55,22 @@ class FileTranslation_page : public QMainWindow {
     QTextEdit *textEdit_assistant_msg_2;
     QTextEdit *textEdit_assistant_msg_3;
 
+/*
+    int paragraph_effective = 1 * 128;  // 段落有效值
+    int paragraph_min = 1 * 1024 + 128; // 段落最小值
+    int paragraph_max = 2 * 1024 + 128; // 段落最大值
+*/
+
     QLineEdit *Input_file_path;
     QLineEdit *Output_file_path;
     QLineEdit *Cut_file_path;
     QLineEdit *Reference_file_path;
     QLineEdit *Success_file_path;
+
+    QLineEdit *paragraph_effective;
+    QLineEdit *paragraph_min;
+    QLineEdit *paragraph_max;
+
 };
 
 #endif // FILETRANSLATION_PAGE_H

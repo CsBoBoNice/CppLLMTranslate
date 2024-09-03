@@ -27,9 +27,9 @@ struct FileContent {
 
 class FileManager {
   public:
-    int paragraph_effective = 1 * 128;  // 段落有效值
-    int paragraph_min = 1 * 1024 + 128; // 段落最小值
-    int paragraph_max = 2 * 1024 + 128; // 段落最大值
+    int paragraph_effective = 512;  // 段落有效值
+    int paragraph_min = 4096; // 段落最小值
+    int paragraph_max = 6144; // 段落最大值
 
     std::filesystem::path directory = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/ttt/";              // 原输入路径
     std::filesystem::path directory_output = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/";      // 输出路径
@@ -67,6 +67,9 @@ class FileManager {
 
     // 函数用于读取文件内容并返回FileContent结构体
     FileContent getFileContent(const std::filesystem::directory_entry &entry);
+
+    // 函数用于读取文件内容并返回FileContent结构体
+    FileContent getFileContent_ok(const std::filesystem::directory_entry &entry);
 
     // 将切割好的段落放入缓冲区 非翻译文件直接拷贝
     void ProcessFilesRecursive(const std::filesystem::path &directory,

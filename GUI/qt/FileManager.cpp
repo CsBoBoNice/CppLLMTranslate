@@ -222,6 +222,51 @@ FileContent FileManager::getFileContent(const std::filesystem::directory_entry &
     return fileContent;
 }
 
+// 函数用于读取文件内容并返回FileContent结构体
+FileContent FileManager::getFileContent_ok(const std::filesystem::directory_entry &entry)
+{
+    FileContent fileContent;
+
+    std::ifstream input(entry.path());
+    if (!input.is_open())
+    {
+        // std::cerr << "无法打开文件: " << entry.path() << std::endl;
+        return fileContent;
+    }
+
+    std::string paragraph;
+    std::string line;
+
+    while (std::getline(input, line))
+    {
+        // 检查是否是特定分隔符
+        if (line == Separator_cut)
+        {
+            if (paragraph.size() >= 2) // 判断是否有效
+            {
+                // 当遇到分隔行时，增加一个段落
+                fileContent.content.push_back(paragraph); // 添加换行符
+                paragraph.clear();
+            }
+        }
+        else
+        {
+            // 否则，添加到当前段落
+            line += "\n";
+            paragraph += line;
+        }
+    }
+
+    // 如果文件末尾没有分隔行，保存最后的段落
+    if (!paragraph.empty())
+    {
+        fileContent.content.push_back(paragraph); // 添加换行符
+    }
+
+    input.close();
+    return fileContent;
+}
+
 // 将切割好的段落放入缓冲区 非翻译文件直接拷贝
 void FileManager::ProcessFilesRecursive(const std::filesystem::path &directory,
                                         const std::filesystem::path &target_directory,
@@ -255,7 +300,7 @@ void FileManager::ProcessFilesRecursive(const std::filesystem::path &directory,
                 (entry.path().extension() == ".md" || entry.path().extension() == ".txt" ||
                  entry.path().extension() == ".rst" || entry.path().extension() == ".h")) {
                 FileContent fileContent;
-                fileContent = getFileContent(entry);
+                fileContent = getFileContent_ok(entry);
                 fileContent.path = relative_path.string();
 
                 if (fileContent.content.size() == 0) {
