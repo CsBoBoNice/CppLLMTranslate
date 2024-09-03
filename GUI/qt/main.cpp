@@ -27,6 +27,7 @@ FileTranslation_page *FileTranslation_page_w;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    a.setWindowIcon(QIcon(QCoreApplication::applicationDirPath()+"/logo.ico")); // 使用文件系统路径
 
     // 加载自定义字体
     QString font_path = QCoreApplication::applicationDirPath() + "/font.ttf";
