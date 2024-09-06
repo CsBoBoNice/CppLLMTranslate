@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 09:35:43
+ * @LastEditTime: 2024-09-06 10:43:29
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -158,17 +158,7 @@ static void FileTranslation_thread()
                 info.file_index = fileManager.m_file_index;
                 info.paragraph_index = fileManager.m_paragraph_index;
 
-                info.paragraph_effective = fileManager.paragraph_effective;
-                info.paragraph_min = fileManager.paragraph_min;
-                info.paragraph_max = fileManager.paragraph_max;
-
-                info.Input_file_path = fileManager.directory;
-                info.Output_file_path = fileManager.directory_output;
-                info.Cut_file_path = fileManager.directory_cut;
-                info.Reference_file_path = fileManager.directory_en;
-                info.Success_file_path = fileManager.directory_ok;
-
-                ConfigManager::getInstance().set_TranslationProgressConfig(info); // 保存进度
+                ConfigManager::getInstance().set_TranslationProgressConfig(info, fileManager.directory); // 保存进度
             }
         } else {
             if (fileManager.translation_cache.size() > 0) {
@@ -214,11 +204,18 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     RowLayout->addWidget(cutButton);
     RowLayout->addWidget(translateButton);
 
-    QString InputPath = QCoreApplication::applicationDirPath() + "/input";
-    QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
-    QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
-    QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
-    QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
+    // 读取配置文件
+    TranslationSetInfo translation_set_info = ConfigManager::getInstance().get_TranslationSetInfo();
+
+    QString InputPath = translation_set_info.Input_file_path.c_str();
+    QString OutputPath = translation_set_info.Output_file_path.c_str();
+    QString CutPath = translation_set_info.Cut_file_path.c_str();
+    QString ReferencePath = translation_set_info.Reference_file_path.c_str();
+    QString SuccessPath = translation_set_info.Success_file_path.c_str();
+
+    fileManager.paragraph_effective = translation_set_info.paragraph_effective;
+    fileManager.paragraph_min = translation_set_info.paragraph_min;
+    fileManager.paragraph_max = translation_set_info.paragraph_max;
 
     Input_file_path = new QLineEdit(InputPath);
     Output_file_path = new QLineEdit(OutputPath);
@@ -459,41 +456,34 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileManager.paragraph_min = paragraph_min->text().toInt();
             fileManager.paragraph_max = paragraph_max->text().toInt();
 
-            TranslationProgressConfig info;
+            TranslationProgressConfig ProgressInfo;
 
-            info.file_index = 0;
-            info.paragraph_index = 0;
+            ProgressInfo.file_index = 0;
+            ProgressInfo.paragraph_index = 0;
 
-            info.paragraph_effective = paragraph_effective->text().toInt();
-            info.paragraph_min = paragraph_min->text().toInt();
-            info.paragraph_max = paragraph_max->text().toInt();
+            TranslationSetInfo translation_set_info;
 
-            info.Input_file_path = Input_file_path->text().toStdString();
-            info.Output_file_path = Output_file_path->text().toStdString();
-            info.Cut_file_path = Cut_file_path->text().toStdString();
-            info.Reference_file_path = Reference_file_path->text().toStdString();
-            info.Success_file_path = Success_file_path->text().toStdString();
+            translation_set_info.paragraph_effective = paragraph_effective->text().toInt();
+            translation_set_info.paragraph_min = paragraph_min->text().toInt();
+            translation_set_info.paragraph_max = paragraph_max->text().toInt();
 
-            QString info_path = info.Input_file_path.c_str();
-            info_path += "/TranslationProgressConfig.json";
+            translation_set_info.Input_file_path = Input_file_path->text().toStdString();
+            translation_set_info.Output_file_path = Output_file_path->text().toStdString();
+            translation_set_info.Cut_file_path = Cut_file_path->text().toStdString();
+            translation_set_info.Reference_file_path = Reference_file_path->text().toStdString();
+            translation_set_info.Success_file_path = Success_file_path->text().toStdString();
 
-            QFile file(info_path);
+            ConfigManager::getInstance().set_TranslationSetInfo(translation_set_info); // 保存设置
+
+            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+
+            QFile file(Progress_info_path);
             if (file.exists() == true) {
-                info = ConfigManager::getInstance().get_TranslationProgressConfig(info_path.toStdString()); // 读取进度
+                ProgressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
+                    Progress_info_path.toStdString()); // 读取进度
                 progress_info.set("文件存在，已读取进度，可继续翻译");
 
-                // 将进度信息显示到UI
-                paragraph_effective->setText(QString::number(info.paragraph_effective));
-                paragraph_min->setText(QString::number(info.paragraph_min));
-                paragraph_max->setText(QString::number(info.paragraph_max));
-
-                Input_file_path->setText(info.Input_file_path.c_str());
-                Output_file_path->setText(info.Output_file_path.c_str());
-                Cut_file_path->setText(info.Cut_file_path.c_str());
-                Reference_file_path->setText(info.Reference_file_path.c_str());
-                Success_file_path->setText(info.Success_file_path.c_str());
-
-                fileManager.m_file_index = info.file_index; // 更新翻译进度
+                fileManager.m_file_index = ProgressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
 
             } else {
@@ -504,23 +494,16 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
                 deleteFolder(Output_file_path->text());
 
                 // 切割段落
-                fileManager.ProcessFilesCut(info.Input_file_path, info.Cut_file_path, info.Input_file_path);
+                fileManager.ProcessFilesCut(translation_set_info.Input_file_path, translation_set_info.Cut_file_path,
+                                            translation_set_info.Input_file_path);
                 fileManager.m_cut_sign = true;
 
-                ConfigManager::getInstance().set_TranslationProgressConfig(info); // 保存进度
+                ConfigManager::getInstance().set_TranslationProgressConfig(
+                    ProgressInfo,
+                    translation_set_info.Input_file_path); // 保存进度
 
                 progress_info.set("切割完成");
             }
-
-            fileManager.paragraph_effective = info.paragraph_effective;
-            fileManager.paragraph_min = info.paragraph_min;
-            fileManager.paragraph_max = info.paragraph_max;
-
-            fileManager.directory = info.Input_file_path;
-            fileManager.directory_output = info.Output_file_path;
-            fileManager.directory_cut = info.Cut_file_path;
-            fileManager.directory_en = info.Reference_file_path;
-            fileManager.directory_ok = info.Success_file_path;
         }
     });
 
@@ -541,41 +524,34 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileManager.paragraph_min = paragraph_min->text().toInt();
             fileManager.paragraph_max = paragraph_max->text().toInt();
 
-            TranslationProgressConfig info;
+            TranslationProgressConfig ProgressInfo;
 
-            info.file_index = 0;
-            info.paragraph_index = 0;
+            ProgressInfo.file_index = 0;
+            ProgressInfo.paragraph_index = 0;
 
-            info.paragraph_effective = paragraph_effective->text().toInt();
-            info.paragraph_min = paragraph_min->text().toInt();
-            info.paragraph_max = paragraph_max->text().toInt();
+            TranslationSetInfo translation_set_info;
 
-            info.Input_file_path = Input_file_path->text().toStdString();
-            info.Output_file_path = Output_file_path->text().toStdString();
-            info.Cut_file_path = Cut_file_path->text().toStdString();
-            info.Reference_file_path = Reference_file_path->text().toStdString();
-            info.Success_file_path = Success_file_path->text().toStdString();
+            translation_set_info.paragraph_effective = paragraph_effective->text().toInt();
+            translation_set_info.paragraph_min = paragraph_min->text().toInt();
+            translation_set_info.paragraph_max = paragraph_max->text().toInt();
 
-            QString info_path = info.Input_file_path.c_str();
-            info_path += "/TranslationProgressConfig.json";
+            translation_set_info.Input_file_path = Input_file_path->text().toStdString();
+            translation_set_info.Output_file_path = Output_file_path->text().toStdString();
+            translation_set_info.Cut_file_path = Cut_file_path->text().toStdString();
+            translation_set_info.Reference_file_path = Reference_file_path->text().toStdString();
+            translation_set_info.Success_file_path = Success_file_path->text().toStdString();
 
-            QFile file(info_path);
+            ConfigManager::getInstance().set_TranslationSetInfo(translation_set_info); // 保存设置
+
+            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+
+            QFile file(Progress_info_path);
             if (file.exists() == true) {
-                info = ConfigManager::getInstance().get_TranslationProgressConfig(info_path.toStdString()); // 读取进度
+                ProgressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
+                    Progress_info_path.toStdString()); // 读取进度
                 progress_info.set("文件存在，已读取进度，可继续翻译");
 
-                // 将进度信息显示到UI
-                paragraph_effective->setText(QString::number(info.paragraph_effective));
-                paragraph_min->setText(QString::number(info.paragraph_min));
-                paragraph_max->setText(QString::number(info.paragraph_max));
-
-                Input_file_path->setText(info.Input_file_path.c_str());
-                Output_file_path->setText(info.Output_file_path.c_str());
-                Cut_file_path->setText(info.Cut_file_path.c_str());
-                Reference_file_path->setText(info.Reference_file_path.c_str());
-                Success_file_path->setText(info.Success_file_path.c_str());
-
-                fileManager.m_file_index = info.file_index; // 更新翻译进度
+                fileManager.m_file_index = ProgressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
 
             } else {
@@ -589,28 +565,25 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
                     deleteFolder(Output_file_path->text());
 
                     // 切割段落
-                    fileManager.ProcessFilesCut(info.Input_file_path, info.Cut_file_path, info.Input_file_path);
+                    fileManager.ProcessFilesCut(translation_set_info.Input_file_path,
+                                                translation_set_info.Cut_file_path,
+                                                translation_set_info.Input_file_path);
                     fileManager.m_cut_sign = true;
                 }
 
                 progress_info.set("切割完成");
+
+                fileManager.m_file_index = 0;
+                fileManager.m_paragraph_index = 0;
             }
-
-            fileManager.paragraph_effective = info.paragraph_effective;
-            fileManager.paragraph_min = info.paragraph_min;
-            fileManager.paragraph_max = info.paragraph_max;
-
-            fileManager.directory = info.Input_file_path;
-            fileManager.directory_output = info.Output_file_path;
-            fileManager.directory_cut = info.Cut_file_path;
-            fileManager.directory_en = info.Reference_file_path;
-            fileManager.directory_ok = info.Success_file_path;
 
             // 将切割好的段落放入缓冲区
             fileManager.ProcessFilesRecursive(fileManager.directory_cut, fileManager.directory_en,
                                               fileManager.directory_cut, fileManager.translation_cache);
 
-            ConfigManager::getInstance().set_TranslationProgressConfig(info); // 保存进度
+            ConfigManager::getInstance().set_TranslationProgressConfig(
+                ProgressInfo,
+                translation_set_info.Input_file_path); // 保存进度
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
 
@@ -625,6 +598,48 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
             fileTypeComboBoxIndex = index;
             // 更新提示
             UpdataPrompt(index);
+        }
+    });
+
+    // 恢复默认
+    connect(resetButton, &QPushButton::clicked, this, [this]() {
+        if (fileManager.translation_cache.size() == 0) {
+
+            TranslationSetInfo info = ConfigManager::getInstance().default_get_TranslationSetInfo();
+            ConfigManager::getInstance().set_TranslationSetInfo(info);
+
+            progress_info.set("已恢复默认");
+
+            // 将进度信息显示到UI
+            paragraph_effective->setText(QString::number(info.paragraph_effective));
+            paragraph_min->setText(QString::number(info.paragraph_min));
+            paragraph_max->setText(QString::number(info.paragraph_max));
+
+            Input_file_path->setText(info.Input_file_path.c_str());
+            Output_file_path->setText(info.Output_file_path.c_str());
+            Cut_file_path->setText(info.Cut_file_path.c_str());
+            Reference_file_path->setText(info.Reference_file_path.c_str());
+            Success_file_path->setText(info.Success_file_path.c_str());
+        }
+    });
+
+    // 清理翻译文件
+    connect(cleanButton, &QPushButton::clicked, this, [this]() {
+        if (fileManager.translation_cache.size() == 0) {
+            // 删除输出路径
+            deleteFolder(Cut_file_path->text());
+            deleteFolder(Reference_file_path->text());
+            deleteFolder(Success_file_path->text());
+            deleteFolder(Output_file_path->text());
+
+            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+
+            QFile file(Progress_info_path);
+            if (file.exists() == true) {
+                file.remove();
+            }
+
+            progress_info.set("已清理");
         }
     });
 

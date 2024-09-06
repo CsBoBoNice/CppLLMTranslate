@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-31 11:11:00
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-31 11:51:55
+ * @LastEditTime: 2024-09-06 10:43:33
  * @FilePath: /CppLLMTranslate/GUI/qt/FileManager.h
  */
 #ifndef FILEMANAGER_H
@@ -27,18 +27,15 @@ struct FileContent {
 
 class FileManager {
   public:
-    int paragraph_effective = 512;  // 段落有效值
-    int paragraph_min = 4096; // 段落最小值
-    int paragraph_max = 6144; // 段落最大值
+    int paragraph_effective = 512; // 段落有效值
+    int paragraph_min = 4096;      // 段落最小值
+    int paragraph_max = 6144;      // 段落最大值
 
-    std::filesystem::path directory = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/ttt/";              // 原输入路径
-    std::filesystem::path directory_output = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/";      // 输出路径
-    std::filesystem::path directory_cut = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_cut/"; // 切割输出路径
-    std::filesystem::path directory_en = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_en/"; // 翻译输出路径(中英对照)
-    std::filesystem::path directory_ok = "/home/csbobo/code/CppLLMTranslate/GUI/qt/build/docs_ok/"; // 翻译输出路径(中文)
-
-    std::string progress_file = "../file_processing/datasheet_output/progress.json"; // 进度文件
-    std::string paragraph_info_file = "../prompts/paragraph_info.json";              // 段落分割阈值文件
+    std::filesystem::path directory;        // 原输入路径
+    std::filesystem::path directory_output; // 输出路径
+    std::filesystem::path directory_cut;    // 切割输出路径
+    std::filesystem::path directory_en;     // 翻译输出路径(中英对照)
+    std::filesystem::path directory_ok;     // 翻译输出路径(中文)
 
     std::string Separator_cut = "*-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-**-*-*";
 
@@ -47,7 +44,7 @@ class FileManager {
     size_t m_file_index = 0;      // 文件计数
     size_t m_paragraph_index = 0; // 段落计数
 
-    bool m_cut_sign=false;
+    bool m_cut_sign = false;
 
   public:
     FileManager();

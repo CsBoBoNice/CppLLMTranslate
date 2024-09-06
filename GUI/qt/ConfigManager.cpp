@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 08:42:29
+ * @LastEditTime: 2024-09-06 10:23:08
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -904,22 +904,12 @@ void ConfigManager::set_prompt_h_file(const agreementInfo &Info)
     h_file_info = Info;   // 保存到全局变量
 }
 
-TranslationProgressConfig TranslationProgressParseJson(const std::string &jsonStr)
+TranslationSetInfo TranslationSetInfoParseJson(const std::string &jsonStr)
 {
-    TranslationProgressConfig info;
+    TranslationSetInfo info;
     cJSON *root = cJSON_Parse(jsonStr.c_str());
     if (root == nullptr) {
         return info;
-    }
-
-    cJSON *file_index = cJSON_GetObjectItem(root, "file_index");
-    if (file_index != nullptr) {
-        info.file_index = file_index->valueint;
-    }
-
-    cJSON *paragraph_index = cJSON_GetObjectItem(root, "paragraph_index");
-    if (paragraph_index != nullptr) {
-        info.paragraph_index = paragraph_index->valueint;
     }
 
     cJSON *paragraph_effective = cJSON_GetObjectItem(root, "paragraph_effective");
@@ -966,11 +956,9 @@ TranslationProgressConfig TranslationProgressParseJson(const std::string &jsonSt
     return info;
 }
 
-std::string TranslationProgressWrapToJson(const TranslationProgressConfig &info)
+std::string TranslationSetInfoWrapToJson(const TranslationSetInfo &info)
 {
     cJSON *root = cJSON_CreateObject();
-    cJSON_AddNumberToObject(root, "file_index", info.file_index);
-    cJSON_AddNumberToObject(root, "paragraph_index", info.paragraph_index);
     cJSON_AddNumberToObject(root, "paragraph_effective", info.paragraph_effective);
     cJSON_AddNumberToObject(root, "paragraph_min", info.paragraph_min);
     cJSON_AddNumberToObject(root, "paragraph_max", info.paragraph_max);
@@ -987,18 +975,15 @@ std::string TranslationProgressWrapToJson(const TranslationProgressConfig &info)
     return result;
 }
 
-TranslationProgressConfig ConfigManager::default_get_TranslationProgressConfig()
+TranslationSetInfo ConfigManager::default_get_TranslationSetInfo()
 {
-
     QString InputPath = QCoreApplication::applicationDirPath() + "/input";
     QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
     QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
     QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
     QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
 
-    TranslationProgressConfig info;
-    info.file_index = 0;
-    info.paragraph_index = 0;
+    TranslationSetInfo info;
     info.paragraph_effective = 512;
     info.paragraph_min = 4096;
     info.paragraph_max = 6144;
@@ -1007,6 +992,84 @@ TranslationProgressConfig ConfigManager::default_get_TranslationProgressConfig()
     info.Cut_file_path = CutPath.toStdString();
     info.Reference_file_path = ReferencePath.toStdString();
     info.Success_file_path = SuccessPath.toStdString();
+    return info;
+}
+
+TranslationSetInfo ConfigManager::get_TranslationSetInfo()
+{
+    if (!TranslationSetInfo_change) {
+        return TranslationSetInfo_info; // 未改变，直接返回全局变量
+    }
+
+    TranslationSetInfo info = default_get_TranslationSetInfo();
+    std::string info_json;
+    QString info_path = QCoreApplication::applicationDirPath() + "/TranslationSetInfo.json";
+    QFile file(info_path);
+    if (file.exists() == true) {
+
+        info_json = readFile(info_path);
+        info = TranslationSetInfoParseJson(info_json);
+        if (info.Input_file_path.empty()) {
+            info = default_get_TranslationSetInfo();
+            saveFile(info_path, TranslationSetInfoWrapToJson(info)); // 配置异常恢复默认
+        }
+    } else {
+        saveFile(info_path, TranslationSetInfoWrapToJson(info)); // 配置异常恢复默认
+    }
+
+    TranslationSetInfo_info = info;    // 保存到全局变量
+    TranslationSetInfo_change = false; // 清除改变标志
+    return info;
+}
+
+void ConfigManager::set_TranslationSetInfo(const TranslationSetInfo &Info)
+{
+    QString info_path = QCoreApplication::applicationDirPath() + "/TranslationSetInfo.json";
+    saveFile(info_path, TranslationSetInfoWrapToJson(Info));
+    TranslationSetInfo_change = true; // 设置改变标志
+    TranslationSetInfo_info = Info;   // 保存到全局变量
+}
+
+TranslationProgressConfig TranslationProgressParseJson(const std::string &jsonStr)
+{
+    TranslationProgressConfig info;
+    cJSON *root = cJSON_Parse(jsonStr.c_str());
+    if (root == nullptr) {
+        return info;
+    }
+
+    cJSON *file_index = cJSON_GetObjectItem(root, "file_index");
+    if (file_index != nullptr) {
+        info.file_index = file_index->valueint;
+    }
+
+    cJSON *paragraph_index = cJSON_GetObjectItem(root, "paragraph_index");
+    if (paragraph_index != nullptr) {
+        info.paragraph_index = paragraph_index->valueint;
+    }
+
+    cJSON_Delete(root);
+    return info;
+}
+
+std::string TranslationProgressWrapToJson(const TranslationProgressConfig &info)
+{
+    cJSON *root = cJSON_CreateObject();
+    cJSON_AddNumberToObject(root, "file_index", info.file_index);
+    cJSON_AddNumberToObject(root, "paragraph_index", info.paragraph_index);
+
+    char *jsonStr = cJSON_Print(root);
+    std::string result(jsonStr);
+    free(jsonStr);
+    cJSON_Delete(root);
+    return result;
+}
+
+TranslationProgressConfig ConfigManager::default_get_TranslationProgressConfig()
+{
+    TranslationProgressConfig info;
+    info.file_index = 0;
+    info.paragraph_index = 0;
     return info;
 }
 
@@ -1022,7 +1085,7 @@ TranslationProgressConfig ConfigManager::get_TranslationProgressConfig(std::stri
     if (file.exists() == true) {
         std::string info_json = readFile(info_path);
         info = TranslationProgressParseJson(info_json); // 解析json
-        if (info.Input_file_path.empty()) {
+        if (info.file_index == 0) {
             info = default_get_TranslationProgressConfig();
             saveFile(info_path, TranslationProgressWrapToJson(info)); // 配置异常恢复默认
         }
@@ -1035,9 +1098,9 @@ TranslationProgressConfig ConfigManager::get_TranslationProgressConfig(std::stri
     return info;
 }
 
-void ConfigManager::set_TranslationProgressConfig(const TranslationProgressConfig &Info)
+void ConfigManager::set_TranslationProgressConfig(const TranslationProgressConfig &Info, std::string Input_file_path)
 {
-    QString info_path = Info.Input_file_path.c_str();
+    QString info_path = Input_file_path.c_str();
     info_path += "/TranslationProgressConfig.json";
     saveFile(info_path, TranslationProgressWrapToJson(Info));
     TranslationProgressConfig_change = true;
