@@ -161,7 +161,7 @@ static void FileTranslation_thread()
                 info.file_index = fileManager.m_file_index;
                 info.paragraph_index = fileManager.m_paragraph_index;
 
-                ConfigManager::getInstance().set_TranslationProgressConfig(info, fileManager.directory); // 保存进度
+                ConfigManager::getInstance().set_TranslationProgressConfig(info, fileManager.directory.string()); // 保存进度
             }
         } else {
             if (fileManager.translation_cache.size() > 0) {
