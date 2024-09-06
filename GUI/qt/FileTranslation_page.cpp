@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 10:43:29
+ * @LastEditTime: 2024-09-06 11:17:24
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -34,12 +34,15 @@ FileManager fileManager;
 
 // 进度信息
 ThreadSafeString progress_info;
+std::string progress_info_last;
 
 // 待翻译内容
 ThreadSafeString translation_content;
+std::string translation_content_last;
 
 // 翻译结果
 ThreadSafeString translation_result;
+std::string translation_result_last;
 
 bool deleteFolder(const QString &path)
 {
@@ -639,6 +642,8 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
                 file.remove();
             }
 
+            fileManager.m_cut_sign = false;
+
             progress_info.set("已清理");
         }
     });
@@ -708,20 +713,36 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
 
     // 连接定时器的timeout信号到槽函数
     connect(translate_timer, &QTimer::timeout, this, [=]() {
-        // 完全翻译的信息覆盖
-        textEdit1->clear();
-        textEdit1->append(translation_content.get().c_str());
-        QTextCursor cursor1 = textEdit1->textCursor();
-        cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
-        textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
+        if (translation_content_last != translation_content.get()) {
+            translation_content_last = translation_content.get();
+            // 完全翻译的信息覆盖
+            textEdit1->clear();
+            textEdit1->append(translation_content.get().c_str());
+            QTextCursor cursor1 = textEdit1->textCursor();
+            cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
+            textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
+        }
 
-        // 完全翻译的信息覆盖
-        textEdit2->clear();
-        textEdit2->append(translation_result.get().c_str());
-        QTextCursor cursor2 = textEdit2->textCursor();
-        cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
-        textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
+        if (translation_result_last != translation_result.get()) {
+            translation_result_last = translation_result.get();
 
+            // 完全翻译的信息覆盖
+            textEdit2->clear();
+            textEdit2->append(translation_result.get().c_str());
+            QTextCursor cursor2 = textEdit2->textCursor();
+            cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
+            textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
+        }
+
+        if (progress_info_last != progress_info.get()) {
+            progress_info_last = progress_info.get();
+            // 完全翻译的信息覆盖
+            progressEdit->clear();
+            progressEdit->append(progress_info.get().c_str());
+            QTextCursor cursor3 = progressEdit->textCursor();
+            cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
+            progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+        }
         // 完全翻译的信息覆盖
         progressEdit->clear();
         progressEdit->append(progress_info.get().c_str());
