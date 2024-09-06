@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 09:47:05
+ * @LastEditTime: 2024-09-06 11:22:54
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -19,6 +19,8 @@
 #include <QFontDatabase>
 #include <QFont>
 
+#define TITLE_V "CppLLMTranslate_V1.0"
+
 start_page *start_page_w;
 simple_page *simple_page_w;
 intricate_page *intricate_page_w;
@@ -27,7 +29,7 @@ FileTranslation_page *FileTranslation_page_w;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(QCoreApplication::applicationDirPath()+"/logo.ico")); // 使用文件系统路径
+    a.setWindowIcon(QIcon(QCoreApplication::applicationDirPath() + "/logo.ico")); // 使用文件系统路径
 
     // 加载自定义字体
     QString font_path = QCoreApplication::applicationDirPath() + "/font.ttf";
@@ -49,22 +51,22 @@ int main(int argc, char *argv[])
     start_page_w = new start_page;
     start_page_w->resize(500, 200);
     start_page_w->hide();
-    start_page_w->setWindowTitle("CppLLMTranslate");
+    start_page_w->setWindowTitle(TITLE_V);
 
     simple_page_w = new simple_page;
     simple_page_w->resize(500, 300);
     simple_page_w->hide();
-    simple_page_w->setWindowTitle("CppLLMTranslate");
+    simple_page_w->setWindowTitle(TITLE_V);
 
     intricate_page_w = new intricate_page;
     intricate_page_w->resize(800, 800);
     intricate_page_w->hide();
-    intricate_page_w->setWindowTitle("CppLLMTranslate");
+    intricate_page_w->setWindowTitle(TITLE_V);
 
     FileTranslation_page_w = new FileTranslation_page;
     FileTranslation_page_w->resize(800, 800);
     FileTranslation_page_w->hide();
-    FileTranslation_page_w->setWindowTitle("CppLLMTranslate");
+    FileTranslation_page_w->setWindowTitle(TITLE_V);
 
     // 创建定时器
     QTimer *page_change = new QTimer();
@@ -96,7 +98,6 @@ int main(int argc, char *argv[])
         simple_page_w->updataModeComboBox();
         intricate_page_w->updataModeComboBox();
         FileTranslation_page_w->updataModeComboBox();
-
     });
 
     // 启动定时器
