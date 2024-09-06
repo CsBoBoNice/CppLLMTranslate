@@ -35,6 +35,8 @@ class FileTranslation_page : public QMainWindow {
     QPushButton *cutButton;
     QPushButton *translateButton;
     QPushButton *reconnectButton;
+    QPushButton *resetButton;
+    QPushButton *cleanButton;
 
     QTimer *translate_timer;
 

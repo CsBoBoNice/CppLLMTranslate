@@ -152,6 +152,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
         // 开始按钮点击后的操作
         // 切换到开始页面
         StateManager::getInstance().ShowPage = 0;
+        StateManager::getInstance().ModeIndex = 0;
     });
 
     // 启动定时器，间隔时间为毫秒

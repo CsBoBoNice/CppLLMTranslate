@@ -240,6 +240,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
         // 开始按钮点击后的操作
         // 切换到开始页面
         StateManager::getInstance().ShowPage = 0;
+        StateManager::getInstance().ModeIndex = 0;
     });
 
     // 使用lambda表达式连接信号和槽

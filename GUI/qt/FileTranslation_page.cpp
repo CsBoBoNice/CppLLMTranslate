@@ -280,6 +280,16 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     inputLayout_8->addWidget(paragraph_max);
     infoPageLayout->addLayout(inputLayout_8);
 
+    resetButton = new QPushButton("恢复默认🔄");
+    cleanButton = new QPushButton("清理翻译文件🗑️");
+    reconnectButton = new QPushButton("重连🔗");
+
+    QHBoxLayout *RowLayout2 = new QHBoxLayout();
+    RowLayout2->addWidget(resetButton);
+    RowLayout2->addWidget(cleanButton);
+    RowLayout2->addWidget(reconnectButton);
+    infoPageLayout->addLayout(RowLayout2);
+
     textEdit1 = new QTextEdit();
     textEdit2 = new QTextEdit();
     progressEdit = new QTextEdit();
@@ -665,6 +675,14 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
         }
 
         UpdataPrompt(0); // 传0单纯是为了不报错
+    });
+
+    // 连接信号和槽
+    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
+        // 开始按钮点击后的操作
+        // 切换到开始页面
+        StateManager::getInstance().ShowPage = 0;
+        StateManager::getInstance().ModeIndex = 0;
     });
 
     // 连接 QTabWidget 的 currentChanged 信号
