@@ -102,13 +102,32 @@ void ConfigManager::SetServerIP(const ServerInfo &newServerInfo)
     saveFile(ipconfig, result); // 保存配置文件
 }
 
+agreementInfo ConfigManager::default_config_en_to_zh()
+{
+    agreementInfo info;
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是专业翻译员，你需要将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。";
+    info.chat_prefix = "将英文文档翻译成简体中文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
+    info.chat_suffix = "\n[待翻译内容结束]\n\n开始将英文文档翻译成简体中文。\n\n";
+    info.user_msg_1 = "Clipboard_Singleton_thread";
+    info.user_msg_2 = "getInstance";
+    info.user_msg_3 =
+        "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's "
+        "the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
+    info.assistant_msg_1 = "剪贴板单例线程";
+    info.assistant_msg_2 = "获得实例";
+    info.assistant_msg_3 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+
+    return info;
+}
+
 agreementInfo ConfigManager::Get_config_en_to_zh()
 {
     if (!en_to_zh_change) {
         return en_to_zh_info; // 未改变，直接返回全局变量
     }
 
-    agreementInfo info = agreement::getInstance().default_en_to_zh();
+    agreementInfo info = default_config_en_to_zh();
     std::string info_json;
     QString info_path = QCoreApplication::applicationDirPath() + "/en_to_zh_config.json";
     QFile file(info_path);
@@ -116,7 +135,7 @@ agreementInfo ConfigManager::Get_config_en_to_zh()
         info_json = readFile(info_path);
         info = agreement::getInstance().parseJson(info_json);
         if (info.system.empty()) {
-            info = agreement::getInstance().default_en_to_zh();
+            info = default_config_en_to_zh();
             saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
         }
     } else {
@@ -134,13 +153,36 @@ void ConfigManager::Set_config_en_to_zh(const agreementInfo &Info)
     en_to_zh_info = Info;   // 保存到全局变量
 }
 
+agreementInfo ConfigManager::default_config_zh_to_en()
+{
+    agreementInfo info;
+
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是专业翻译员，你需要将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。";
+    info.chat_prefix = "将简体中文翻译成英文,翻译后仅输出翻译内容，无需其他解释说明。\n\n[待翻译内容开始]\n\n";
+    info.chat_suffix = "\n[待翻译内容结束]\n\n开始将将简体中文翻译成英文。\n\n";
+    info.user_msg_1 = "精美";
+    info.user_msg_2 = "生活其实和天气一样，有晴，有阴，偶尔还会下点雨，自然规律，生活不简单尽量简单过。";
+    info.user_msg_3 = "帮助";
+
+    info.assistant_msg_1 =
+        "exquisite\n精致的，精美的；\nelegant\n（人）高雅的，举止优雅的；\nfineness\n美好；纯度；细微；优雅；";
+    info.assistant_msg_2 =
+        "Life is actually like the weather, with its sunny days, cloudy days, and occasional rain showers. It's "
+        "the natural order of things. Life isn't simple, but we should strive to simplify it as much as  possible.";
+    info.assistant_msg_3 =
+        "help\n帮助，援助；\nassist\n帮助，协助；\nassistance\n帮助，援助；\naid\n帮助；援助，救助；";
+
+    return info;
+}
+
 agreementInfo ConfigManager::Get_config_zh_to_en()
 {
     if (!zh_to_en_change) {
         return zh_to_en_info; // 未改变，直接返回全局变量
     }
 
-    agreementInfo info = agreement::getInstance().default_zh_to_en();
+    agreementInfo info = default_config_zh_to_en();
     std::string info_json;
     QString info_path = QCoreApplication::applicationDirPath() + "/zh_to_en_config.json";
     QFile file(info_path);
@@ -148,7 +190,7 @@ agreementInfo ConfigManager::Get_config_zh_to_en()
         info_json = readFile(info_path);
         info = agreement::getInstance().parseJson(info_json);
         if (info.system.empty()) {
-            info = agreement::getInstance().default_zh_to_en();
+            info = default_config_zh_to_en();
             saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
         }
     } else {
@@ -167,12 +209,29 @@ void ConfigManager::Set_config_zh_to_en(const agreementInfo &Info)
     zh_to_en_info = Info;   // 保存到全局变量
 }
 
+agreementInfo ConfigManager::default_config_chat()
+{
+    agreementInfo info;
+    info.cmd = (int)AgreementCmd::translate_msg;
+    info.system = "你是一个乐于助人的助手。";
+    info.chat_prefix.clear();
+    info.chat_suffix.clear();
+    info.user_msg_1.clear();
+    info.user_msg_2.clear();
+    info.user_msg_3.clear();
+
+    info.assistant_msg_1.clear();
+    info.assistant_msg_2.clear();
+    info.assistant_msg_3.clear();
+    return info;
+}
+
 agreementInfo ConfigManager::Get_config_chat()
 {
     if (!chat_change) {
         return chat_info; // 未改变，直接返回全局变量
     }
-    agreementInfo info = agreement::getInstance().default_chat();
+    agreementInfo info = default_config_chat();
     std::string info_json;
     QString info_path = QCoreApplication::applicationDirPath() + "/chat_config.json";
     QFile file(info_path);
@@ -181,7 +240,7 @@ agreementInfo ConfigManager::Get_config_chat()
         info_json = readFile(info_path);
         info = agreement::getInstance().parseJson(info_json);
         if (info.system.empty()) {
-            info = agreement::getInstance().default_chat();
+            info = default_config_chat();
             saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
         }
     } else {

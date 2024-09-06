@@ -1,8 +1,8 @@
 /*
  * @Date: 2024-08-23 13:55:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-24 09:52:17
- * @FilePath: /lvgl/main/src/agreement.h
+ * @LastEditTime: 2024-09-06 11:03:00
+ * @FilePath: /CppLLMTranslate/GUI/qt/agreement.h
  */
 // agreement.h
 #ifndef AGREEMENT_H
@@ -49,12 +49,6 @@ class agreement {
 
     // 封装为json数据
     std::string wrapToJson(const agreementInfo &info);
-
-    agreementInfo default_en_to_zh();
-
-    agreementInfo default_zh_to_en();
-
-    agreementInfo default_chat();
 
   private:
     // 构造函数和析构函数私有化，防止外部创建和删除对象

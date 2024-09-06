@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 17:10:17
+ * @LastEditTime: 2024-09-06 11:03:11
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -139,10 +139,12 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
 
     QPushButton *GetButton = new QPushButton("获取配置");
     QPushButton *SetButton = new QPushButton("更新配置");
+    QPushButton *resetButton = new QPushButton("恢复默认");
 
     QHBoxLayout *SetButtonLayout = new QHBoxLayout();
     SetButtonLayout->addWidget(GetButton);
     SetButtonLayout->addWidget(SetButton);
+    SetButtonLayout->addWidget(resetButton);
     set_layout->addLayout(SetButtonLayout);
 
     /********************************************************/
@@ -286,6 +288,23 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
         } else if (StateManager::getInstance().ModeIndex == 2) {
             ConfigManager::getInstance().Set_config_chat(info);
         }
+    });
+
+    connect(resetButton, &QPushButton::clicked, this, [this]() {
+        agreementInfo info;
+
+        if (StateManager::getInstance().ModeIndex == 0) {
+            info = ConfigManager::getInstance().default_config_en_to_zh();
+            ConfigManager::getInstance().Set_config_en_to_zh(info);
+        } else if (StateManager::getInstance().ModeIndex == 1) {
+            info = ConfigManager::getInstance().default_config_zh_to_en();
+            ConfigManager::getInstance().Set_config_zh_to_en(info);
+        } else if (StateManager::getInstance().ModeIndex == 2) {
+            info = ConfigManager::getInstance().default_config_chat();
+            ConfigManager::getInstance().Set_config_chat(info);
+        }
+
+        UpDataInfo(0); // 传0单纯是为了不报错
     });
 
     // 连接 QTabWidget 的 currentChanged 信号

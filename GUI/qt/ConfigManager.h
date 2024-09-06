@@ -58,12 +58,15 @@ class ConfigManager {
     ServerInfo GetServerIP();
     void SetServerIP(const ServerInfo &newServerInfo);
 
+    agreementInfo default_config_en_to_zh();
     agreementInfo Get_config_en_to_zh();
     void Set_config_en_to_zh(const agreementInfo &Info);
 
+    agreementInfo default_config_zh_to_en();
     agreementInfo Get_config_zh_to_en();
     void Set_config_zh_to_en(const agreementInfo &Info);
 
+    agreementInfo default_config_chat();
     agreementInfo Get_config_chat();
     void Set_config_chat(const agreementInfo &Info);
 
