@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:27:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 16:30:10
+ * @LastEditTime: 2024-09-03 10:13:10
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.h
  */
 #ifndef CONFIGMANAGER_H
@@ -19,6 +19,21 @@ struct ServerInfo {
     std::string url;
     std::string apiKey;
     std::string model;
+};
+
+struct TranslationProgressConfig {
+    int file_index;      // 文件计数
+    int paragraph_index; // 段落计数
+
+    int paragraph_effective;
+    int paragraph_min;
+    int paragraph_max;
+
+    std::string Input_file_path;
+    std::string Output_file_path;
+    std::string Cut_file_path;
+    std::string Reference_file_path;
+    std::string Success_file_path;
 };
 
 class ConfigManager {
@@ -80,6 +95,12 @@ class ConfigManager {
     agreementInfo default_get_prompt_h_file();
     agreementInfo get_prompt_h_file();
     void set_prompt_h_file(const agreementInfo &Info);
+
+    bool TranslationProgressConfig_change = true;
+    TranslationProgressConfig TranslationProgressConfig_info;
+    TranslationProgressConfig default_get_TranslationProgressConfig();
+    TranslationProgressConfig get_TranslationProgressConfig(std::string Input_file_path);
+    void set_TranslationProgressConfig(const TranslationProgressConfig &Info);
 
   private:
     // 私有构造函数

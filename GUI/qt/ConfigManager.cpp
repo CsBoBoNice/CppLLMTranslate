@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 17:32:28
+ * @LastEditTime: 2024-09-06 08:42:29
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -131,6 +131,7 @@ void ConfigManager::Set_config_en_to_zh(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/en_to_zh_config.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     en_to_zh_change = true; // 设置改变标志
+    en_to_zh_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::Get_config_zh_to_en()
@@ -153,7 +154,8 @@ agreementInfo ConfigManager::Get_config_zh_to_en()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    zh_to_en_info = info; // 保存到全局变量
+    zh_to_en_info = info;    // 保存到全局变量
+    zh_to_en_change = false; // 设置改变标志
     return info;
 }
 
@@ -162,6 +164,7 @@ void ConfigManager::Set_config_zh_to_en(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/zh_to_en_config.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     zh_to_en_change = true; // 设置改变标志
+    zh_to_en_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::Get_config_chat()
@@ -184,7 +187,8 @@ agreementInfo ConfigManager::Get_config_chat()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    chat_info = info; // 保存到全局变量
+    chat_info = info;    // 保存到全局变量
+    chat_change = false; // 设置改变标志
     return info;
 }
 
@@ -193,6 +197,7 @@ void ConfigManager::Set_config_chat(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/chat_config.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     chat_change = true; // 设置改变标志
+    chat_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::default_get_prompt_md_file()
@@ -291,7 +296,8 @@ agreementInfo ConfigManager::get_prompt_md_file()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    md_file_info = info; // 保存到全局变量
+    md_file_info = info;    // 保存到全局变量
+    md_file_change = false; // 设置改变标志
     return info;
 }
 
@@ -300,6 +306,7 @@ void ConfigManager::set_prompt_md_file(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/prompot_md.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     md_file_change = true; // 设置改变标志
+    md_file_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::default_get_prompt_txt_file()
@@ -403,7 +410,8 @@ agreementInfo ConfigManager::get_prompt_txt_file()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    txt_file_info = info; // 保存到全局变量
+    txt_file_info = info;    // 保存到全局变量
+    txt_file_change = false; // 设置改变标志
     return info;
 }
 
@@ -412,6 +420,7 @@ void ConfigManager::set_prompt_txt_file(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/prompot_txt.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     txt_file_change = true; // 设置改变标志
+    txt_file_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::default_get_prompt_rst_file()
@@ -591,7 +600,8 @@ agreementInfo ConfigManager::get_prompt_rst_file()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    rst_file_info = info; // 保存到全局变量
+    rst_file_info = info;    // 保存到全局变量
+    rst_file_change = false; // 设置改变标志
     return info;
 }
 
@@ -600,6 +610,7 @@ void ConfigManager::set_prompt_rst_file(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/prompot_rst.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     rst_file_change = true; // 设置改变标志
+    rst_file_info = Info;   // 保存到全局变量
 }
 
 agreementInfo ConfigManager::default_get_prompt_h_file()
@@ -879,7 +890,8 @@ agreementInfo ConfigManager::get_prompt_h_file()
     } else {
         saveFile(info_path, agreement::getInstance().wrapToJson(info)); // 配置异常恢复默认
     }
-    h_file_info = info; // 保存到全局变量
+    h_file_info = info;    // 保存到全局变量
+    h_file_change = false; // 设置改变标志
     return info;
 }
 
@@ -889,4 +901,145 @@ void ConfigManager::set_prompt_h_file(const agreementInfo &Info)
     QString info_path = QCoreApplication::applicationDirPath() + "/prompot_h.json";
     saveFile(info_path, agreement::getInstance().wrapToJson(Info));
     h_file_change = true; // 设置改变标志
+    h_file_info = Info;   // 保存到全局变量
+}
+
+TranslationProgressConfig TranslationProgressParseJson(const std::string &jsonStr)
+{
+    TranslationProgressConfig info;
+    cJSON *root = cJSON_Parse(jsonStr.c_str());
+    if (root == nullptr) {
+        return info;
+    }
+
+    cJSON *file_index = cJSON_GetObjectItem(root, "file_index");
+    if (file_index != nullptr) {
+        info.file_index = file_index->valueint;
+    }
+
+    cJSON *paragraph_index = cJSON_GetObjectItem(root, "paragraph_index");
+    if (paragraph_index != nullptr) {
+        info.paragraph_index = paragraph_index->valueint;
+    }
+
+    cJSON *paragraph_effective = cJSON_GetObjectItem(root, "paragraph_effective");
+    if (paragraph_effective != nullptr) {
+        info.paragraph_effective = paragraph_effective->valueint;
+    }
+
+    cJSON *paragraph_min = cJSON_GetObjectItem(root, "paragraph_min");
+    if (paragraph_min != nullptr) {
+        info.paragraph_min = paragraph_min->valueint;
+    }
+
+    cJSON *paragraph_max = cJSON_GetObjectItem(root, "paragraph_max");
+    if (paragraph_max != nullptr) {
+        info.paragraph_max = paragraph_max->valueint;
+    }
+
+    cJSON *Input_file_path = cJSON_GetObjectItem(root, "Input_file_path");
+    if (Input_file_path != nullptr) {
+        info.Input_file_path = Input_file_path->valuestring;
+    }
+
+    cJSON *Output_file_path = cJSON_GetObjectItem(root, "Output_file_path");
+    if (Output_file_path != nullptr) {
+        info.Output_file_path = Output_file_path->valuestring;
+    }
+
+    cJSON *Cut_file_path = cJSON_GetObjectItem(root, "Cut_file_path");
+    if (Cut_file_path != nullptr) {
+        info.Cut_file_path = Cut_file_path->valuestring;
+    }
+
+    cJSON *Reference_file_path = cJSON_GetObjectItem(root, "Reference_file_path");
+    if (Reference_file_path != nullptr) {
+        info.Reference_file_path = Reference_file_path->valuestring;
+    }
+
+    cJSON *Success_file_path = cJSON_GetObjectItem(root, "Success_file_path");
+    if (Success_file_path != nullptr) {
+        info.Success_file_path = Success_file_path->valuestring;
+    }
+
+    cJSON_Delete(root);
+    return info;
+}
+
+std::string TranslationProgressWrapToJson(const TranslationProgressConfig &info)
+{
+    cJSON *root = cJSON_CreateObject();
+    cJSON_AddNumberToObject(root, "file_index", info.file_index);
+    cJSON_AddNumberToObject(root, "paragraph_index", info.paragraph_index);
+    cJSON_AddNumberToObject(root, "paragraph_effective", info.paragraph_effective);
+    cJSON_AddNumberToObject(root, "paragraph_min", info.paragraph_min);
+    cJSON_AddNumberToObject(root, "paragraph_max", info.paragraph_max);
+    cJSON_AddStringToObject(root, "Input_file_path", info.Input_file_path.c_str());
+    cJSON_AddStringToObject(root, "Output_file_path", info.Output_file_path.c_str());
+    cJSON_AddStringToObject(root, "Cut_file_path", info.Cut_file_path.c_str());
+    cJSON_AddStringToObject(root, "Reference_file_path", info.Reference_file_path.c_str());
+    cJSON_AddStringToObject(root, "Success_file_path", info.Success_file_path.c_str());
+
+    char *jsonStr = cJSON_Print(root);
+    std::string result(jsonStr);
+    free(jsonStr);
+    cJSON_Delete(root);
+    return result;
+}
+
+TranslationProgressConfig ConfigManager::default_get_TranslationProgressConfig()
+{
+
+    QString InputPath = QCoreApplication::applicationDirPath() + "/input";
+    QString OutputPath = QCoreApplication::applicationDirPath() + "/output";
+    QString CutPath = QCoreApplication::applicationDirPath() + "/output/cut";
+    QString ReferencePath = QCoreApplication::applicationDirPath() + "/output/reference";
+    QString SuccessPath = QCoreApplication::applicationDirPath() + "/output/success";
+
+    TranslationProgressConfig info;
+    info.file_index = 0;
+    info.paragraph_index = 0;
+    info.paragraph_effective = 512;
+    info.paragraph_min = 4096;
+    info.paragraph_max = 6144;
+    info.Input_file_path = InputPath.toStdString();
+    info.Output_file_path = OutputPath.toStdString();
+    info.Cut_file_path = CutPath.toStdString();
+    info.Reference_file_path = ReferencePath.toStdString();
+    info.Success_file_path = SuccessPath.toStdString();
+    return info;
+}
+
+TranslationProgressConfig ConfigManager::get_TranslationProgressConfig(std::string Input_file_path)
+{
+    if (!TranslationProgressConfig_change) {
+        return TranslationProgressConfig_info; // 未改变，直接返回全局变量
+    }
+
+    TranslationProgressConfig info = default_get_TranslationProgressConfig();
+    QString info_path = Input_file_path.c_str();
+    QFile file(info_path);
+    if (file.exists() == true) {
+        std::string info_json = readFile(info_path);
+        info = TranslationProgressParseJson(info_json); // 解析json
+        if (info.Input_file_path.empty()) {
+            info = default_get_TranslationProgressConfig();
+            saveFile(info_path, TranslationProgressWrapToJson(info)); // 配置异常恢复默认
+        }
+    } else {
+        saveFile(info_path, TranslationProgressWrapToJson(info)); // 配置异常恢复默认
+    }
+
+    TranslationProgressConfig_info = info; // 保存到全局变量
+    TranslationProgressConfig_change = false;
+    return info;
+}
+
+void ConfigManager::set_TranslationProgressConfig(const TranslationProgressConfig &Info)
+{
+    QString info_path = Info.Input_file_path.c_str();
+    info_path += "/TranslationProgressConfig.json";
+    saveFile(info_path, TranslationProgressWrapToJson(Info));
+    TranslationProgressConfig_change = true;
+    TranslationProgressConfig_info = Info; // 保存到全局变量
 }
