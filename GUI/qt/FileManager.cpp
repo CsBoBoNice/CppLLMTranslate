@@ -149,8 +149,52 @@ void FileManager::ProcessFilesCut(const std::filesystem::path &directory,
                 inputFile.close();
                 outputFile.close();
 
+            } else if (entry.path().filename() == "CMakeLists.txt") {
+                // 对于非翻译文件，直接复制
+                std::filesystem::copy_file(entry.path(), target_path,
+                                           std::filesystem::copy_options::overwrite_existing);
+            } else if (entry.path().extension() == ".txt") {
+
+                std::ifstream inputFile(entry.path());
+                std::ofstream outputFile(target_path);
+
+                if (!inputFile.is_open() || !outputFile.is_open()) {
+                    std::cerr << "open file error" << std::endl;
+                    inputFile.close();
+                    outputFile.close();
+                    continue;
+                }
+
+                std::string line = "";
+                std::string paragraph;
+
+                while (std::getline(inputFile, line)) {
+                    if (paragraph.size() >= paragraph_effective &&
+                        ((paragraph[paragraph.size() - 1] == '\n' && paragraph[paragraph.size() - 2] == '.' &&
+                          paragraph.size() >= paragraph_effective))) {
+                        // 检查是否是英文句号后紧跟换行符 读取的字节数大于 paragraph_min 或者 大于 paragraph_max 以 回车结尾
+                        outputFile << paragraph << "\n" << Separator_cut << "\n";
+                        paragraph.clear();
+
+                        line += "\n";
+                        paragraph += line;
+                    } else {
+                        // 否则，添加到当前段落
+                        line += "\n";
+                        paragraph += line;
+                    }
+                }
+
+                // 如果文件末尾没有分隔行，保存最后的段落
+                if (!paragraph.empty()) {
+                    outputFile << paragraph << "\n";
+                }
+
+                inputFile.close();
+                outputFile.close();
+
             } else {
-                // 对于非.md文件，直接复制
+                // 对于非翻译文件，直接复制
                 std::filesystem::copy_file(entry.path(), target_path,
                                            std::filesystem::copy_options::overwrite_existing);
             }
@@ -228,8 +272,7 @@ FileContent FileManager::getFileContent_ok(const std::filesystem::directory_entr
     FileContent fileContent;
 
     std::ifstream input(entry.path());
-    if (!input.is_open())
-    {
+    if (!input.is_open()) {
         // std::cerr << "无法打开文件: " << entry.path() << std::endl;
         return fileContent;
     }
@@ -237,20 +280,16 @@ FileContent FileManager::getFileContent_ok(const std::filesystem::directory_entr
     std::string paragraph;
     std::string line;
 
-    while (std::getline(input, line))
-    {
+    while (std::getline(input, line)) {
         // 检查是否是特定分隔符
-        if (line == Separator_cut)
-        {
+        if (line == Separator_cut) {
             if (paragraph.size() >= 2) // 判断是否有效
             {
                 // 当遇到分隔行时，增加一个段落
                 fileContent.content.push_back(paragraph); // 添加换行符
                 paragraph.clear();
             }
-        }
-        else
-        {
+        } else {
             // 否则，添加到当前段落
             line += "\n";
             paragraph += line;
@@ -258,8 +297,7 @@ FileContent FileManager::getFileContent_ok(const std::filesystem::directory_entr
     }
 
     // 如果文件末尾没有分隔行，保存最后的段落
-    if (!paragraph.empty())
-    {
+    if (!paragraph.empty()) {
         fileContent.content.push_back(paragraph); // 添加换行符
     }
 
@@ -300,7 +338,7 @@ void FileManager::ProcessFilesRecursive(const std::filesystem::path &directory,
                 (entry.path().extension() == ".md" || entry.path().extension() == ".txt" ||
                  entry.path().extension() == ".rst" || entry.path().extension() == ".h")) {
                 FileContent fileContent;
-                fileContent = getFileContent_ok(entry);
+                fileContent = getFileContent(entry);
                 fileContent.path = relative_path.string();
 
                 if (fileContent.content.size() == 0) {
@@ -319,21 +357,39 @@ void FileManager::ProcessFilesRecursive(const std::filesystem::path &directory,
 
 // 读取已翻译内容 保存至std::vector<FileContent>& result
 void FileManager::ReadTranslated(const std::filesystem::path &directory,
+                                 const std::filesystem::path &target_directory,
                                  const std::filesystem::path &root_directory,
                                  std::vector<FileContent> &result)
 {
+
+    // 创建输出目录
+    if (!std::filesystem::exists(target_directory)) {
+        std::filesystem::create_directory(target_directory);
+    }
+
     for (const auto &entry : std::filesystem::directory_iterator(directory)) {
         std::filesystem::path relative_path = std::filesystem::relative(entry.path(), root_directory);
+        std::filesystem::path target_path = target_directory / relative_path;
 
         if (std::filesystem::is_directory(entry.status())) {
+            // 创建对应的子目录
+            if (!std::filesystem::exists(target_path)) {
+                std::filesystem::create_directory(target_path);
+            }
+
             // 递归处理子目录
-            ReadTranslated(entry.path(), root_directory, result);
+            ReadTranslated(entry.path(), target_directory, root_directory, result);
         } else {
+            // 确保目标文件的目录存在
+            if (!std::filesystem::exists(target_path.parent_path())) {
+                std::filesystem::create_directories(target_path.parent_path());
+            }
+
             if (entry.path().filename() != "CMakeLists.txt" &&
                 (entry.path().extension() == ".md" || entry.path().extension() == ".txt" ||
                  entry.path().extension() == ".rst" || entry.path().extension() == ".h")) {
                 FileContent fileContent;
-                fileContent = getFileContent(entry);
+                fileContent = getFileContent_ok(entry);
                 fileContent.path = relative_path.string();
 
                 if (fileContent.content.size() == 0) {
@@ -341,6 +397,10 @@ void FileManager::ReadTranslated(const std::filesystem::path &directory,
                 }
 
                 result.push_back(fileContent);
+            } else {
+                // 对于非.md文件，直接复制
+                std::filesystem::copy_file(entry.path(), target_path,
+                                           std::filesystem::copy_options::overwrite_existing);
             }
         }
     }
@@ -374,32 +434,28 @@ void FileManager::SaveToFilesystem(const std::vector<FileContent> &result,
     }
 }
 
-void FileManager::SaveTranslatedFiles(const std::vector<FileContent> &result, const std::filesystem::path &out_root_directory)
+void FileManager::SaveTranslatedFiles(const std::vector<FileContent> &result,
+                                      const std::filesystem::path &out_root_directory)
 {
     // 创建输出目录
-    if (!std::filesystem::exists(out_root_directory))
-    {
+    if (!std::filesystem::exists(out_root_directory)) {
         std::filesystem::create_directory(out_root_directory);
     }
 
     // 使用数组下标的方式遍历result并将内容保存至out_root_directory文件夹中
-    for (size_t file_index = 0; file_index < result.size(); ++file_index)
-    {
+    for (size_t file_index = 0; file_index < result.size(); ++file_index) {
         std::filesystem::path out_path = out_root_directory / result[file_index].path;
         // 创建输出文件的目录
-        if (!std::filesystem::exists(out_path.parent_path()))
-        {
+        if (!std::filesystem::exists(out_path.parent_path())) {
             std::filesystem::create_directories(out_path.parent_path());
         }
         std::ofstream output(out_path);
-        if (!output.is_open())
-        {
+        if (!output.is_open()) {
             std::cerr << "无法创建文件: " << out_path << std::endl;
             continue;
         }
         // 使用传统的for循环遍历content向量
-        for (size_t paragraph_index = 0; paragraph_index < result[file_index].content.size(); ++paragraph_index)
-        {
+        for (size_t paragraph_index = 0; paragraph_index < result[file_index].content.size(); ++paragraph_index) {
             if (paragraph_index % 2 != 0) // 检查paragraph_index是否为奇数
             {
                 output << result[file_index].content[paragraph_index];
@@ -413,9 +469,9 @@ void FileManager::CleanAll()
 {
     // 清空翻译缓冲
     translation_cache.clear();
-    m_file_index=0;
+    m_file_index = 0;
     m_paragraph_index = 0;
-    m_cut_sign=false;
+    m_cut_sign = false;
 }
 
 // 判断字符串末尾的文件类型

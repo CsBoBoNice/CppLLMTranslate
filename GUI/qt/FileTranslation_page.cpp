@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 14:46:46
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 08:42:27
+ * @LastEditTime: 2024-09-06 09:35:43
  * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
  */
 /*
@@ -173,8 +173,8 @@ static void FileTranslation_thread()
         } else {
             if (fileManager.translation_cache.size() > 0) {
                 // 将翻译好的段落放入缓冲区
-                fileManager.ProcessFilesRecursive(fileManager.directory_en, fileManager.directory_ok,
-                                                  fileManager.directory_en, fileManager.translation_cache);
+                fileManager.ReadTranslated(fileManager.directory_en, fileManager.directory_ok, fileManager.directory_en,
+                                           fileManager.translation_cache);
 
                 // 所有文件翻译完毕 将中文提取放入指定文件夹
                 fileManager.SaveTranslatedFiles(fileManager.translation_cache, fileManager.directory_ok);

@@ -79,6 +79,7 @@ class FileManager {
 
     // 读取已翻译内容 保存至std::vector<FileContent>& result
     void ReadTranslated(const std::filesystem::path &directory,
+                        const std::filesystem::path &target_directory,
                         const std::filesystem::path &root_directory,
                         std::vector<FileContent> &result);
 
