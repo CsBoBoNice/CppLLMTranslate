@@ -14,7 +14,7 @@
 // 初始化静态成员变量
 QString HttpManager::m_apiKey = "888888";
 int HttpManager::m_maxRetries = 3;
-int HttpManager::m_timeout = 60000;
+int HttpManager::m_timeout = 180000;
 QString HttpManager::m_url = "http://127.0.0.1:59218/v1/chat/completions";
 QString HttpManager::m_model = "gpt-4o";
 
@@ -37,7 +37,6 @@ void HttpManager::InitHttpManager(QString url, QString apiKey, QString model, in
 
 bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
 {
-
     QUrl url(m_url);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -45,16 +44,20 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
 
     int retries = 0;
     while (retries < m_maxRetries) {
-
         QNetworkAccessManager manager;
-
+        manager.setTransferTimeout(m_timeout);
         QNetworkReply *reply = manager.post(request, doc.toJson());
 
         QEventLoop loop;
+        QTimer timer;
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 
-        QTimer::singleShot(m_timeout, &loop, &QEventLoop::quit);
+        timer.start(m_timeout);
         loop.exec();
+
+        // 取消定时器，防止它再次触发事件循环的退出
+        timer.stop();
 
         if (reply->error()) {
             qDebug() << "Network error:" << reply->errorString();
@@ -77,11 +80,20 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
             QString responseStr = QString::fromUtf8(response);
             qDebug() << "Response as QString:" << responseStr;
 
+            if (responseStr.isEmpty()) {
+                qDebug() << "Empty response from server.";
+                ret_msg = "ERROR: Empty response from server.";
+                reply->deleteLater();
+                retries++;
+                return false;
+            }
+
             QJsonParseError parseError;
             QJsonDocument doc = QJsonDocument::fromJson(responseStr.toUtf8(), &parseError);
             if (parseError.error != QJsonParseError::NoError) {
                 qDebug() << "JSON parse error:" << parseError.errorString();
                 ret_msg = "ERROR: JSON parse error:" + parseError.errorString();
+                reply->deleteLater();
                 return false;
             }
 
@@ -101,7 +113,6 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
             }
 
             reply->deleteLater();
-
             break;
         }
     }
@@ -112,6 +123,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
 
     return true;
 }
+
 
 void HttpManager::sendRequestJson(std::string json_msg)
 {

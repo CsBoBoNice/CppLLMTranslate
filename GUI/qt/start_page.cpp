@@ -67,7 +67,7 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
         textEdit->clear();
         textEdit->append("Please wait ...");
 
-        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 60000, 3);
+        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 180000, 3);
 
         agreementInfo info_send;
         // info_send = agreement::getInstance().default_chat();
@@ -90,7 +90,7 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     });
 
     connect(startButton, &QPushButton::clicked, this, [this]() {
-        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 60000, 3);
+        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 180000, 3);
 
         // 开始按钮点击后的操作
         // 切换到第二个页面
