@@ -35,15 +35,15 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
     firstRowLayout->addWidget(translationModeComboBox);
     firstRowLayout->addWidget(toggleSettingsButton);
-    mainLayout->addLayout(firstRowLayout);
+    mainVBoxLayout->addLayout(firstRowLayout);
 
     // 第二行
     textEdit1 = new QTextEdit();
-    mainLayout->addWidget(textEdit1);
+    mainVBoxLayout->addWidget(textEdit1);
 
     // 第三行
     textEdit2 = new QTextEdit();
-    mainLayout->addWidget(textEdit2);
+    mainVBoxLayout->addWidget(textEdit2);
 
     // 第四行
     submitTranslationButton = new QPushButton("提交🚀");
@@ -51,18 +51,18 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     reconnectButton = new QPushButton("重连🔗");
 
     // 设置工具提示
-    translateButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
+    submitTranslationButton->setToolTip("(Ctrl+Enter) 组合键也可以提交 \n (Ctrl+)字体变大 (Ctrl-)字体变小");
     checkBox->setToolTip("是否替换剪贴板粘贴 (Ctrl+V) 的内容");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
     fourthRowLayout->addWidget(submitTranslationButton);
     fourthRowLayout->addWidget(checkBox);
     fourthRowLayout->addWidget(reconnectButton);
-    mainLayout->addLayout(fourthRowLayout);
+    mainVBoxLayout->addLayout(fourthRowLayout);
 
     // 设置布局到中心窗口
     QWidget *centralWidget = new QWidget();
-    centralWidget->setLayout(mainLayout);
+    centralWidget->setLayout(mainVBoxLayout);
     setCentralWidget(centralWidget);
 
     // 创建定时器
