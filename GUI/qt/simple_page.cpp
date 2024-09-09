@@ -21,19 +21,19 @@ static void Http_thread()
 simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 {
     // 设置主窗口的布局
-    mainLayout = new QVBoxLayout();
+    mainVBoxLayout = new QVBoxLayout();
 
     // 第一行
-    modeComboBox = new QComboBox();
-    modeComboBox->addItem("英译中");
-    modeComboBox->addItem("中译英");
-    modeComboBox->addItem("聊天");
-    modeComboBox->addItem("文件翻译");
+    translationModeComboBox = new QComboBox();
+    translationModeComboBox->addItem("英译中");
+    translationModeComboBox->addItem("中译英");
+    translationModeComboBox->addItem("聊天");
+    translationModeComboBox->addItem("文件翻译");
     toggleSettingsButton = new QPushButton("简");
     toggleSettingsButton->setToolTip("切换到可以设置提示词的页面");
 
     QHBoxLayout *firstRowLayout = new QHBoxLayout();
-    firstRowLayout->addWidget(modeComboBox);
+    firstRowLayout->addWidget(translationModeComboBox);
     firstRowLayout->addWidget(toggleSettingsButton);
     mainLayout->addLayout(firstRowLayout);
 
@@ -46,7 +46,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     mainLayout->addWidget(textEdit2);
 
     // 第四行
-    translateButton = new QPushButton("提交🚀");
+    submitTranslationButton = new QPushButton("提交🚀");
     checkBox = new QCheckBox("剪贴板替换");
     reconnectButton = new QPushButton("重连🔗");
 
@@ -55,7 +55,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     checkBox->setToolTip("是否替换剪贴板粘贴 (Ctrl+V) 的内容");
 
     QHBoxLayout *fourthRowLayout = new QHBoxLayout();
-    fourthRowLayout->addWidget(translateButton);
+    fourthRowLayout->addWidget(submitTranslationButton);
     fourthRowLayout->addWidget(checkBox);
     fourthRowLayout->addWidget(reconnectButton);
     mainLayout->addLayout(fourthRowLayout);
@@ -130,7 +130,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     });
 
     // 使用lambda表达式连接信号和槽
-    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+    connect(translationModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 1) {
             qDebug("simple_page index=%d", index);
             StateManager::getInstance().ModeIndex = index;
@@ -145,7 +145,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     connect(toggleSettingsButton, &QPushButton::clicked, this, &simple_page::onToggleSettingsButtonClicked);
 
     // 连接信号和槽
-    connect(translateButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
+    connect(submitTranslationButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
 
     // 连接信号和槽
     connect(reconnectButton, &QPushButton::clicked, this, [this]() {
@@ -167,10 +167,10 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
 
 simple_page::~simple_page() {}
 
-void simple_page::updataModeComboBox()
+void simple_page::updateModeComboBox()
 {
     if (StateManager::getInstance().ShowPage == 1) {
-        modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
+        translationModeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
     }
 }
 

@@ -25,7 +25,7 @@ class simple_page : public QMainWindow {
     simple_page(QWidget *parent = nullptr);
     ~simple_page();
 
-    void updataModeComboBox();
+    void updateModeComboBox();
 
   private slots:
     void onToggleSettingsButtonClicked();
@@ -35,12 +35,12 @@ class simple_page : public QMainWindow {
     void ChangeFontSize(int delta);
 
   private:
-    QVBoxLayout *mainLayout;
-    QComboBox *modeComboBox;
+    QVBoxLayout *mainVBoxLayout;
+    QComboBox *translationModeComboBox;
     QPushButton *toggleSettingsButton;
     QTextEdit *textEdit1;
     QTextEdit *textEdit2;
-    QPushButton *translateButton;
+    QPushButton *submitTranslationButton;
     QCheckBox *checkBox;
     QPushButton *reconnectButton;
 
