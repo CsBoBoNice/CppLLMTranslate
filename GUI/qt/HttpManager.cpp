@@ -15,7 +15,7 @@
 QString HttpManager::m_apiKey = "888888";
 int HttpManager::m_maxRetries = 3;
 int HttpManager::m_timeout = 180000;
-QString HttpManager::m_url = "http://127.0.0.1:59218/v1/chat/completions";
+QString HttpManager::m_url = "http://127.0.0.1:11434/v1/chat/completions";
 QString HttpManager::m_model = "gpt-4o";
 
 HttpManager::HttpManager() {}

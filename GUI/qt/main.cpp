@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-10 09:38:02
+ * @LastEditTime: 2024-09-10 11:47:13
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -21,7 +21,7 @@
 
 #define TITLE_V "CppLLMTranslate_V1.0"
 
-start_page *start_page_w;
+StartPage *start_page_w;
 SimplePage *simple_page_w;
 intricate_page *intricate_page_w;
 FileTranslation_page *FileTranslation_page_w;
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    start_page_w = new start_page;
+    start_page_w = new StartPage;
     start_page_w->resize(500, 200);
     start_page_w->hide();
     start_page_w->setWindowTitle(TITLE_V);
