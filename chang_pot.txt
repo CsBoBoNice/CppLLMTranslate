@@ -1,16 +1,19 @@
-The code is programmed in C++ in the QT6 environment. Without changing the logic of the code, Change the variable names to be more descriptive and consistent. Be careful not to modify variables and functions outside the class to avoid compilation errors. Note that the variables in the .cpp and .h files should correspond to each other after modification
-
-The following are specific requirements:
-
-### Class and Struct Naming
-- Class names (Class) and struct names (Struct) should use PascalCase, where each word starts with an uppercase letter, for example: `class Student; struct Book;`.
-### Variable Naming
-- Local variables and member variables should use camelCase, with the first word starting with a lowercase letter and each subsequent word starting with an uppercase letter, for example: `int studentId; string teacherName;`.
-- Constant names should be all uppercase letters and words should be separated by underscores, for example: `const int MAX_SIZE = 100;`.
-
-### Naming Conventions for Private Variables in Classes (CamelCase with Prefix m_)
-- **Variable Name**: Use camelCase, where the first letter of the first word is lowercase and the first letter of each subsequent word is uppercase.
-- **Prefix**: Prefix the variable name with `m_` to clearly indicate that the variable is a member variable of the class.
-
-### Function Naming
-- Function names should use camelCase, for example: `void printMessage();`.
+代码是在QT6框架中使用C++开发的。
+为了提高代码的可读性，请在不改变代码逻辑的前提下重命名变量与函数。
+确保不要修改类外的变量和函数，以防止编译问题。
+确保.cpp和.h文件中的变量在重命名过程后保持一致。
+保留原有代码的格式与缩进，保留原有代码注释。首先修改GUI/qt/HttpManager.h文件，然后修改GUI/qt/HttpManager.cpp文件。
+以下是命名约定的具体指南：
+类和结构体命名:
+    类名（例如，`class Student`）和结构体名（例如，`struct Book`）应该遵循驼峰命名法,每个单词首字母大写。
+变量命名:
+    局部变量应该使用驼峰命名法，第一个单词以小写字母开头，后续每个单词以大写字母开头（例如，`int studentId; string teacherName;`）。
+    常量名称应该全部大写，单词之间用下划线分隔（例如，`const int MAX_SIZE = 100;`）。
+类中公共变量(public:)的命名约定:
+    变量名：类中公共变量,遵循驼峰命名法，每个单词的首字母大写（例如，`int StudentId; string TeacherName;`）。
+    前缀：类中公共变量无需添加前缀。
+类中私有变量(private:)的命名约定:
+    变量名：类中私有变量,遵循驼峰命名法，第一个单词的首字母小写，后续每个单词的首字母大写。
+    前缀：类中私有变量变量名前加上`m_`前缀，以将其标识为类的私有成员变量。
+函数命名:
+    函数名应遵循驼峰命名法，每个单词的首字母大写（例如，`void printMessage();`）。

@@ -33,3 +33,4 @@
 
 *.log
 *.aider*
+*.env
