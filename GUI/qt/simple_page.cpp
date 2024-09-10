@@ -1,5 +1,4 @@
 
-
 #include "simple_page.h"
 #include "HttpManager.h"
 #include "MessageManager.h"
@@ -18,7 +17,7 @@ static void Http_thread()
     httpManager.SendRequest_thread();
 }
 
-simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
+SimplePage::SimplePage(QWidget *parent) : QMainWindow(parent)
 {
     // 设置主窗口的布局
     mainVBoxLayout = new QVBoxLayout();
@@ -38,12 +37,12 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     mainVBoxLayout->addLayout(firstRowLayout);
 
     // 第二行
-    textEdit1 = new QTextEdit();
-    mainVBoxLayout->addWidget(textEdit1);
+    sourceTextEdit = new QTextEdit();
+    mainVBoxLayout->addWidget(sourceTextEdit);
 
     // 第三行
-    textEdit2 = new QTextEdit();
-    mainVBoxLayout->addWidget(textEdit2);
+    targetTextEdit = new QTextEdit();
+    mainVBoxLayout->addWidget(targetTextEdit);
 
     // 第四行
     submitTranslationButton = new QPushButton("提交🚀");
@@ -66,64 +65,64 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     setCentralWidget(centralWidget);
 
     // 创建定时器
-    copy_timer = new QTimer(this);
+    copyTimer = new QTimer(this);
 
     // 创建定时器
-    translate_timer = new QTimer(this);
+    translateTimer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
-    connect(copy_timer, &QTimer::timeout, this, [=]() {
+    connect(copyTimer, &QTimer::timeout, this, [=]() {
         // 槽函数的内容
         // 获取剪贴板对象
         QClipboard *clipboard = QApplication::clipboard();
-        static std::string copy_text_last;
-        std::string copy_text = clipboard->text().toStdString(); // 从剪贴板获取文本;
-        if (copy_text != copy_text_last && !copy_text.empty()) {
-            textEdit1->clear();
-            textEdit1->append(copy_text.c_str());
-            copy_text_last = copy_text;
+        static std::string copyTextLast;
+        std::string copyText = clipboard->text().toStdString(); // 从剪贴板获取文本;
+        if (copyText != copyTextLast && !copyText.empty()) {
+            sourceTextEdit->clear();
+            sourceTextEdit->append(copyText.c_str());
+            copyTextLast = copyText;
         }
     });
 
     // 连接定时器的timeout信号到槽函数
-    connect(translate_timer, &QTimer::timeout, this, [=]() {
+    connect(translateTimer, &QTimer::timeout, this, [=]() {
         if (StateManager::getInstance().ShowPage == 1) {
 
-            std::string show_text;
-            if (MessageManager::getInstance().popFromInputQueueNoWait(show_text)) {
+            std::string showText;
+            if (MessageManager::getInstance().popFromInputQueueNoWait(showText)) {
 
-                agreementInfo info = agreement::getInstance().parseJson(show_text);
+                agreementInfo info = agreement::getInstance().parseJson(showText);
 
                 if (info.cmd == (int)AgreementCmd::success_msg) {
                     // 完全翻译的信息覆盖
-                    textEdit2->clear();
-                    textEdit2->append(info.msg.c_str());
+                    targetTextEdit->clear();
+                    targetTextEdit->append(info.msg.c_str());
                     if (checkBox->isChecked()) {
                         QClipboard *clipboard = QApplication::clipboard();
                         clipboard->setText(info.msg.c_str()); // 将文本复制到剪贴板
                     }
-                    QTextCursor cursor = textEdit2->textCursor();
+                    QTextCursor cursor = targetTextEdit->textCursor();
                     cursor.movePosition(QTextCursor::Start); // 移动光标到文本开头
-                    textEdit2->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
+                    targetTextEdit->setTextCursor(cursor);        // 更新 QTextEdit 的光标位置
 
                 } else if (info.cmd == (int)AgreementCmd::course_msg) {
                     // 过程中的信息追加
 
                     // // 获取QTextEdit的文本内容
-                    // QString currentText = textEdit2->toPlainText();
+                    // QString currentText = targetTextEdit->toPlainText();
                     // currentText += info.msg.c_str();
                     // // 设置合并后的文本到QTextEdit
-                    // textEdit2->setPlainText(currentText);
-                    QTextCursor cursor = textEdit2->textCursor();
+                    // targetTextEdit->setPlainText(currentText);
+                    QTextCursor cursor = targetTextEdit->textCursor();
                     cursor.movePosition(QTextCursor::End);        // 移动光标到文本末尾
-                    textEdit2->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
-                    textEdit2->insertPlainText(info.msg.c_str()); // 插入文本
-                    textEdit2->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
+                    targetTextEdit->setTextCursor(cursor);             // 更新 QTextEdit 的光标位置
+                    targetTextEdit->insertPlainText(info.msg.c_str()); // 插入文本
+                    targetTextEdit->ensureCursorVisible();             // 确保光标可见，即滚动到末尾
 
                 } else {
                     // 其他消息覆盖
-                    textEdit2->clear();
-                    textEdit2->append(info.msg.c_str());
+                    targetTextEdit->clear();
+                    targetTextEdit->append(info.msg.c_str());
                 }
             }
         }
@@ -132,7 +131,7 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     // 使用lambda表达式连接信号和槽
     connect(translationModeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 1) {
-            qDebug("simple_page index=%d", index);
+            qDebug("SimplePage index=%d", index);
             StateManager::getInstance().ModeIndex = index;
             if (index == 3) {
                 // 切换页面
@@ -142,10 +141,10 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     });
 
     // 连接按钮的点击信号到槽函数
-    connect(toggleSettingsButton, &QPushButton::clicked, this, &simple_page::onToggleSettingsButtonClicked);
+    connect(toggleSettingsButton, &QPushButton::clicked, this, &SimplePage::OnToggleSettingsButtonClicked);
 
     // 连接信号和槽
-    connect(submitTranslationButton, &QPushButton::clicked, this, &simple_page::SendtoServer);
+    connect(submitTranslationButton, &QPushButton::clicked, this, &SimplePage::SendToServer);
 
     // 连接信号和槽
     connect(reconnectButton, &QPushButton::clicked, this, [this]() {
@@ -156,33 +155,33 @@ simple_page::simple_page(QWidget *parent) : QMainWindow(parent)
     });
 
     // 启动定时器，间隔时间为毫秒
-    copy_timer->start(100);
+    copyTimer->start(100);
 
     // 启动定时器，间隔时间为毫秒
-    translate_timer->start(1);
+    translateTimer->start(1);
 
     std::thread t_HTTP_thread(Http_thread);
     t_HTTP_thread.detach();
 }
 
-simple_page::~simple_page() {}
+SimplePage::~SimplePage() {}
 
-void simple_page::updateModeComboBox()
+void SimplePage::UpdateModeComboBox()
 {
     if (StateManager::getInstance().ShowPage == 1) {
         translationModeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
     }
 }
 
-void simple_page::onToggleSettingsButtonClicked()
+void SimplePage::OnToggleSettingsButtonClicked()
 {
     // 切换 繁 页面
     StateManager::getInstance().ShowPage = 2;
 }
 
-void simple_page::SendtoServer()
+void SimplePage::SendToServer()
 {
-    std::string src_text = textEdit1->toPlainText().toStdString();
+    std::string srcText = sourceTextEdit->toPlainText().toStdString();
 
     agreementInfo info;
 
@@ -197,21 +196,21 @@ void simple_page::SendtoServer()
         info = ConfigManager::getInstance().Get_config_chat();
     }
 
-    info.msg = src_text;
+    info.msg = srcText;
     info.cmd = (int)AgreementCmd::translate_msg;
 
-    std::string msg_translate = agreement::getInstance().wrapToJson(info);
+    std::string msgTranslate = agreement::getInstance().wrapToJson(info);
 
-    MessageManager::getInstance().pushToOutputQueue(msg_translate);
+    MessageManager::getInstance().pushToOutputQueue(msgTranslate);
 
-    textEdit2->clear();
-    textEdit2->append("Please wait ...");
+    targetTextEdit->clear();
+    targetTextEdit->append("Please wait ...");
 }
 
-void simple_page::keyPressEvent(QKeyEvent *event)
+void SimplePage::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return && event->modifiers().testFlag(Qt::ControlModifier)) {
-        SendtoServer();
+        SendToServer();
     } else if (event->key() == Qt::Key_Equal && event->modifiers().testFlag(Qt::ControlModifier)) {
         ChangeFontSize(1);
     } else if (event->key() == Qt::Key_Minus && event->modifiers().testFlag(Qt::ControlModifier)) {
@@ -221,7 +220,7 @@ void simple_page::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void simple_page::ChangeFontSize(int delta)
+void SimplePage::ChangeFontSize(int delta)
 {
     QFont font = QApplication::font();
     int newSize = font.pointSize() + delta; // 调整字体大小

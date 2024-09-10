@@ -1,9 +1,3 @@
-/*
- * @Date: 2024-08-29 09:52:10
- * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 11:40:50
- * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
- */
 
 #ifndef SIMPLE_PAGE_H
 #define SIMPLE_PAGE_H
@@ -18,19 +12,19 @@
 #include <QTimer>
 #include <QKeyEvent>
 
-class simple_page : public QMainWindow {
+class SimplePage : public QMainWindow {
     Q_OBJECT
 
   public:
-    simple_page(QWidget *parent = nullptr);
-    ~simple_page();
+    SimplePage(QWidget *parent = nullptr);
+    ~SimplePage();
 
-    void updateModeComboBox();
+    void UpdateModeComboBox();
 
   private slots:
-    void onToggleSettingsButtonClicked();
+    void OnToggleSettingsButtonClicked();
 
-    void SendtoServer();
+    void SendToServer();
 
     void ChangeFontSize(int delta);
 
@@ -38,16 +32,16 @@ class simple_page : public QMainWindow {
     QVBoxLayout *mainVBoxLayout;
     QComboBox *translationModeComboBox;
     QPushButton *toggleSettingsButton;
-    QTextEdit *textEdit1;
-    QTextEdit *textEdit2;
+    QTextEdit *sourceTextEdit;
+    QTextEdit *targetTextEdit;
     QPushButton *submitTranslationButton;
     QCheckBox *checkBox;
     QPushButton *reconnectButton;
 
-    int mode_index = 0;
+    int modeIndex = 0;
 
-    QTimer *copy_timer;
-    QTimer *translate_timer;
+    QTimer *copyTimer;
+    QTimer *translateTimer;
 
   protected:
     void keyPressEvent(QKeyEvent *event) override;
