@@ -35,19 +35,19 @@ class SimplePage : public QMainWindow {
     void ChangeFontSize(int delta);
 
   private:
-    QVBoxLayout *mainVBoxLayout;
-    QComboBox *translationModeComboBox;
-    QPushButton *toggleSettingsButton;
-    QTextEdit *sourceTextEdit;
-    QTextEdit *targetTextEdit;
-    QPushButton *submitTranslationButton;
-    QCheckBox *checkBox;
-    QPushButton *reconnectButton;
+    QVBoxLayout *m_mainVBoxLayout;
+    QComboBox *m_translationModeComboBox;
+    QPushButton *m_toggleSettingsButton;
+    QTextEdit *m_sourceTextEdit;
+    QTextEdit *m_targetTextEdit;
+    QPushButton *m_submitTranslationButton;
+    QCheckBox *m_checkBox;
+    QPushButton *m_reconnectButton;
 
-    int modeIndex = 0;
+    int m_modeIndex = 0;
 
-    QTimer *copyTimer;
-    QTimer *translateTimer;
+    QTimer *m_copyTimer;
+    QTimer *m_translateTimer;
 
   protected:
     void keyPressEvent(QKeyEvent *event) override;
