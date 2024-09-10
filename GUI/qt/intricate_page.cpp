@@ -322,7 +322,7 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
 
 intricate_page::~intricate_page() {}
 
-void intricate_page::updateModeComboBox()
+void intricate_page::UpdateModeComboBox()
 {
     if (StateManager::getInstance().ShowPage == 2) {
         modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);

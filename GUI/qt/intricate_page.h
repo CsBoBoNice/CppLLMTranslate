@@ -25,7 +25,7 @@ class intricate_page : public QMainWindow {
     intricate_page(QWidget *parent = nullptr);
     ~intricate_page();
 
-    void updateModeComboBox();
+    void UpdateModeComboBox();
 
   private slots:
     void onToggleSettingsButtonClicked();

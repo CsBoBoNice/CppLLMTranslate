@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 11:22:54
+ * @LastEditTime: 2024-09-10 09:38:02
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -22,7 +22,7 @@
 #define TITLE_V "CppLLMTranslate_V1.0"
 
 start_page *start_page_w;
-simple_page *simple_page_w;
+SimplePage *simple_page_w;
 intricate_page *intricate_page_w;
 FileTranslation_page *FileTranslation_page_w;
 
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     start_page_w->hide();
     start_page_w->setWindowTitle(TITLE_V);
 
-    simple_page_w = new simple_page;
+    simple_page_w = new SimplePage;
     simple_page_w->resize(500, 300);
     simple_page_w->hide();
     simple_page_w->setWindowTitle(TITLE_V);
@@ -95,9 +95,9 @@ int main(int argc, char *argv[])
             FileTranslation_page_w->show();
         }
 
-        simple_page_w->updateModeComboBox();
-        intricate_page_w->updateModeComboBox();
-        FileTranslation_page_w->updateModeComboBox();
+        simple_page_w->UpdateModeComboBox();
+        intricate_page_w->UpdateModeComboBox();
+        FileTranslation_page_w->UpdateModeComboBox();
     });
 
     // 启动定时器

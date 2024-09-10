@@ -1,3 +1,9 @@
+/*
+ * @Date: 2024-09-10 09:06:02
+ * @LastEditors: csbobo 751541594@qq.com
+ * @LastEditTime: 2024-09-10 09:39:04
+ * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
+ */
 
 #ifndef SIMPLE_PAGE_H
 #define SIMPLE_PAGE_H
