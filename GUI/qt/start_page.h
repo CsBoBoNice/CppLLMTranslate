@@ -26,15 +26,15 @@ class start_page : public QMainWindow {
     explicit start_page(QWidget *parent = nullptr);
 
   private:
-    QWidget *firstPage;
+    QWidget *mainPage;
 
-    QLineEdit *urlLineEdit;
-    QLineEdit *modelLineEdit;
-    QLineEdit *apiKeyLineEdit;
-    QPushButton *defaultButton;
-    QPushButton *testButton;
-    QPushButton *startButton;
-    QTextEdit *textEdit;
+    QLineEdit *urlInput;
+    QLineEdit *modelInput;
+    QLineEdit *apiKeyInput;
+    QPushButton *resetButton;
+    QPushButton *testConnectionButton;
+    QPushButton *startApplicationButton;
+    QTextEdit *outputTextEdit;
 
   signals:
 };

@@ -23,51 +23,51 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
     ServerInfo server_info = ConfigManager::getInstance().GetServerIP();
 
     // 初始化UI
-    firstPage = new QWidget(this);
+    mainPage = new QWidget(this);
 
-    urlLineEdit = new QLineEdit(server_info.url.c_str(), this);
-    modelLineEdit = new QLineEdit(server_info.model.c_str(), this);
-    apiKeyLineEdit = new QLineEdit(server_info.apiKey.c_str(), this);
-    defaultButton = new QPushButton("默认🔄", this);
-    testButton = new QPushButton("测试🔍", this);
-    startButton = new QPushButton("开始🌟", this);
-    textEdit = new QTextEdit(this);
+    urlInput = new QLineEdit(server_info.url.c_str(), this);
+    modelInput = new QLineEdit(server_info.model.c_str(), this);
+    apiKeyInput = new QLineEdit(server_info.apiKey.c_str(), this);
+    resetButton = new QPushButton("默认🔄", this);
+    testConnectionButton = new QPushButton("测试🔍", this);
+    startApplicationButton = new QPushButton("开始🌟", this);
+    outputTextEdit = new QTextEdit(this);
 
     // 页面1布局
-    QVBoxLayout *firstPageLayout = new QVBoxLayout(centralWidget());
+    QVBoxLayout *mainPageLayout = new QVBoxLayout(centralWidget());
 
     QHBoxLayout *inputLayout_1 = new QHBoxLayout();
     inputLayout_1->addWidget(new QLabel("URL: ", this));
-    inputLayout_1->addWidget(urlLineEdit);
-    firstPageLayout->addLayout(inputLayout_1);
+    inputLayout_1->addWidget(urlInput);
+    mainPageLayout->addLayout(inputLayout_1);
 
     QHBoxLayout *inputLayout_2 = new QHBoxLayout();
     inputLayout_2->addWidget(new QLabel("Model: ", this));
-    inputLayout_2->addWidget(modelLineEdit);
-    firstPageLayout->addLayout(inputLayout_2);
+    inputLayout_2->addWidget(modelInput);
+    mainPageLayout->addLayout(inputLayout_2);
 
     QHBoxLayout *inputLayout_3 = new QHBoxLayout();
     inputLayout_3->addWidget(new QLabel("API Key: ", this));
-    inputLayout_3->addWidget(apiKeyLineEdit);
-    firstPageLayout->addLayout(inputLayout_3);
+    inputLayout_3->addWidget(apiKeyInput);
+    mainPageLayout->addLayout(inputLayout_3);
 
     QHBoxLayout *buttonLayout = new QHBoxLayout();
-    buttonLayout->addWidget(defaultButton);
-    buttonLayout->addWidget(testButton);
-    buttonLayout->addWidget(startButton);
-    firstPageLayout->addLayout(buttonLayout);
-    firstPageLayout->addWidget(textEdit);
+    buttonLayout->addWidget(resetButton);
+    buttonLayout->addWidget(testConnectionButton);
+    buttonLayout->addWidget(startApplicationButton);
+    mainPageLayout->addLayout(buttonLayout);
+    mainPageLayout->addWidget(outputTextEdit);
 
-    firstPage->setLayout(firstPageLayout);
+    mainPage->setLayout(mainPageLayout);
 
     // 设置主窗口的布局
-    setCentralWidget(firstPage);
+    setCentralWidget(mainPage);
 
-    connect(testButton, &QPushButton::clicked, this, [this]() {
-        textEdit->clear();
-        textEdit->append("Please wait ...");
+    connect(testConnectionButton, &QPushButton::clicked, this, [this]() {
+        outputTextEdit->clear();
+        outputTextEdit->append("Please wait ...");
 
-        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 180000, 3);
+        HttpManager::InitHttpManager(urlInput->text(), apiKeyInput->text(), modelInput->text(), 180000, 3);
 
         agreementInfo info_send;
         // info_send = agreement::getInstance().default_chat();
@@ -84,31 +84,31 @@ start_page::start_page(QWidget *parent) : QMainWindow{parent}
         agreementInfo info = agreement::getInstance().parseJson(show_text);
 
         if (info.cmd == (int)AgreementCmd::success_msg) {
-            textEdit->clear();
-            textEdit->append(info.msg.c_str());
+            outputTextEdit->clear();
+            outputTextEdit->append(info.msg.c_str());
         }
     });
 
-    connect(startButton, &QPushButton::clicked, this, [this]() {
-        HttpManager::InitHttpManager(urlLineEdit->text(), apiKeyLineEdit->text(), modelLineEdit->text(), 180000, 3);
+    connect(startApplicationButton, &QPushButton::clicked, this, [this]() {
+        HttpManager::InitHttpManager(urlInput->text(), apiKeyInput->text(), modelInput->text(), 180000, 3);
 
         // 开始按钮点击后的操作
         // 切换到第二个页面
         StateManager::getInstance().ShowPage = 1;
 
         ServerInfo newServerInfo;
-        newServerInfo.url = urlLineEdit->text().toStdString();
-        newServerInfo.apiKey = apiKeyLineEdit->text().toStdString();
-        newServerInfo.model = modelLineEdit->text().toStdString();
+        newServerInfo.url = urlInput->text().toStdString();
+        newServerInfo.apiKey = apiKeyInput->text().toStdString();
+        newServerInfo.model = modelInput->text().toStdString();
 
         ConfigManager::getInstance().SetServerIP(newServerInfo);
     });
 
-    connect(defaultButton, &QPushButton::clicked, this, [this]() {
+    connect(resetButton, &QPushButton::clicked, this, [this]() {
         ServerInfo defaultServerInfo = ConfigManager::getInstance().DefaultGetServerIP();
 
-        urlLineEdit->setText(defaultServerInfo.url.c_str());
-        apiKeyLineEdit->setText(defaultServerInfo.apiKey.c_str());
-        modelLineEdit->setText(defaultServerInfo.model.c_str());
+        urlInput->setText(defaultServerInfo.url.c_str());
+        apiKeyInput->setText(defaultServerInfo.apiKey.c_str());
+        modelInput->setText(defaultServerInfo.model.c_str());
     });
 }

@@ -24,7 +24,7 @@ class FileTranslation_page : public QMainWindow {
     FileTranslation_page(QWidget *parent = nullptr);
     ~FileTranslation_page();
 
-    void updataModeComboBox();
+    void updateModeComboBox();
 
     void UpdataPrompt(int index);
 
