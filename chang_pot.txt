@@ -1,0 +1,16 @@
+The code is programmed in C++ in the QT6 environment. Without changing the logic of the code, Change the variable names to be more descriptive and consistent. Be careful not to modify variables and functions outside the class to avoid compilation errors. Note that the variables in the .cpp and .h files should correspond to each other after modification
+
+The following are specific requirements:
+
+### Class and Struct Naming
+- Class names (Class) and struct names (Struct) should use PascalCase, where each word starts with an uppercase letter, for example: `class Student; struct Book;`.
+### Variable Naming
+- Local variables and member variables should use camelCase, with the first word starting with a lowercase letter and each subsequent word starting with an uppercase letter, for example: `int studentId; string teacherName;`.
+- Constant names should be all uppercase letters and words should be separated by underscores, for example: `const int MAX_SIZE = 100;`.
+
+### Naming Conventions for Private Variables in Classes (CamelCase with Prefix m_)
+- **Variable Name**: Use camelCase, where the first letter of the first word is lowercase and the first letter of each subsequent word is uppercase.
+- **Prefix**: Prefix the variable name with `m_` to clearly indicate that the variable is a member variable of the class.
+
+### Function Naming
+- Function names should use camelCase, for example: `void printMessage();`.
