@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-10 09:06:02
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-10 09:39:04
+ * @LastEditTime: 2024-09-11 10:22:14
  * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
  */
 

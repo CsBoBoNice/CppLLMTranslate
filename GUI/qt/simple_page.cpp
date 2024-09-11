@@ -11,7 +11,7 @@
 
 HttpManager httpManager;
 
-static void Http_thread()
+static void HttpThread()
 {
     httpManager.SendRequestThread();
 }
@@ -159,7 +159,7 @@ SimplePage::SimplePage(QWidget *parent) : QMainWindow(parent)
     // 启动定时器，间隔时间为毫秒
     m_translateTimer->start(1);
 
-    std::thread t_HTTP_thread(Http_thread);
+    std::thread t_HTTP_thread(HttpThread);
     t_HTTP_thread.detach();
 }
 
