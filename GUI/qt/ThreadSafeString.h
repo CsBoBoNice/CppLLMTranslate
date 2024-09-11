@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-09-02 15:23:40
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 15:51:31
+ * @LastEditTime: 2024-09-11 13:52:00
  * @FilePath: /CppLLMTranslate/GUI/qt/ThreadSafeString.h
  */
 #ifndef THREADSAFESTRING_H
@@ -21,17 +21,17 @@ class ThreadSafeString {
     ThreadSafeString &operator=(const ThreadSafeString &) = delete;
 
     // 设置内容
-    void set(const std::string &str);
+    void Set(const std::string &str);
 
     // 追加内容
-    void append(const std::string &str);
+    void Append(const std::string &str);
 
     // 获取内容
-    std::string get() const;
+    std::string Get() const;
 
   private:
-    mutable std::mutex mtx; // 用于保护string的互斥量
-    std::string data;       // 存储字符串数据
+    mutable std::mutex m_mutex; // 用于保护string的互斥量
+    std::string m_data;         // 存储字符串数据
 };
 
 #endif // THREADSAFESTRING_H

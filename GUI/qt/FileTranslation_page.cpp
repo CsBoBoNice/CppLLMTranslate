@@ -90,7 +90,7 @@ static void FileTranslation_thread()
             // 将ostringstream的内容转换为std::string
             std::string content_str = content_ss.str();
             // 界面输出日志
-            progress_info.set(content_str);
+            progress_info.Set(content_str);
 
             // 原英文未翻译段落
             std::string en_string =
@@ -121,8 +121,8 @@ static void FileTranslation_thread()
             httpManager_.SendRequestAgreementInfo(prompt_info, zh_string);
 
             // 界面输出日志
-            translation_content.set(en_string);
-            translation_result.set(zh_string);
+            translation_content.Set(en_string);
+            translation_result.Set(zh_string);
 
             // 输出至文件
             std::string output_to_file_string =
@@ -167,7 +167,7 @@ static void FileTranslation_thread()
                 qDebug() << "22222 fileManager.translation_cache.clear()" << fileManager.translation_cache.size();
 
                 // 界面输出日志
-                progress_info.set("翻译完成");
+                progress_info.Set("翻译完成");
             }
         }
     }
@@ -473,7 +473,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             if (file.exists() == true) {
                 progressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
                     progressInfoPath.toStdString()); // 读取进度
-                progress_info.set("文件存在，已读取进度，可继续翻译");
+                progress_info.Set("文件存在，已读取进度，可继续翻译");
 
                 fileManager.m_file_index = progressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
@@ -494,7 +494,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
                     progressInfo,
                     translationSetInfo.Input_file_path); // 保存进度
 
-                progress_info.set("切割完成");
+                progress_info.Set("切割完成");
             }
         }
     });
@@ -541,7 +541,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             if (file.exists() == true) {
                 progressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
                     progressInfoPath.toStdString()); // 读取进度
-                progress_info.set("文件存在，已读取进度，可继续翻译");
+                progress_info.Set("文件存在，已读取进度，可继续翻译");
 
                 fileManager.m_file_index = progressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
@@ -563,7 +563,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
                     fileManager.m_cut_sign = true;
                 }
 
-                progress_info.set("切割完成");
+                progress_info.Set("切割完成");
 
                 fileManager.m_file_index = 0;
                 fileManager.m_paragraph_index = 0;
@@ -579,7 +579,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
 
-            progress_info.set("开始翻译");
+            progress_info.Set("开始翻译");
         }
     });
 
@@ -600,7 +600,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             TranslationSetInfo info = ConfigManager::getInstance().default_get_TranslationSetInfo();
             ConfigManager::getInstance().set_TranslationSetInfo(info);
 
-            progress_info.set("已恢复默认");
+            progress_info.Set("已恢复默认");
 
             // 将进度信息显示到UI
             m_paragraphEffective->setText(QString::number(info.paragraph_effective));
@@ -633,7 +633,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
             fileManager.m_cut_sign = false;
 
-            progress_info.set("已清理");
+            progress_info.Set("已清理");
         }
     });
 
@@ -702,39 +702,39 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
     // 连接定时器的timeout信号到槽函数
     connect(m_translateTimer, &QTimer::timeout, this, [=]() {
-        if (translation_content_last != translation_content.get()) {
-            translation_content_last = translation_content.get();
+        if (translation_content_last != translation_content.Get()) {
+            translation_content_last = translation_content.Get();
             // 完全翻译的信息覆盖
             m_textEdit1->clear();
-            m_textEdit1->append(translation_content.get().c_str());
+            m_textEdit1->append(translation_content.Get().c_str());
             QTextCursor cursor1 = m_textEdit1->textCursor();
             cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
             m_textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
         }
 
-        if (translation_result_last != translation_result.get()) {
-            translation_result_last = translation_result.get();
+        if (translation_result_last != translation_result.Get()) {
+            translation_result_last = translation_result.Get();
 
             // 完全翻译的信息覆盖
             m_textEdit2->clear();
-            m_textEdit2->append(translation_result.get().c_str());
+            m_textEdit2->append(translation_result.Get().c_str());
             QTextCursor cursor2 = m_textEdit2->textCursor();
             cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
             m_textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
         }
 
-        if (progress_info_last != progress_info.get()) {
-            progress_info_last = progress_info.get();
+        if (progress_info_last != progress_info.Get()) {
+            progress_info_last = progress_info.Get();
             // 完全翻译的信息覆盖
             m_progressEdit->clear();
-            m_progressEdit->append(progress_info.get().c_str());
+            m_progressEdit->append(progress_info.Get().c_str());
             QTextCursor cursor3 = m_progressEdit->textCursor();
             cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
             m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
         }
         // 完全翻译的信息覆盖
         m_progressEdit->clear();
-        m_progressEdit->append(progress_info.get().c_str());
+        m_progressEdit->append(progress_info.Get().c_str());
         QTextCursor cursor3 = m_progressEdit->textCursor();
         cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
         m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
