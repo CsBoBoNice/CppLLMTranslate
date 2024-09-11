@@ -26,37 +26,37 @@ class CustomTabStyle : public QProxyStyle {
     QSize
     sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const
     {
-        QSize s = QProxyStyle::sizeFromContents(type, option, size, widget);
+        QSize newSize = QProxyStyle::sizeFromContents(type, option, size, widget);
         if (type == QStyle::CT_TabBarTab) {
-            s.transpose();
-            s.rwidth() = 200; // 设置每个tabBar中item的大小
-            s.rheight() = 100;
+            newSize.transpose();
+            newSize.rwidth() = 200; // 设置每个tabBar中item的大小
+            newSize.rheight() = 100;
         }
-        return s;
+        return newSize;
     }
 
     void drawControl(ControlElement element, const QStyleOption *option, QPainter *painter, const QWidget *widget) const
     {
         if (element == CE_TabBarTabLabel) {
-            if (const QStyleOptionTab *tab = qstyleoption_cast<const QStyleOptionTab *>(option)) {
-                QRect allRect = tab->rect;
+            if (const QStyleOptionTab *tabOption = qstyleoption_cast<const QStyleOptionTab *>(option)) {
+                QRect allRect = tabOption->rect;
 
-                if (tab->state & QStyle::State_Selected) {
+                if (tabOption->state & QStyle::State_Selected) {
                     painter->save();
                     painter->setPen(0x89cfff);
                     painter->setBrush(QBrush(0x89cfff));
                     painter->drawRect(allRect.adjusted(6, 6, -6, -6));
                     painter->restore();
                 }
-                QTextOption option;
-                option.setAlignment(Qt::AlignCenter);
-                if (tab->state & QStyle::State_Selected) {
+                QTextOption textOption;
+                textOption.setAlignment(Qt::AlignCenter);
+                if (tabOption->state & QStyle::State_Selected) {
                     painter->setPen(0xf8fcff);
                 } else {
                     painter->setPen(0x5d5d5d);
                 }
 
-                painter->drawText(allRect, tab->text, option);
+                painter->drawText(allRect, tabOption->text, textOption);
                 return;
             }
         }
