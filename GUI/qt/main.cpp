@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 15:21:35
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-10 11:47:13
+ * @LastEditTime: 2024-09-11 10:36:11
  * @FilePath: /CppLLMTranslate/GUI/qt/main.cpp
  */
 
@@ -23,7 +23,7 @@
 
 StartPage *start_page_w;
 SimplePage *simple_page_w;
-intricate_page *intricate_page_w;
+IntricatePage *intricate_page_w;
 FileTranslation_page *FileTranslation_page_w;
 
 int main(int argc, char *argv[])
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     simple_page_w->hide();
     simple_page_w->setWindowTitle(TITLE_V);
 
-    intricate_page_w = new intricate_page;
+    intricate_page_w = new IntricatePage;
     intricate_page_w->resize(800, 800);
     intricate_page_w->hide();
     intricate_page_w->setWindowTitle(TITLE_V);

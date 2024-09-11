@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 11:03:11
+ * @LastEditTime: 2024-09-11 10:34:18
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.cpp
  */
 
@@ -14,7 +14,7 @@
 #include "ConfigManager.h"
 #include "StateManager.h"
 
-intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
+IntricatePage::IntricatePage(QWidget *parent) : QMainWindow(parent)
 {
     // 设置主窗口的布局
     m_mainLayout = new QVBoxLayout();
@@ -256,16 +256,16 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
                 StateManager::getInstance().ShowPage = 3;
             }
 
-            UpDataInfo(index);
+            UpdateInfo(index);
         }
     });
 
     // 连接按钮的点击信号到槽函数
-    connect(m_toggleSettingsButton, &QPushButton::clicked, this, &intricate_page::onToggleSettingsButtonClicked);
+    connect(m_toggleSettingsButton, &QPushButton::clicked, this, &IntricatePage::onToggleSettingsButtonClicked);
 
     // 连接按钮的点击信号到槽函数
     connect(getButton, &QPushButton::clicked, this, [this]() {
-        UpDataInfo(0); // 传0单纯是为了不报错
+        UpdateInfo(0); // 传0单纯是为了不报错
     });
 
     connect(setButton, &QPushButton::clicked, this, [this]() {
@@ -304,14 +304,14 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
             ConfigManager::getInstance().Set_config_chat(info);
         }
 
-        UpDataInfo(0); // 传0单纯是为了不报错
+        UpdateInfo(0); // 传0单纯是为了不报错
     });
 
     // 连接 QTabWidget 的 currentChanged 信号
-    QObject::connect(tabWidget, &QTabWidget::currentChanged, this, &intricate_page::UpDataInfo);
+    QObject::connect(tabWidget, &QTabWidget::currentChanged, this, &IntricatePage::UpdateInfo);
 
     // 连接信号和槽
-    connect(m_translateButton, &QPushButton::clicked, this, &intricate_page::SendtoServer);
+    connect(m_translateButton, &QPushButton::clicked, this, &IntricatePage::SendToServer);
 
     // 启动定时器，间隔时间为毫秒
     m_copyTimer->start(100);
@@ -320,22 +320,22 @@ intricate_page::intricate_page(QWidget *parent) : QMainWindow(parent)
     m_translateTimer->start(1);
 }
 
-intricate_page::~intricate_page() {}
+IntricatePage::~IntricatePage() {}
 
-void intricate_page::UpdateModeComboBox()
+void IntricatePage::UpdateModeComboBox()
 {
     if (StateManager::getInstance().ShowPage == 2) {
         m_modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
     }
 }
 
-void intricate_page::onToggleSettingsButtonClicked()
+void IntricatePage::onToggleSettingsButtonClicked()
 {
     // 切换 简 页面
     StateManager::getInstance().ShowPage = 1;
 }
 
-void intricate_page::UpDataInfo(int index)
+void IntricatePage::UpdateInfo(int index)
 {
     agreementInfo info;
     if (StateManager::getInstance().ModeIndex == 0) {
@@ -360,7 +360,7 @@ void intricate_page::UpDataInfo(int index)
     m_textEditAssistantMsg3->setText(info.assistant_msg_3.c_str());
 }
 
-void intricate_page::SendtoServer()
+void IntricatePage::SendToServer()
 {
     std::string srcText = m_textEdit1->toPlainText().toStdString();
 
@@ -388,10 +388,10 @@ void intricate_page::SendtoServer()
     m_textEdit2->append("Please wait ...");
 }
 
-void intricate_page::keyPressEvent(QKeyEvent *event)
+void IntricatePage::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return && event->modifiers().testFlag(Qt::ControlModifier)) {
-        SendtoServer();
+        SendToServer();
     } else if (event->key() == Qt::Key_Equal && event->modifiers().testFlag(Qt::ControlModifier)) {
         ChangeFontSize(1);
     } else if (event->key() == Qt::Key_Minus && event->modifiers().testFlag(Qt::ControlModifier)) {
@@ -401,7 +401,7 @@ void intricate_page::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void intricate_page::ChangeFontSize(int delta)
+void IntricatePage::ChangeFontSize(int delta)
 {
     QFont font = QApplication::font();
     int newSize = font.pointSize() + delta; // 调整字体大小

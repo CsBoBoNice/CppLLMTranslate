@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:56:49
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 10:03:21
+ * @LastEditTime: 2024-09-11 10:34:21
  * @FilePath: /CppLLMTranslate/GUI/qt/intricate_page.h
  */
 
@@ -18,21 +18,21 @@
 #include <QTimer>
 #include <QKeyEvent>
 
-class intricate_page : public QMainWindow {
+class IntricatePage : public QMainWindow {
     Q_OBJECT
 
   public:
-    intricate_page(QWidget *parent = nullptr);
-    ~intricate_page();
+    IntricatePage(QWidget *parent = nullptr);
+    ~IntricatePage();
 
     void UpdateModeComboBox();
 
   private slots:
     void onToggleSettingsButtonClicked();
 
-    void UpDataInfo(int index);
+    void UpdateInfo(int index);
 
-    void SendtoServer();
+    void SendToServer();
 
     void ChangeFontSize(int delta);
 
