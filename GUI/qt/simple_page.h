@@ -1,7 +1,7 @@
 /*
- * @Date: 2024-08-29 09:52:10
+ * @Date: 2024-09-10 09:06:02
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-29 11:40:50
+ * @LastEditTime: 2024-09-10 09:39:04
  * @FilePath: /CppLLMTranslate/GUI/qt/simple_page.h
  */
 
@@ -18,36 +18,36 @@
 #include <QTimer>
 #include <QKeyEvent>
 
-class simple_page : public QMainWindow {
+class SimplePage : public QMainWindow {
     Q_OBJECT
 
   public:
-    simple_page(QWidget *parent = nullptr);
-    ~simple_page();
+    SimplePage(QWidget *parent = nullptr);
+    ~SimplePage();
 
-    void updateModeComboBox();
+    void UpdateModeComboBox();
 
   private slots:
-    void onToggleSettingsButtonClicked();
+    void OnToggleSettingsButtonClicked();
 
-    void SendtoServer();
+    void SendToServer();
 
     void ChangeFontSize(int delta);
 
   private:
-    QVBoxLayout *mainVBoxLayout;
-    QComboBox *translationModeComboBox;
-    QPushButton *toggleSettingsButton;
-    QTextEdit *textEdit1;
-    QTextEdit *textEdit2;
-    QPushButton *submitTranslationButton;
-    QCheckBox *checkBox;
-    QPushButton *reconnectButton;
+    QVBoxLayout *m_mainVBoxLayout;
+    QComboBox *m_translationModeComboBox;
+    QPushButton *m_toggleSettingsButton;
+    QTextEdit *m_sourceTextEdit;
+    QTextEdit *m_targetTextEdit;
+    QPushButton *m_submitTranslationButton;
+    QCheckBox *m_checkBox;
+    QPushButton *m_reconnectButton;
 
-    int mode_index = 0;
+    int m_modeIndex = 0;
 
-    QTimer *copy_timer;
-    QTimer *translate_timer;
+    QTimer *m_copyTimer;
+    QTimer *m_translateTimer;
 
   protected:
     void keyPressEvent(QKeyEvent *event) override;

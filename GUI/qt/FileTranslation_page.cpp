@@ -757,7 +757,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
 
 FileTranslation_page::~FileTranslation_page() {}
 
-void FileTranslation_page::updateModeComboBox()
+void FileTranslation_page::UpdateModeComboBox()
 {
 
     if (StateManager::getInstance().ShowPage == 3) {

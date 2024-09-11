@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-30 11:01:26
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 09:46:41
+ * @LastEditTime: 2024-09-10 17:17:27
  * @FilePath: /CppLLMTranslate/GUI/qt/HttpManager.h
  */
 #ifndef HTTPMANAGER_H
@@ -30,6 +30,7 @@ class HttpManager : public QObject {
 
     void SendRequest_thread();
 
+  public:
     static QString m_apiKey;
     static int m_maxRetries;
     static int m_timeout;

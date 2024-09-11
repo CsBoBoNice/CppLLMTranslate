@@ -25,7 +25,7 @@ class intricate_page : public QMainWindow {
     intricate_page(QWidget *parent = nullptr);
     ~intricate_page();
 
-    void updateModeComboBox();
+    void UpdateModeComboBox();
 
   private slots:
     void onToggleSettingsButtonClicked();
@@ -37,27 +37,27 @@ class intricate_page : public QMainWindow {
     void ChangeFontSize(int delta);
 
   private:
-    QVBoxLayout *mainLayout;
-    QComboBox *modeComboBox;
-    QPushButton *toggleSettingsButton;
-    QTextEdit *textEdit1;
-    QTextEdit *textEdit2;
-    QPushButton *translateButton;
-    QCheckBox *checkBox;
-    QPushButton *reconnectButton;
+    QVBoxLayout *m_mainLayout;
+    QComboBox *m_modeComboBox;
+    QPushButton *m_toggleSettingsButton;
+    QTextEdit *m_textEdit1;
+    QTextEdit *m_textEdit2;
+    QPushButton *m_translateButton;
+    QCheckBox *m_checkBox;
+    QPushButton *m_reconnectButton;
 
-    QTimer *copy_timer;
-    QTimer *translate_timer;
+    QTimer *m_copyTimer;
+    QTimer *m_translateTimer;
 
-    QTextEdit *textEdit_system;
-    QTextEdit *textEdit_chat_prefix;
-    QTextEdit *textEdit_chat_suffix;
-    QTextEdit *textEdit_user_msg_1;
-    QTextEdit *textEdit_user_msg_2;
-    QTextEdit *textEdit_user_msg_3;
-    QTextEdit *textEdit_assistant_msg_1;
-    QTextEdit *textEdit_assistant_msg_2;
-    QTextEdit *textEdit_assistant_msg_3;
+    QTextEdit *m_textEditSystem;
+    QTextEdit *m_textEditChatPrefix;
+    QTextEdit *m_textEditChatSuffix;
+    QTextEdit *m_textEditUserMsg1;
+    QTextEdit *m_textEditUserMsg2;
+    QTextEdit *m_textEditUserMsg3;
+    QTextEdit *m_textEditAssistantMsg1;
+    QTextEdit *m_textEditAssistantMsg2;
+    QTextEdit *m_textEditAssistantMsg3;
 
   protected:
     void keyPressEvent(QKeyEvent *event) override;

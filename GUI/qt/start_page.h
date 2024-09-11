@@ -8,8 +8,6 @@
 #define START_PAGE_H
 
 #include <QMainWindow>
-
-#include <QMainWindow>
 #include <QStackedLayout>
 #include <QWidget>
 #include <QLineEdit>
@@ -20,21 +18,21 @@
 #include <QClipboard>
 #include <QCheckBox>
 
-class start_page : public QMainWindow {
+class StartPage : public QMainWindow {
     Q_OBJECT
   public:
-    explicit start_page(QWidget *parent = nullptr);
+    explicit StartPage(QWidget *parent = nullptr);
 
   private:
-    QWidget *mainPage;
+    QWidget *m_mainPage;
 
-    QLineEdit *urlInput;
-    QLineEdit *modelInput;
-    QLineEdit *apiKeyInput;
-    QPushButton *resetButton;
-    QPushButton *testConnectionButton;
-    QPushButton *startApplicationButton;
-    QTextEdit *outputTextEdit;
+    QLineEdit *m_urlInput;
+    QLineEdit *m_modelInput;
+    QLineEdit *m_apiKeyInput;
+    QPushButton *m_resetButton;
+    QPushButton *m_testConnectionButton;
+    QPushButton *m_startApplicationButton;
+    QTextEdit *m_outputTextEdit;
 
   signals:
 };
