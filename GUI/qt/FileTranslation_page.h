@@ -20,46 +20,46 @@ class FileTranslationPage : public QMainWindow {
 
     void UpdateModeComboBox();
 
-    void UpdataPrompt(int index);
+    void UpdatePrompt(int index);
 
   private:
-    QVBoxLayout *mainLayout;
-    QComboBox *modeComboBox;
+    QVBoxLayout *m_mainLayout;
+    QComboBox *m_modeComboBox;
 
-    QPushButton *cutButton;
-    QPushButton *translateButton;
-    QPushButton *reconnectButton;
-    QPushButton *resetButton;
-    QPushButton *cleanButton;
+    QPushButton *m_cutButton;
+    QPushButton *m_translateButton;
+    QPushButton *m_reconnectButton;
+    QPushButton *m_resetButton;
+    QPushButton *m_cleanButton;
 
-    QTimer *translate_timer;
+    QTimer *m_translateTimer;
 
-    QTextEdit *textEdit1;
-    QTextEdit *textEdit2;
-    QTextEdit *progressEdit;
+    QTextEdit *m_textEdit1;
+    QTextEdit *m_textEdit2;
+    QTextEdit *m_progressEdit;
 
-    QComboBox *fileTypeComboBox;
-    int fileTypeComboBoxIndex = 0;
+    QComboBox *m_fileTypeComboBox;
+    int m_fileTypeComboBoxIndex = 0;
 
-    QTextEdit *textEdit_system;
-    QTextEdit *textEdit_chat_prefix;
-    QTextEdit *textEdit_chat_suffix;
-    QTextEdit *textEdit_user_msg_1;
-    QTextEdit *textEdit_user_msg_2;
-    QTextEdit *textEdit_user_msg_3;
-    QTextEdit *textEdit_assistant_msg_1;
-    QTextEdit *textEdit_assistant_msg_2;
-    QTextEdit *textEdit_assistant_msg_3;
+    QTextEdit *m_textEditSystem;
+    QTextEdit *m_textEditChatPrefix;
+    QTextEdit *m_textEditChatSuffix;
+    QTextEdit *m_textEditUserMsg1;
+    QTextEdit *m_textEditUserMsg2;
+    QTextEdit *m_textEditUserMsg3;
+    QTextEdit *m_textEditAssistantMsg1;
+    QTextEdit *m_textEditAssistantMsg2;
+    QTextEdit *m_textEditAssistantMsg3;
 
-    QLineEdit *Input_file_path;
-    QLineEdit *Output_file_path;
-    QLineEdit *Cut_file_path;
-    QLineEdit *Reference_file_path;
-    QLineEdit *Success_file_path;
+    QLineEdit *m_inputFilePath;
+    QLineEdit *m_outputFilePath;
+    QLineEdit *m_cutFilePath;
+    QLineEdit *m_referenceFilePath;
+    QLineEdit *m_successFilePath;
 
-    QLineEdit *paragraph_effective;
-    QLineEdit *paragraph_min;
-    QLineEdit *paragraph_max;
+    QLineEdit *m_paragraphEffective;
+    QLineEdit *m_paragraphMin;
+    QLineEdit *m_paragraphMax;
 };
 
 #endif // _FILETRANSLATIONPAGE_H

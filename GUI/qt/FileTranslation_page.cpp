@@ -177,123 +177,123 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 {
 
     // 设置主窗口的布局
-    mainLayout = new QVBoxLayout();
+    m_mainLayout = new QVBoxLayout();
     // 第一行
-    modeComboBox = new QComboBox();
-    modeComboBox->addItem("英译中");
-    modeComboBox->addItem("中译英");
-    modeComboBox->addItem("聊天");
-    modeComboBox->addItem("文件翻译");
+    m_modeComboBox = new QComboBox();
+    m_modeComboBox->addItem("英译中");
+    m_modeComboBox->addItem("中译英");
+    m_modeComboBox->addItem("聊天");
+    m_modeComboBox->addItem("文件翻译");
 
-    mainLayout->addWidget(modeComboBox);
+    m_mainLayout->addWidget(m_modeComboBox);
 
     /********************************************************/
 
-    cutButton = new QPushButton("切割📏");
-    translateButton = new QPushButton("提交🚀");
+    m_cutButton = new QPushButton("切割📏");
+    m_translateButton = new QPushButton("提交🚀");
 
-    QHBoxLayout *RowLayout = new QHBoxLayout();
-    RowLayout->addWidget(cutButton);
-    RowLayout->addWidget(translateButton);
+    QHBoxLayout *rowLayout = new QHBoxLayout();
+    rowLayout->addWidget(m_cutButton);
+    rowLayout->addWidget(m_translateButton);
 
     // 读取配置文件
-    TranslationSetInfo translation_set_info = ConfigManager::getInstance().get_TranslationSetInfo();
+    TranslationSetInfo translationSetInfo = ConfigManager::getInstance().get_TranslationSetInfo();
 
-    QString InputPath = translation_set_info.Input_file_path.c_str();
-    QString OutputPath = translation_set_info.Output_file_path.c_str();
-    QString CutPath = translation_set_info.Cut_file_path.c_str();
-    QString ReferencePath = translation_set_info.Reference_file_path.c_str();
-    QString SuccessPath = translation_set_info.Success_file_path.c_str();
+    QString inputPath = translationSetInfo.Input_file_path.c_str();
+    QString outputPath = translationSetInfo.Output_file_path.c_str();
+    QString cutPath = translationSetInfo.Cut_file_path.c_str();
+    QString referencePath = translationSetInfo.Reference_file_path.c_str();
+    QString successPath = translationSetInfo.Success_file_path.c_str();
 
-    fileManager.paragraph_effective = translation_set_info.paragraph_effective;
-    fileManager.paragraph_min = translation_set_info.paragraph_min;
-    fileManager.paragraph_max = translation_set_info.paragraph_max;
+    fileManager.paragraph_effective = translationSetInfo.paragraph_effective;
+    fileManager.paragraph_min = translationSetInfo.paragraph_min;
+    fileManager.paragraph_max = translationSetInfo.paragraph_max;
 
-    Input_file_path = new QLineEdit(InputPath);
-    Output_file_path = new QLineEdit(OutputPath);
-    Cut_file_path = new QLineEdit(CutPath);
-    Reference_file_path = new QLineEdit(ReferencePath);
-    Success_file_path = new QLineEdit(SuccessPath);
-    paragraph_effective = new QLineEdit(std::to_string(fileManager.paragraph_effective).c_str());
-    paragraph_min = new QLineEdit(std::to_string(fileManager.paragraph_min).c_str());
-    paragraph_max = new QLineEdit(std::to_string(fileManager.paragraph_max).c_str());
+    m_inputFilePath = new QLineEdit(inputPath);
+    m_outputFilePath = new QLineEdit(outputPath);
+    m_cutFilePath = new QLineEdit(cutPath);
+    m_referenceFilePath = new QLineEdit(referencePath);
+    m_successFilePath = new QLineEdit(successPath);
+    m_paragraphEffective = new QLineEdit(std::to_string(fileManager.paragraph_effective).c_str());
+    m_paragraphMin = new QLineEdit(std::to_string(fileManager.paragraph_min).c_str());
+    m_paragraphMax = new QLineEdit(std::to_string(fileManager.paragraph_max).c_str());
 
     QIntValidator *validator = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    paragraph_effective->setValidator(validator);
+    m_paragraphEffective->setValidator(validator);
 
     QIntValidator *validator1 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    paragraph_min->setValidator(validator1);
+    m_paragraphMin->setValidator(validator1);
 
     QIntValidator *validator2 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    paragraph_max->setValidator(validator2);
+    m_paragraphMax->setValidator(validator2);
 
     QVBoxLayout *infoPageLayout = new QVBoxLayout();
 
-    QHBoxLayout *inputLayout_1 = new QHBoxLayout();
-    inputLayout_1->addWidget(new QLabel("输入路径: "));
-    inputLayout_1->addWidget(Input_file_path);
-    infoPageLayout->addLayout(inputLayout_1);
+    QHBoxLayout *inputLayout1 = new QHBoxLayout();
+    inputLayout1->addWidget(new QLabel("输入路径: "));
+    inputLayout1->addWidget(m_inputFilePath);
+    infoPageLayout->addLayout(inputLayout1);
 
-    QHBoxLayout *inputLayout_2 = new QHBoxLayout();
-    inputLayout_2->addWidget(new QLabel("输出路径: "));
-    inputLayout_2->addWidget(Output_file_path);
-    infoPageLayout->addLayout(inputLayout_2);
+    QHBoxLayout *inputLayout2 = new QHBoxLayout();
+    inputLayout2->addWidget(new QLabel("输出路径: "));
+    inputLayout2->addWidget(m_outputFilePath);
+    infoPageLayout->addLayout(inputLayout2);
 
-    QHBoxLayout *inputLayout_3 = new QHBoxLayout();
-    inputLayout_3->addWidget(new QLabel("切割路径: "));
-    inputLayout_3->addWidget(Cut_file_path);
-    infoPageLayout->addLayout(inputLayout_3);
+    QHBoxLayout *inputLayout3 = new QHBoxLayout();
+    inputLayout3->addWidget(new QLabel("切割路径: "));
+    inputLayout3->addWidget(m_cutFilePath);
+    infoPageLayout->addLayout(inputLayout3);
 
-    QHBoxLayout *inputLayout_4 = new QHBoxLayout();
-    inputLayout_4->addWidget(new QLabel("对照路径: "));
-    inputLayout_4->addWidget(Reference_file_path);
-    infoPageLayout->addLayout(inputLayout_4);
+    QHBoxLayout *inputLayout4 = new QHBoxLayout();
+    inputLayout4->addWidget(new QLabel("对照路径: "));
+    inputLayout4->addWidget(m_referenceFilePath);
+    infoPageLayout->addLayout(inputLayout4);
 
-    QHBoxLayout *inputLayout_5 = new QHBoxLayout();
-    inputLayout_5->addWidget(new QLabel("完成路径: "));
-    inputLayout_5->addWidget(Success_file_path);
-    infoPageLayout->addLayout(inputLayout_5);
+    QHBoxLayout *inputLayout5 = new QHBoxLayout();
+    inputLayout5->addWidget(new QLabel("完成路径: "));
+    inputLayout5->addWidget(m_successFilePath);
+    infoPageLayout->addLayout(inputLayout5);
 
-    QHBoxLayout *inputLayout_6 = new QHBoxLayout();
-    inputLayout_6->addWidget(new QLabel("段落有效值: "));
-    inputLayout_6->addWidget(paragraph_effective);
-    infoPageLayout->addLayout(inputLayout_6);
+    QHBoxLayout *inputLayout6 = new QHBoxLayout();
+    inputLayout6->addWidget(new QLabel("段落有效值: "));
+    inputLayout6->addWidget(m_paragraphEffective);
+    infoPageLayout->addLayout(inputLayout6);
 
-    QHBoxLayout *inputLayout_7 = new QHBoxLayout();
-    inputLayout_7->addWidget(new QLabel("段落最小值: "));
-    inputLayout_7->addWidget(paragraph_min);
-    infoPageLayout->addLayout(inputLayout_7);
+    QHBoxLayout *inputLayout7 = new QHBoxLayout();
+    inputLayout7->addWidget(new QLabel("段落最小值: "));
+    inputLayout7->addWidget(m_paragraphMin);
+    infoPageLayout->addLayout(inputLayout7);
 
-    QHBoxLayout *inputLayout_8 = new QHBoxLayout();
-    inputLayout_8->addWidget(new QLabel("段落最大值: "));
-    inputLayout_8->addWidget(paragraph_max);
-    infoPageLayout->addLayout(inputLayout_8);
+    QHBoxLayout *inputLayout8 = new QHBoxLayout();
+    inputLayout8->addWidget(new QLabel("段落最大值: "));
+    inputLayout8->addWidget(m_paragraphMax);
+    infoPageLayout->addLayout(inputLayout8);
 
-    resetButton = new QPushButton("恢复默认🔄");
-    cleanButton = new QPushButton("清理翻译文件🗑️");
-    reconnectButton = new QPushButton("重连🔗");
+    m_resetButton = new QPushButton("恢复默认🔄");
+    m_cleanButton = new QPushButton("清理翻译文件🗑️");
+    m_reconnectButton = new QPushButton("重连🔗");
 
-    QHBoxLayout *RowLayout2 = new QHBoxLayout();
-    RowLayout2->addWidget(resetButton);
-    RowLayout2->addWidget(cleanButton);
-    RowLayout2->addWidget(reconnectButton);
-    infoPageLayout->addLayout(RowLayout2);
+    QHBoxLayout *rowLayout2 = new QHBoxLayout();
+    rowLayout2->addWidget(m_resetButton);
+    rowLayout2->addWidget(m_cleanButton);
+    rowLayout2->addWidget(m_reconnectButton);
+    infoPageLayout->addLayout(rowLayout2);
 
-    textEdit1 = new QTextEdit();
-    textEdit2 = new QTextEdit();
-    progressEdit = new QTextEdit();
+    m_textEdit1 = new QTextEdit();
+    m_textEdit2 = new QTextEdit();
+    m_progressEdit = new QTextEdit();
 
     QVBoxLayout *progressLayout = new QVBoxLayout();
 
     QHBoxLayout *chatLayout = new QHBoxLayout();
-    chatLayout->addWidget(textEdit1);
-    chatLayout->addWidget(textEdit2);
+    chatLayout->addWidget(m_textEdit1);
+    chatLayout->addWidget(m_textEdit2);
 
-    progressLayout->addWidget(progressEdit);
+    progressLayout->addWidget(m_progressEdit);
     progressLayout->addLayout(chatLayout);
 
     QVBoxLayout *filePatLayout = new QVBoxLayout();
-    filePatLayout->addLayout(RowLayout);
+    filePatLayout->addLayout(rowLayout);
     filePatLayout->addLayout(infoPageLayout);
     filePatLayout->addLayout(progressLayout);
 
@@ -305,194 +305,194 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
     /********************************************************/
 
-    fileTypeComboBox = new QComboBox();
-    fileTypeComboBox->addItem(".md");
-    fileTypeComboBox->addItem(".txt");
-    fileTypeComboBox->addItem(".rst");
-    fileTypeComboBox->addItem(".h");
+    m_fileTypeComboBox = new QComboBox();
+    m_fileTypeComboBox->addItem(".md");
+    m_fileTypeComboBox->addItem(".txt");
+    m_fileTypeComboBox->addItem(".rst");
+    m_fileTypeComboBox->addItem(".h");
 
     // 创建输入框
-    textEdit_system = new QTextEdit();
-    textEdit_chat_prefix = new QTextEdit();
-    textEdit_chat_suffix = new QTextEdit();
-    textEdit_user_msg_1 = new QTextEdit();
-    textEdit_user_msg_2 = new QTextEdit();
-    textEdit_user_msg_3 = new QTextEdit();
-    textEdit_assistant_msg_1 = new QTextEdit();
-    textEdit_assistant_msg_2 = new QTextEdit();
-    textEdit_assistant_msg_3 = new QTextEdit();
+    m_textEditSystem = new QTextEdit();
+    m_textEditChatPrefix = new QTextEdit();
+    m_textEditChatSuffix = new QTextEdit();
+    m_textEditUserMsg1 = new QTextEdit();
+    m_textEditUserMsg2 = new QTextEdit();
+    m_textEditUserMsg3 = new QTextEdit();
+    m_textEditAssistantMsg1 = new QTextEdit();
+    m_textEditAssistantMsg2 = new QTextEdit();
+    m_textEditAssistantMsg3 = new QTextEdit();
 
     // 创建标签
-    QLabel *set_label1 = new QLabel("系统设置  :");
-    QLabel *set_label2 = new QLabel("消息前缀  :");
-    QLabel *set_label3 = new QLabel("消息后缀  :");
-    QLabel *set_label4 = new QLabel("优质提问1:");
-    QLabel *set_label5 = new QLabel("优质回答1:");
-    QLabel *set_label6 = new QLabel("优质提问2:");
-    QLabel *set_label7 = new QLabel("优质回答2:");
-    QLabel *set_label8 = new QLabel("优质提问3:");
-    QLabel *set_label9 = new QLabel("优质回答3:");
+    QLabel *setLabel1 = new QLabel("系统设置  :");
+    QLabel *setLabel2 = new QLabel("消息前缀  :");
+    QLabel *setLabel3 = new QLabel("消息后缀  :");
+    QLabel *setLabel4 = new QLabel("优质提问1:");
+    QLabel *setLabel5 = new QLabel("优质回答1:");
+    QLabel *setLabel6 = new QLabel("优质提问2:");
+    QLabel *setLabel7 = new QLabel("优质回答2:");
+    QLabel *setLabel8 = new QLabel("优质提问3:");
+    QLabel *setLabel9 = new QLabel("优质回答3:");
 
     // 创建布局管理器
-    QVBoxLayout *set_layout = new QVBoxLayout();
+    QVBoxLayout *setLayout = new QVBoxLayout();
 
-    set_layout->addWidget(fileTypeComboBox);
+    setLayout->addWidget(m_fileTypeComboBox);
 
     // 添加控件到布局管理器
 
-    QHBoxLayout *set_HBoxLayout_1 = new QHBoxLayout();
-    set_HBoxLayout_1->addWidget(set_label1);
-    set_HBoxLayout_1->addWidget(textEdit_system);
-    set_layout->addLayout(set_HBoxLayout_1);
+    QHBoxLayout *setHBoxLayout1 = new QHBoxLayout();
+    setHBoxLayout1->addWidget(setLabel1);
+    setHBoxLayout1->addWidget(m_textEditSystem);
+    setLayout->addLayout(setHBoxLayout1);
 
-    QHBoxLayout *set_HBoxLayout_2 = new QHBoxLayout();
-    set_HBoxLayout_2->addWidget(set_label2);
-    set_HBoxLayout_2->addWidget(textEdit_chat_prefix);
-    set_layout->addLayout(set_HBoxLayout_2);
+    QHBoxLayout *setHBoxLayout2 = new QHBoxLayout();
+    setHBoxLayout2->addWidget(setLabel2);
+    setHBoxLayout2->addWidget(m_textEditChatPrefix);
+    setLayout->addLayout(setHBoxLayout2);
 
-    QHBoxLayout *set_HBoxLayout_3 = new QHBoxLayout();
-    set_HBoxLayout_3->addWidget(set_label3);
-    set_HBoxLayout_3->addWidget(textEdit_chat_suffix);
-    set_layout->addLayout(set_HBoxLayout_3);
+    QHBoxLayout *setHBoxLayout3 = new QHBoxLayout();
+    setHBoxLayout3->addWidget(setLabel3);
+    setHBoxLayout3->addWidget(m_textEditChatSuffix);
+    setLayout->addLayout(setHBoxLayout3);
 
-    QHBoxLayout *set_HBoxLayout_4 = new QHBoxLayout();
-    set_HBoxLayout_4->addWidget(set_label4);
-    set_HBoxLayout_4->addWidget(textEdit_user_msg_1);
-    set_layout->addLayout(set_HBoxLayout_4);
+    QHBoxLayout *setHBoxLayout4 = new QHBoxLayout();
+    setHBoxLayout4->addWidget(setLabel4);
+    setHBoxLayout4->addWidget(m_textEditUserMsg1);
+    setLayout->addLayout(setHBoxLayout4);
 
-    QHBoxLayout *set_HBoxLayout_5 = new QHBoxLayout();
-    set_HBoxLayout_5->addWidget(set_label5);
-    set_HBoxLayout_5->addWidget(textEdit_assistant_msg_1);
-    set_layout->addLayout(set_HBoxLayout_5);
+    QHBoxLayout *setHBoxLayout5 = new QHBoxLayout();
+    setHBoxLayout5->addWidget(setLabel5);
+    setHBoxLayout5->addWidget(m_textEditAssistantMsg1);
+    setLayout->addLayout(setHBoxLayout5);
 
-    QHBoxLayout *set_HBoxLayout_6 = new QHBoxLayout();
-    set_HBoxLayout_6->addWidget(set_label6);
-    set_HBoxLayout_6->addWidget(textEdit_user_msg_2);
-    set_layout->addLayout(set_HBoxLayout_6);
+    QHBoxLayout *setHBoxLayout6 = new QHBoxLayout();
+    setHBoxLayout6->addWidget(setLabel6);
+    setHBoxLayout6->addWidget(m_textEditUserMsg2);
+    setLayout->addLayout(setHBoxLayout6);
 
-    QHBoxLayout *set_HBoxLayout_7 = new QHBoxLayout();
-    set_HBoxLayout_7->addWidget(set_label7);
-    set_HBoxLayout_7->addWidget(textEdit_assistant_msg_2);
-    set_layout->addLayout(set_HBoxLayout_7);
+    QHBoxLayout *setHBoxLayout7 = new QHBoxLayout();
+    setHBoxLayout7->addWidget(setLabel7);
+    setHBoxLayout7->addWidget(m_textEditAssistantMsg2);
+    setLayout->addLayout(setHBoxLayout7);
 
-    QHBoxLayout *set_HBoxLayout_8 = new QHBoxLayout();
-    set_HBoxLayout_8->addWidget(set_label8);
-    set_HBoxLayout_8->addWidget(textEdit_user_msg_3);
-    set_layout->addLayout(set_HBoxLayout_8);
+    QHBoxLayout *setHBoxLayout8 = new QHBoxLayout();
+    setHBoxLayout8->addWidget(setLabel8);
+    setHBoxLayout8->addWidget(m_textEditUserMsg3);
+    setLayout->addLayout(setHBoxLayout8);
 
-    QHBoxLayout *set_HBoxLayout_9 = new QHBoxLayout();
-    set_HBoxLayout_9->addWidget(set_label9);
-    set_HBoxLayout_9->addWidget(textEdit_assistant_msg_3);
-    set_layout->addLayout(set_HBoxLayout_9);
+    QHBoxLayout *setHBoxLayout9 = new QHBoxLayout();
+    setHBoxLayout9->addWidget(setLabel9);
+    setHBoxLayout9->addWidget(m_textEditAssistantMsg3);
+    setLayout->addLayout(setHBoxLayout9);
 
-    QPushButton *RstButton = new QPushButton("重置prompt");
-    QPushButton *GetButton = new QPushButton("获取prompt");
-    QPushButton *SetButton = new QPushButton("更新prompt");
+    QPushButton *rstButton = new QPushButton("重置prompt");
+    QPushButton *getButton = new QPushButton("获取prompt");
+    QPushButton *setButton = new QPushButton("更新prompt");
 
-    QHBoxLayout *SetButtonLayout = new QHBoxLayout();
-    SetButtonLayout->addWidget(RstButton);
-    SetButtonLayout->addWidget(GetButton);
-    SetButtonLayout->addWidget(SetButton);
-    set_layout->addLayout(SetButtonLayout);
+    QHBoxLayout *setButtonLayout = new QHBoxLayout();
+    setButtonLayout->addWidget(rstButton);
+    setButtonLayout->addWidget(getButton);
+    setButtonLayout->addWidget(setButton);
+    setLayout->addLayout(setButtonLayout);
 
     // 创建页面并设置布局
     QWidget *promptsWidgetPage = new QWidget();
-    promptsWidgetPage->setLayout(set_layout);
+    promptsWidgetPage->setLayout(setLayout);
 
     /********************************************************/
 
     // 页面布局
-    QTabWidget *TabWidget_ = new QTabWidget();
-    TabWidget_->addTab(progressWidgetPage, "进度");
-    TabWidget_->addTab(promptsWidgetPage, "提示");
+    QTabWidget *tabWidget = new QTabWidget();
+    tabWidget->addTab(progressWidgetPage, "进度");
+    tabWidget->addTab(promptsWidgetPage, "提示");
 
-    QHBoxLayout *TabWidget_Layout = new QHBoxLayout();
-    TabWidget_Layout->addWidget(TabWidget_);
+    QHBoxLayout *tabWidgetLayout = new QHBoxLayout();
+    tabWidgetLayout->addWidget(tabWidget);
 
-    mainLayout->addLayout(TabWidget_Layout);
+    m_mainLayout->addLayout(tabWidgetLayout);
 
     // 设置布局到中心窗口
     QWidget *centralWidget = new QWidget();
-    centralWidget->setLayout(mainLayout);
+    centralWidget->setLayout(m_mainLayout);
     setCentralWidget(centralWidget);
 
-    std::thread t_FileTranslation_thread(FileTranslation_thread);
-    t_FileTranslation_thread.detach();
+    std::thread tFileTranslationThread(FileTranslation_thread);
+    tFileTranslationThread.detach();
 
     // 模式选择
-    connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+    connect(m_modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 3) {
             qDebug("FileTranslationPage index=%d", index);
             StateManager::getInstance().ModeIndex = index;
             if (index != 3) {
                 // 切换页面
                 StateManager::getInstance().ShowPage = 1;
-                modeComboBox->setCurrentIndex(index);
+                m_modeComboBox->setCurrentIndex(index);
             }
         }
     });
 
     // 切割按钮按下
-    connect(cutButton, &QPushButton::clicked, this, [this]() {
+    connect(m_cutButton, &QPushButton::clicked, this, [this]() {
         if (fileManager.translation_cache.size() == 0) {
 
             // 更新文件路径
-            fileManager.directory = Input_file_path->text().toStdString();
-            fileManager.directory_output = Output_file_path->text().toStdString();
-            fileManager.directory_cut = Cut_file_path->text().toStdString();
-            fileManager.directory_en = Reference_file_path->text().toStdString();
-            fileManager.directory_ok = Success_file_path->text().toStdString();
+            fileManager.directory = m_inputFilePath->text().toStdString();
+            fileManager.directory_output = m_outputFilePath->text().toStdString();
+            fileManager.directory_cut = m_cutFilePath->text().toStdString();
+            fileManager.directory_en = m_referenceFilePath->text().toStdString();
+            fileManager.directory_ok = m_successFilePath->text().toStdString();
 
             // 更新段落切割参数
-            fileManager.paragraph_effective = paragraph_effective->text().toInt();
-            fileManager.paragraph_min = paragraph_min->text().toInt();
-            fileManager.paragraph_max = paragraph_max->text().toInt();
+            fileManager.paragraph_effective = m_paragraphEffective->text().toInt();
+            fileManager.paragraph_min = m_paragraphMin->text().toInt();
+            fileManager.paragraph_max = m_paragraphMax->text().toInt();
 
-            TranslationProgressConfig ProgressInfo;
+            TranslationProgressConfig progressInfo;
 
-            ProgressInfo.file_index = 0;
-            ProgressInfo.paragraph_index = 0;
+            progressInfo.file_index = 0;
+            progressInfo.paragraph_index = 0;
 
-            TranslationSetInfo translation_set_info;
+            TranslationSetInfo translationSetInfo;
 
-            translation_set_info.paragraph_effective = paragraph_effective->text().toInt();
-            translation_set_info.paragraph_min = paragraph_min->text().toInt();
-            translation_set_info.paragraph_max = paragraph_max->text().toInt();
+            translationSetInfo.paragraph_effective = m_paragraphEffective->text().toInt();
+            translationSetInfo.paragraph_min = m_paragraphMin->text().toInt();
+            translationSetInfo.paragraph_max = m_paragraphMax->text().toInt();
 
-            translation_set_info.Input_file_path = Input_file_path->text().toStdString();
-            translation_set_info.Output_file_path = Output_file_path->text().toStdString();
-            translation_set_info.Cut_file_path = Cut_file_path->text().toStdString();
-            translation_set_info.Reference_file_path = Reference_file_path->text().toStdString();
-            translation_set_info.Success_file_path = Success_file_path->text().toStdString();
+            translationSetInfo.Input_file_path = m_inputFilePath->text().toStdString();
+            translationSetInfo.Output_file_path = m_outputFilePath->text().toStdString();
+            translationSetInfo.Cut_file_path = m_cutFilePath->text().toStdString();
+            translationSetInfo.Reference_file_path = m_referenceFilePath->text().toStdString();
+            translationSetInfo.Success_file_path = m_successFilePath->text().toStdString();
 
-            ConfigManager::getInstance().set_TranslationSetInfo(translation_set_info); // 保存设置
+            ConfigManager::getInstance().set_TranslationSetInfo(translationSetInfo); // 保存设置
 
-            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+            QString progressInfoPath = m_inputFilePath->text() + "/TranslationProgressConfig.json";
 
-            QFile file(Progress_info_path);
+            QFile file(progressInfoPath);
             if (file.exists() == true) {
-                ProgressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
-                    Progress_info_path.toStdString()); // 读取进度
+                progressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
+                    progressInfoPath.toStdString()); // 读取进度
                 progress_info.set("文件存在，已读取进度，可继续翻译");
 
-                fileManager.m_file_index = ProgressInfo.file_index; // 更新翻译进度
+                fileManager.m_file_index = progressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
 
             } else {
                 // 删除输出路径
-                deleteFolder(Cut_file_path->text());
-                deleteFolder(Reference_file_path->text());
-                deleteFolder(Success_file_path->text());
-                deleteFolder(Output_file_path->text());
+                deleteFolder(m_cutFilePath->text());
+                deleteFolder(m_referenceFilePath->text());
+                deleteFolder(m_successFilePath->text());
+                deleteFolder(m_outputFilePath->text());
 
                 // 切割段落
-                fileManager.ProcessFilesCut(translation_set_info.Input_file_path, translation_set_info.Cut_file_path,
-                                            translation_set_info.Input_file_path);
+                fileManager.ProcessFilesCut(translationSetInfo.Input_file_path, translationSetInfo.Cut_file_path,
+                                            translationSetInfo.Input_file_path);
                 fileManager.m_cut_sign = true;
 
                 ConfigManager::getInstance().set_TranslationProgressConfig(
-                    ProgressInfo,
-                    translation_set_info.Input_file_path); // 保存进度
+                    progressInfo,
+                    translationSetInfo.Input_file_path); // 保存进度
 
                 progress_info.set("切割完成");
             }
@@ -500,50 +500,50 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     });
 
     // 翻译按钮按下
-    connect(translateButton, &QPushButton::clicked, this, [this]() {
+    connect(m_translateButton, &QPushButton::clicked, this, [this]() {
         qDebug() << "111111 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
         if (fileManager.translation_cache.size() == 0) {
 
             // 更新文件路径
-            fileManager.directory = Input_file_path->text().toStdString();
-            fileManager.directory_output = Output_file_path->text().toStdString();
-            fileManager.directory_cut = Cut_file_path->text().toStdString();
-            fileManager.directory_en = Reference_file_path->text().toStdString();
-            fileManager.directory_ok = Success_file_path->text().toStdString();
+            fileManager.directory = m_inputFilePath->text().toStdString();
+            fileManager.directory_output = m_outputFilePath->text().toStdString();
+            fileManager.directory_cut = m_cutFilePath->text().toStdString();
+            fileManager.directory_en = m_referenceFilePath->text().toStdString();
+            fileManager.directory_ok = m_successFilePath->text().toStdString();
 
             // 更新段落切割参数
-            fileManager.paragraph_effective = paragraph_effective->text().toInt();
-            fileManager.paragraph_min = paragraph_min->text().toInt();
-            fileManager.paragraph_max = paragraph_max->text().toInt();
+            fileManager.paragraph_effective = m_paragraphEffective->text().toInt();
+            fileManager.paragraph_min = m_paragraphMin->text().toInt();
+            fileManager.paragraph_max = m_paragraphMax->text().toInt();
 
-            TranslationProgressConfig ProgressInfo;
+            TranslationProgressConfig progressInfo;
 
-            ProgressInfo.file_index = 0;
-            ProgressInfo.paragraph_index = 0;
+            progressInfo.file_index = 0;
+            progressInfo.paragraph_index = 0;
 
-            TranslationSetInfo translation_set_info;
+            TranslationSetInfo translationSetInfo;
 
-            translation_set_info.paragraph_effective = paragraph_effective->text().toInt();
-            translation_set_info.paragraph_min = paragraph_min->text().toInt();
-            translation_set_info.paragraph_max = paragraph_max->text().toInt();
+            translationSetInfo.paragraph_effective = m_paragraphEffective->text().toInt();
+            translationSetInfo.paragraph_min = m_paragraphMin->text().toInt();
+            translationSetInfo.paragraph_max = m_paragraphMax->text().toInt();
 
-            translation_set_info.Input_file_path = Input_file_path->text().toStdString();
-            translation_set_info.Output_file_path = Output_file_path->text().toStdString();
-            translation_set_info.Cut_file_path = Cut_file_path->text().toStdString();
-            translation_set_info.Reference_file_path = Reference_file_path->text().toStdString();
-            translation_set_info.Success_file_path = Success_file_path->text().toStdString();
+            translationSetInfo.Input_file_path = m_inputFilePath->text().toStdString();
+            translationSetInfo.Output_file_path = m_outputFilePath->text().toStdString();
+            translationSetInfo.Cut_file_path = m_cutFilePath->text().toStdString();
+            translationSetInfo.Reference_file_path = m_referenceFilePath->text().toStdString();
+            translationSetInfo.Success_file_path = m_successFilePath->text().toStdString();
 
-            ConfigManager::getInstance().set_TranslationSetInfo(translation_set_info); // 保存设置
+            ConfigManager::getInstance().set_TranslationSetInfo(translationSetInfo); // 保存设置
 
-            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+            QString progressInfoPath = m_inputFilePath->text() + "/TranslationProgressConfig.json";
 
-            QFile file(Progress_info_path);
+            QFile file(progressInfoPath);
             if (file.exists() == true) {
-                ProgressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
-                    Progress_info_path.toStdString()); // 读取进度
+                progressInfo = ConfigManager::getInstance().get_TranslationProgressConfig(
+                    progressInfoPath.toStdString()); // 读取进度
                 progress_info.set("文件存在，已读取进度，可继续翻译");
 
-                fileManager.m_file_index = ProgressInfo.file_index; // 更新翻译进度
+                fileManager.m_file_index = progressInfo.file_index; // 更新翻译进度
                 fileManager.m_paragraph_index = 0;
 
             } else {
@@ -551,15 +551,15 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
                 if (fileManager.m_cut_sign != true) {
 
                     // 删除输出路径
-                    deleteFolder(Cut_file_path->text());
-                    deleteFolder(Reference_file_path->text());
-                    deleteFolder(Success_file_path->text());
-                    deleteFolder(Output_file_path->text());
+                    deleteFolder(m_cutFilePath->text());
+                    deleteFolder(m_referenceFilePath->text());
+                    deleteFolder(m_successFilePath->text());
+                    deleteFolder(m_outputFilePath->text());
 
                     // 切割段落
-                    fileManager.ProcessFilesCut(translation_set_info.Input_file_path,
-                                                translation_set_info.Cut_file_path,
-                                                translation_set_info.Input_file_path);
+                    fileManager.ProcessFilesCut(translationSetInfo.Input_file_path,
+                                                translationSetInfo.Cut_file_path,
+                                                translationSetInfo.Input_file_path);
                     fileManager.m_cut_sign = true;
                 }
 
@@ -574,8 +574,8 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
                                               fileManager.directory_cut, fileManager.translation_cache);
 
             ConfigManager::getInstance().set_TranslationProgressConfig(
-                ProgressInfo,
-                translation_set_info.Input_file_path); // 保存进度
+                progressInfo,
+                translationSetInfo.Input_file_path); // 保存进度
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
 
@@ -584,17 +584,17 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     });
 
     // 模式选择
-    connect(fileTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
+    connect(m_fileTypeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 3) {
             qDebug("fileTypeComboBox index=%d", index);
-            fileTypeComboBoxIndex = index;
+            m_fileTypeComboBoxIndex = index;
             // 更新提示
-            UpdataPrompt(index);
+            UpdatePrompt(index);
         }
     });
 
     // 恢复默认
-    connect(resetButton, &QPushButton::clicked, this, [this]() {
+    connect(m_resetButton, &QPushButton::clicked, this, [this]() {
         if (fileManager.translation_cache.size() == 0) {
 
             TranslationSetInfo info = ConfigManager::getInstance().default_get_TranslationSetInfo();
@@ -603,30 +603,30 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             progress_info.set("已恢复默认");
 
             // 将进度信息显示到UI
-            paragraph_effective->setText(QString::number(info.paragraph_effective));
-            paragraph_min->setText(QString::number(info.paragraph_min));
-            paragraph_max->setText(QString::number(info.paragraph_max));
+            m_paragraphEffective->setText(QString::number(info.paragraph_effective));
+            m_paragraphMin->setText(QString::number(info.paragraph_min));
+            m_paragraphMax->setText(QString::number(info.paragraph_max));
 
-            Input_file_path->setText(info.Input_file_path.c_str());
-            Output_file_path->setText(info.Output_file_path.c_str());
-            Cut_file_path->setText(info.Cut_file_path.c_str());
-            Reference_file_path->setText(info.Reference_file_path.c_str());
-            Success_file_path->setText(info.Success_file_path.c_str());
+            m_inputFilePath->setText(info.Input_file_path.c_str());
+            m_outputFilePath->setText(info.Output_file_path.c_str());
+            m_cutFilePath->setText(info.Cut_file_path.c_str());
+            m_referenceFilePath->setText(info.Reference_file_path.c_str());
+            m_successFilePath->setText(info.Success_file_path.c_str());
         }
     });
 
     // 清理翻译文件
-    connect(cleanButton, &QPushButton::clicked, this, [this]() {
+    connect(m_cleanButton, &QPushButton::clicked, this, [this]() {
         if (fileManager.translation_cache.size() == 0) {
             // 删除输出路径
-            deleteFolder(Cut_file_path->text());
-            deleteFolder(Reference_file_path->text());
-            deleteFolder(Success_file_path->text());
-            deleteFolder(Output_file_path->text());
+            deleteFolder(m_cutFilePath->text());
+            deleteFolder(m_referenceFilePath->text());
+            deleteFolder(m_successFilePath->text());
+            deleteFolder(m_outputFilePath->text());
 
-            QString Progress_info_path = Input_file_path->text() + "/TranslationProgressConfig.json";
+            QString progressInfoPath = m_inputFilePath->text() + "/TranslationProgressConfig.json";
 
-            QFile file(Progress_info_path);
+            QFile file(progressInfoPath);
             if (file.exists() == true) {
                 file.remove();
             }
@@ -638,56 +638,56 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     });
 
     // 连接按钮的点击信号到槽函数
-    connect(GetButton, &QPushButton::clicked, this, [this]() {
-        UpdataPrompt(0); // 传0单纯是为了不报错
+    connect(getButton, &QPushButton::clicked, this, [this]() {
+        UpdatePrompt(0); // 传0单纯是为了不报错
     });
 
-    connect(SetButton, &QPushButton::clicked, this, [this]() {
+    connect(setButton, &QPushButton::clicked, this, [this]() {
         agreementInfo info;
 
-        info.system = textEdit_system->toPlainText().toStdString();
-        info.chat_prefix = textEdit_chat_prefix->toPlainText().toStdString();
-        info.chat_suffix = textEdit_chat_suffix->toPlainText().toStdString();
-        info.user_msg_1 = textEdit_user_msg_1->toPlainText().toStdString();
-        info.user_msg_2 = textEdit_user_msg_2->toPlainText().toStdString();
-        info.user_msg_3 = textEdit_user_msg_3->toPlainText().toStdString();
-        info.assistant_msg_1 = textEdit_assistant_msg_1->toPlainText().toStdString();
-        info.assistant_msg_2 = textEdit_assistant_msg_2->toPlainText().toStdString();
-        info.assistant_msg_3 = textEdit_assistant_msg_3->toPlainText().toStdString();
+        info.system = m_textEditSystem->toPlainText().toStdString();
+        info.chat_prefix = m_textEditChatPrefix->toPlainText().toStdString();
+        info.chat_suffix = m_textEditChatSuffix->toPlainText().toStdString();
+        info.user_msg_1 = m_textEditUserMsg1->toPlainText().toStdString();
+        info.user_msg_2 = m_textEditUserMsg2->toPlainText().toStdString();
+        info.user_msg_3 = m_textEditUserMsg3->toPlainText().toStdString();
+        info.assistant_msg_1 = m_textEditAssistantMsg1->toPlainText().toStdString();
+        info.assistant_msg_2 = m_textEditAssistantMsg2->toPlainText().toStdString();
+        info.assistant_msg_3 = m_textEditAssistantMsg3->toPlainText().toStdString();
 
-        if (fileTypeComboBoxIndex == 0) {
+        if (m_fileTypeComboBoxIndex == 0) {
             ConfigManager::getInstance().set_prompt_md_file(info);
-        } else if (fileTypeComboBoxIndex == 1) {
+        } else if (m_fileTypeComboBoxIndex == 1) {
             ConfigManager::getInstance().set_prompt_txt_file(info);
-        } else if (fileTypeComboBoxIndex == 2) {
+        } else if (m_fileTypeComboBoxIndex == 2) {
             ConfigManager::getInstance().set_prompt_rst_file(info);
-        } else if (fileTypeComboBoxIndex == 3) {
+        } else if (m_fileTypeComboBoxIndex == 3) {
             ConfigManager::getInstance().set_prompt_h_file(info);
         }
     });
 
-    connect(RstButton, &QPushButton::clicked, this, [this]() {
+    connect(rstButton, &QPushButton::clicked, this, [this]() {
         agreementInfo info;
 
-        if (fileTypeComboBoxIndex == 0) {
+        if (m_fileTypeComboBoxIndex == 0) {
             info = ConfigManager::getInstance().default_get_prompt_md_file();
             ConfigManager::getInstance().set_prompt_md_file(info);
-        } else if (fileTypeComboBoxIndex == 1) {
+        } else if (m_fileTypeComboBoxIndex == 1) {
             info = ConfigManager::getInstance().default_get_prompt_txt_file();
             ConfigManager::getInstance().set_prompt_txt_file(info);
-        } else if (fileTypeComboBoxIndex == 2) {
+        } else if (m_fileTypeComboBoxIndex == 2) {
             info = ConfigManager::getInstance().default_get_prompt_rst_file();
             ConfigManager::getInstance().set_prompt_rst_file(info);
-        } else if (fileTypeComboBoxIndex == 3) {
+        } else if (m_fileTypeComboBoxIndex == 3) {
             info = ConfigManager::getInstance().default_get_prompt_h_file();
             ConfigManager::getInstance().set_prompt_h_file(info);
         }
 
-        UpdataPrompt(0); // 传0单纯是为了不报错
+        UpdatePrompt(0); // 传0单纯是为了不报错
     });
 
     // 连接信号和槽
-    connect(reconnectButton, &QPushButton::clicked, this, [this]() {
+    connect(m_reconnectButton, &QPushButton::clicked, this, [this]() {
         // 开始按钮点击后的操作
         // 切换到开始页面
         StateManager::getInstance().ShowPage = 0;
@@ -695,53 +695,53 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     });
 
     // 连接 QTabWidget 的 currentChanged 信号
-    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &FileTranslationPage::UpdataPrompt);
+    QObject::connect(tabWidget, &QTabWidget::currentChanged, this, &FileTranslationPage::UpdatePrompt);
 
     // 创建定时器
-    translate_timer = new QTimer(this);
+    m_translateTimer = new QTimer(this);
 
     // 连接定时器的timeout信号到槽函数
-    connect(translate_timer, &QTimer::timeout, this, [=]() {
+    connect(m_translateTimer, &QTimer::timeout, this, [=]() {
         if (translation_content_last != translation_content.get()) {
             translation_content_last = translation_content.get();
             // 完全翻译的信息覆盖
-            textEdit1->clear();
-            textEdit1->append(translation_content.get().c_str());
-            QTextCursor cursor1 = textEdit1->textCursor();
+            m_textEdit1->clear();
+            m_textEdit1->append(translation_content.get().c_str());
+            QTextCursor cursor1 = m_textEdit1->textCursor();
             cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
+            m_textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
         }
 
         if (translation_result_last != translation_result.get()) {
             translation_result_last = translation_result.get();
 
             // 完全翻译的信息覆盖
-            textEdit2->clear();
-            textEdit2->append(translation_result.get().c_str());
-            QTextCursor cursor2 = textEdit2->textCursor();
+            m_textEdit2->clear();
+            m_textEdit2->append(translation_result.get().c_str());
+            QTextCursor cursor2 = m_textEdit2->textCursor();
             cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
+            m_textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
         }
 
         if (progress_info_last != progress_info.get()) {
             progress_info_last = progress_info.get();
             // 完全翻译的信息覆盖
-            progressEdit->clear();
-            progressEdit->append(progress_info.get().c_str());
-            QTextCursor cursor3 = progressEdit->textCursor();
+            m_progressEdit->clear();
+            m_progressEdit->append(progress_info.get().c_str());
+            QTextCursor cursor3 = m_progressEdit->textCursor();
             cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+            m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
         }
         // 完全翻译的信息覆盖
-        progressEdit->clear();
-        progressEdit->append(progress_info.get().c_str());
-        QTextCursor cursor3 = progressEdit->textCursor();
+        m_progressEdit->clear();
+        m_progressEdit->append(progress_info.get().c_str());
+        QTextCursor cursor3 = m_progressEdit->textCursor();
         cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
-        progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+        m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
     });
 
     // 启动定时器，间隔时间为毫秒
-    translate_timer->start(100);
+    m_translateTimer->start(100);
 }
 
 FileTranslationPage::~FileTranslationPage() {}
@@ -750,30 +750,30 @@ void FileTranslationPage::UpdateModeComboBox()
 {
 
     if (StateManager::getInstance().ShowPage == 3) {
-        modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
+        m_modeComboBox->setCurrentIndex(StateManager::getInstance().ModeIndex);
     }
 }
 
-void FileTranslationPage::UpdataPrompt(int index)
+void FileTranslationPage::UpdatePrompt(int index)
 {
     agreementInfo info;
-    if (fileTypeComboBoxIndex == 0) {
+    if (m_fileTypeComboBoxIndex == 0) {
         info = ConfigManager::getInstance().get_prompt_md_file();
-    } else if (fileTypeComboBoxIndex == 1) {
+    } else if (m_fileTypeComboBoxIndex == 1) {
         info = ConfigManager::getInstance().get_prompt_txt_file();
-    } else if (fileTypeComboBoxIndex == 2) {
+    } else if (m_fileTypeComboBoxIndex == 2) {
         info = ConfigManager::getInstance().get_prompt_rst_file();
-    } else if (fileTypeComboBoxIndex == 3) {
+    } else if (m_fileTypeComboBoxIndex == 3) {
         info = ConfigManager::getInstance().get_prompt_h_file();
     }
 
-    textEdit_system->setText(info.system.c_str());
-    textEdit_chat_prefix->setText(info.chat_prefix.c_str());
-    textEdit_chat_suffix->setText(info.chat_suffix.c_str());
-    textEdit_user_msg_1->setText(info.user_msg_1.c_str());
-    textEdit_user_msg_2->setText(info.user_msg_2.c_str());
-    textEdit_user_msg_3->setText(info.user_msg_3.c_str());
-    textEdit_assistant_msg_1->setText(info.assistant_msg_1.c_str());
-    textEdit_assistant_msg_2->setText(info.assistant_msg_2.c_str());
-    textEdit_assistant_msg_3->setText(info.assistant_msg_3.c_str());
+    m_textEditSystem->setText(info.system.c_str());
+    m_textEditChatPrefix->setText(info.chat_prefix.c_str());
+    m_textEditChatSuffix->setText(info.chat_suffix.c_str());
+    m_textEditUserMsg1->setText(info.user_msg_1.c_str());
+    m_textEditUserMsg2->setText(info.user_msg_2.c_str());
+    m_textEditUserMsg3->setText(info.user_msg_3.c_str());
+    m_textEditAssistantMsg1->setText(info.assistant_msg_1.c_str());
+    m_textEditAssistantMsg2->setText(info.assistant_msg_2.c_str());
+    m_textEditAssistantMsg3->setText(info.assistant_msg_3.c_str());
 }
