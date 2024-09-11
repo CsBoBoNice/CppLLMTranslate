@@ -70,7 +70,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
         std::string msgTranslate = agreement::getInstance().wrapToJson(infoSend);
 
         HttpManager httpManager;
-        httpManager.sendRequestJson(msgTranslate);
+        httpManager.SendRequestJson(msgTranslate);
 
         std::string showText;
         MessageManager::getInstance().popFromInputQueueNoWait(showText);

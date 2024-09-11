@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-30 11:01:26
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-10 17:17:27
+ * @LastEditTime: 2024-09-11 09:56:43
  * @FilePath: /CppLLMTranslate/GUI/qt/HttpManager.h
  */
 #ifndef HTTPMANAGER_H
@@ -21,21 +21,21 @@ class HttpManager : public QObject {
 
     static void InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries);
 
-    bool sendRequest(const QJsonDocument &doc, QString &ret_msg);
+    bool SendRequest(const QJsonDocument &doc, QString &retMsg);
 
-    void sendRequestJson(std::string json_msg);
-    bool sendRequestAgreementInfo(agreementInfo info, std::string &ret_msg);
+    void SendRequestJson(std::string jsonMsg);
+    bool SendRequestAgreementInfo(agreementInfo info, std::string &retMsg);
 
-    bool sendRequest_AgreementInfo(agreementInfo info);
+    bool SendRequestAgreementInfo(agreementInfo info);
 
-    void SendRequest_thread();
+    void SendRequestThread();
 
   public:
-    static QString m_apiKey;
-    static int m_maxRetries;
-    static int m_timeout;
-    static QString m_url;
-    static QString m_model;
+    static QString ApiKey;
+    static int MaxRetries;
+    static int Timeout;
+    static QString Url;
+    static QString Model;
 };
 
 #endif // HTTPMANAGER_H

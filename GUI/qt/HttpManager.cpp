@@ -12,11 +12,11 @@
 #include "MessageManager.h"
 
 // 初始化静态成员变量
-QString HttpManager::m_apiKey = "888888";
-int HttpManager::m_maxRetries = 3;
-int HttpManager::m_timeout = 180000;
-QString HttpManager::m_url = "http://127.0.0.1:11434/v1/chat/completions";
-QString HttpManager::m_model = "gpt-4o";
+QString HttpManager::ApiKey = "888888";
+int HttpManager::MaxRetries = 3;
+int HttpManager::Timeout = 180000;
+QString HttpManager::Url = "http://127.0.0.1:11434/v1/chat/completions";
+QString HttpManager::Model = "gpt-4o";
 
 HttpManager::HttpManager() {}
 
@@ -28,24 +28,24 @@ HttpManager::~HttpManager()
 
 void HttpManager::InitHttpManager(QString url, QString apiKey, QString model, int timeout, int maxRetries)
 {
-    m_apiKey = apiKey;
-    m_maxRetries = maxRetries;
-    m_timeout = timeout;
-    m_url = url;
-    m_model = model;
+    ApiKey = apiKey;
+    MaxRetries = maxRetries;
+    Timeout = timeout;
+    Url = url;
+    Model = model;
 }
 
-bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
+bool HttpManager::SendRequest(const QJsonDocument &doc, QString &retMsg)
 {
-    QUrl url(m_url);
+    QUrl url(Url);
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-    request.setRawHeader("Authorization", "Bearer " + m_apiKey.toUtf8());
+    request.setRawHeader("Authorization", "Bearer " + ApiKey.toUtf8());
 
     int retries = 0;
-    while (retries < m_maxRetries) {
+    while (retries < MaxRetries) {
         QNetworkAccessManager manager;
-        manager.setTransferTimeout(m_timeout);
+        manager.setTransferTimeout(Timeout);
         QNetworkReply *reply = manager.post(request, doc.toJson());
 
         QEventLoop loop;
@@ -53,7 +53,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
         QObject::connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
 
-        timer.start(m_timeout);
+        timer.start(Timeout);
         loop.exec();
 
         // 取消定时器，防止它再次触发事件循环的退出
@@ -69,7 +69,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
                 qDebug() << "Network error else:" << reply->errorString();
             }
 
-            ret_msg = "ERROR: " + reply->errorString();
+            retMsg = "ERROR: " + reply->errorString();
 
             reply->abort();
             reply->deleteLater();
@@ -82,7 +82,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
 
             if (responseStr.isEmpty()) {
                 qDebug() << "Empty response from server.";
-                ret_msg = "ERROR: Empty response from server.";
+                retMsg = "ERROR: Empty response from server.";
                 reply->deleteLater();
                 retries++;
                 return false;
@@ -92,7 +92,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
             QJsonDocument doc = QJsonDocument::fromJson(responseStr.toUtf8(), &parseError);
             if (parseError.error != QJsonParseError::NoError) {
                 qDebug() << "JSON parse error:" << parseError.errorString();
-                ret_msg = "ERROR: JSON parse error:" + parseError.errorString();
+                retMsg = "ERROR: JSON parse error:" + parseError.errorString();
                 reply->deleteLater();
                 return false;
             }
@@ -109,7 +109,7 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
                 qDebug() << "Message Content:" << messageContent;
                 qDebug() << "Role:" << role;
 
-                ret_msg = messageContent;
+                retMsg = messageContent;
             }
 
             reply->deleteLater();
@@ -117,39 +117,38 @@ bool HttpManager::sendRequest(const QJsonDocument &doc, QString &ret_msg)
         }
     }
 
-    if (retries >= m_maxRetries) {
-        qDebug() << "Failed to parse JSON after" << m_maxRetries << "retries.";
+    if (retries >= MaxRetries) {
+        qDebug() << "Failed to parse JSON after" << MaxRetries << "retries.";
     }
 
     return true;
 }
 
-
-void HttpManager::sendRequestJson(std::string json_msg)
+void HttpManager::SendRequestJson(std::string jsonMsg)
 {
-    agreementInfo info = agreement::getInstance().parseJson(json_msg);
+    agreementInfo info = agreement::getInstance().parseJson(jsonMsg);
 
-    std::string Request_string;
-    sendRequestAgreementInfo(info, Request_string);
+    std::string requestString;
+    SendRequestAgreementInfo(info, requestString);
 
     agreementInfo retInfo;
     retInfo.cmd = (int)AgreementCmd::success_msg;
-    retInfo.msg = Request_string;
+    retInfo.msg = requestString;
     std::string retInfoJson = agreement::getInstance().wrapToJson(retInfo);
     MessageManager::getInstance().pushToInputQueue(retInfoJson);
 }
 
-bool HttpManager::sendRequestAgreementInfo(agreementInfo info, std::string &ret_msg)
+bool HttpManager::SendRequestAgreementInfo(agreementInfo info, std::string &retMsg)
 {
     bool ret = true;
 
     std::string system = info.system;
-    std::string user_msg_1 = info.chat_prefix + info.user_msg_1 + info.chat_suffix;
-    std::string user_msg_2 = info.chat_prefix + info.user_msg_2 + info.chat_suffix;
-    std::string user_msg_3 = info.chat_prefix + info.user_msg_3 + info.chat_suffix;
-    std::string assistant_msg_1 = info.assistant_msg_1;
-    std::string assistant_msg_2 = info.assistant_msg_2;
-    std::string assistant_msg_3 = info.assistant_msg_3;
+    std::string userMsg1 = info.chat_prefix + info.user_msg_1 + info.chat_suffix;
+    std::string userMsg2 = info.chat_prefix + info.user_msg_2 + info.chat_suffix;
+    std::string userMsg3 = info.chat_prefix + info.user_msg_3 + info.chat_suffix;
+    std::string assistantMsg1 = info.assistant_msg_1;
+    std::string assistantMsg2 = info.assistant_msg_2;
+    std::string assistantMsg3 = info.assistant_msg_3;
     std::string msg = info.chat_prefix + info.msg + info.chat_suffix;
 
     QJsonArray messages;
@@ -158,36 +157,36 @@ bool HttpManager::sendRequestAgreementInfo(agreementInfo info, std::string &ret_
         {"content", system.c_str()}
     });
 
-    if (!user_msg_1.empty() && !assistant_msg_1.empty()) {
+    if (!userMsg1.empty() && !assistantMsg1.empty()) {
         messages.append(QJsonObject{
-            {   "role",             "user"},
-            {"content", user_msg_1.c_str()}
+            {   "role",           "user"},
+            {"content", userMsg1.c_str()}
         });
         messages.append(QJsonObject{
-            {   "role",             "assistant"},
-            {"content", assistant_msg_1.c_str()}
-        });
-    }
-
-    if (!user_msg_2.empty() && !assistant_msg_2.empty()) {
-        messages.append(QJsonObject{
-            {   "role",             "user"},
-            {"content", user_msg_2.c_str()}
-        });
-        messages.append(QJsonObject{
-            {   "role",             "assistant"},
-            {"content", assistant_msg_2.c_str()}
+            {   "role",           "assistant"},
+            {"content", assistantMsg1.c_str()}
         });
     }
 
-    if (!user_msg_3.empty() && !assistant_msg_3.empty()) {
+    if (!userMsg2.empty() && !assistantMsg2.empty()) {
         messages.append(QJsonObject{
-            {   "role",             "user"},
-            {"content", user_msg_3.c_str()}
+            {   "role",           "user"},
+            {"content", userMsg2.c_str()}
         });
         messages.append(QJsonObject{
-            {   "role",             "assistant"},
-            {"content", assistant_msg_3.c_str()}
+            {   "role",           "assistant"},
+            {"content", assistantMsg2.c_str()}
+        });
+    }
+
+    if (!userMsg3.empty() && !assistantMsg3.empty()) {
+        messages.append(QJsonObject{
+            {   "role",           "user"},
+            {"content", userMsg3.c_str()}
+        });
+        messages.append(QJsonObject{
+            {   "role",           "assistant"},
+            {"content", assistantMsg3.c_str()}
         });
     }
 
@@ -197,7 +196,7 @@ bool HttpManager::sendRequestAgreementInfo(agreementInfo info, std::string &ret_
     });
 
     QJsonObject requestObj{
-        {   "model",  m_model},
+        {   "model",    Model},
         {"messages", messages}
     };
 
@@ -205,17 +204,17 @@ bool HttpManager::sendRequestAgreementInfo(agreementInfo info, std::string &ret_
     // 打印请求的JSON数据
     qDebug() << "Request JSON:\n" << QString::fromUtf8(doc.toJson());
     QString retString;
-    ret = sendRequest(doc, retString);
-    ret_msg = retString.toStdString();
+    ret = SendRequest(doc, retString);
+    retMsg = retString.toStdString();
     return ret;
 }
 
-void HttpManager::SendRequest_thread()
+void HttpManager::SendRequestThread()
 {
     while (1) {
-        std::string json_msg;
-        if (MessageManager::getInstance().popFromOutputQueue(json_msg)) {
-            sendRequestJson(json_msg);
+        std::string jsonMsg;
+        if (MessageManager::getInstance().popFromOutputQueue(jsonMsg)) {
+            SendRequestJson(jsonMsg);
         }
     }
 }

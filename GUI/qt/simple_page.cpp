@@ -13,7 +13,7 @@ HttpManager httpManager;
 
 static void Http_thread()
 {
-    httpManager.SendRequest_thread();
+    httpManager.SendRequestThread();
 }
 
 SimplePage::SimplePage(QWidget *parent) : QMainWindow(parent)

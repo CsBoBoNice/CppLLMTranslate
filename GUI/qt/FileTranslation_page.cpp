@@ -130,7 +130,7 @@ static void FileTranslation_thread()
 
             HttpManager httpManager_;
 
-            httpManager_.sendRequestAgreementInfo(prompt_info, zh_string);
+            httpManager_.SendRequestAgreementInfo(prompt_info, zh_string);
 
             // 界面输出日志
             translation_content.set(en_string);
