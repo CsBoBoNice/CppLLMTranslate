@@ -1,11 +1,5 @@
-/*
- * @Date: 2024-09-02 16:50:22
- * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-03 09:08:40
- * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.h
- */
-#ifndef FILETRANSLATION_PAGE_H
-#define FILETRANSLATION_PAGE_H
+#ifndef _FILETRANSLATIONPAGE_H
+#define _FILETRANSLATIONPAGE_H
 
 #include <QMainWindow>
 #include <QVBoxLayout>
@@ -18,11 +12,11 @@
 #include <QKeyEvent>
 #include <QLineEdit>
 
-class FileTranslation_page : public QMainWindow {
+class FileTranslationPage : public QMainWindow {
     Q_OBJECT
   public:
-    FileTranslation_page(QWidget *parent = nullptr);
-    ~FileTranslation_page();
+    FileTranslationPage(QWidget *parent = nullptr);
+    ~FileTranslationPage();
 
     void UpdateModeComboBox();
 
@@ -57,12 +51,6 @@ class FileTranslation_page : public QMainWindow {
     QTextEdit *textEdit_assistant_msg_2;
     QTextEdit *textEdit_assistant_msg_3;
 
-/*
-    int paragraph_effective = 1 * 128;  // 段落有效值
-    int paragraph_min = 1 * 1024 + 128; // 段落最小值
-    int paragraph_max = 2 * 1024 + 128; // 段落最大值
-*/
-
     QLineEdit *Input_file_path;
     QLineEdit *Output_file_path;
     QLineEdit *Cut_file_path;
@@ -72,7 +60,6 @@ class FileTranslation_page : public QMainWindow {
     QLineEdit *paragraph_effective;
     QLineEdit *paragraph_min;
     QLineEdit *paragraph_max;
-
 };
 
-#endif // FILETRANSLATION_PAGE_H
+#endif // _FILETRANSLATIONPAGE_H

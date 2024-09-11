@@ -1,15 +1,3 @@
-/*
- * @Date: 2024-09-02 14:46:46
- * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 11:17:24
- * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
- */
-/*
- * @Date: 2024-08-31 13:42:22
- * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-02 14:44:39
- * @FilePath: /CppLLMTranslate/GUI/qt/FileTranslation_page.cpp
- */
 #include "FileTranslation_page.h"
 #include "FileManager.h"
 #include <QThread>
@@ -161,7 +149,8 @@ static void FileTranslation_thread()
                 info.file_index = fileManager.m_file_index;
                 info.paragraph_index = fileManager.m_paragraph_index;
 
-                ConfigManager::getInstance().set_TranslationProgressConfig(info, fileManager.directory.string()); // 保存进度
+                ConfigManager::getInstance().set_TranslationProgressConfig(info,
+                                                                           fileManager.directory.string()); // 保存进度
             }
         } else {
             if (fileManager.translation_cache.size() > 0) {
@@ -184,7 +173,7 @@ static void FileTranslation_thread()
     }
 }
 
-FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent)
+FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 {
 
     // 设置主窗口的布局
@@ -433,7 +422,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     // 模式选择
     connect(modeComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), this, [=](int index) {
         if (StateManager::getInstance().ShowPage == 3) {
-            qDebug("FileTranslation_page index=%d", index);
+            qDebug("FileTranslationPage index=%d", index);
             StateManager::getInstance().ModeIndex = index;
             if (index != 3) {
                 // 切换页面
@@ -706,7 +695,7 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     });
 
     // 连接 QTabWidget 的 currentChanged 信号
-    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &FileTranslation_page::UpdataPrompt);
+    QObject::connect(TabWidget_, &QTabWidget::currentChanged, this, &FileTranslationPage::UpdataPrompt);
 
     // 创建定时器
     translate_timer = new QTimer(this);
@@ -755,9 +744,9 @@ FileTranslation_page::FileTranslation_page(QWidget *parent) : QMainWindow(parent
     translate_timer->start(100);
 }
 
-FileTranslation_page::~FileTranslation_page() {}
+FileTranslationPage::~FileTranslationPage() {}
 
-void FileTranslation_page::UpdateModeComboBox()
+void FileTranslationPage::UpdateModeComboBox()
 {
 
     if (StateManager::getInstance().ShowPage == 3) {
@@ -765,7 +754,7 @@ void FileTranslation_page::UpdateModeComboBox()
     }
 }
 
-void FileTranslation_page::UpdataPrompt(int index)
+void FileTranslationPage::UpdataPrompt(int index)
 {
     agreementInfo info;
     if (fileTypeComboBoxIndex == 0) {
