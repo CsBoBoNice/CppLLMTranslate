@@ -21,19 +21,19 @@
 
 #define TITLE_V "CppLLMTranslate_V1.0"
 
-StartPage *start_page_w;
-SimplePage *simple_page_w;
-IntricatePage *intricate_page_w;
-FileTranslation_page *FileTranslation_page_w;
+StartPage *startPageWindow;
+SimplePage *simplePageWindow;
+IntricatePage *intricatePageWindow;
+FileTranslation_page *fileTranslationPageWindow;
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setWindowIcon(QIcon(QCoreApplication::applicationDirPath() + "/logo.ico")); // 使用文件系统路径
+    QApplication app(argc, argv);
+    app.setWindowIcon(QIcon(QCoreApplication::applicationDirPath() + "/logo.ico")); // 使用文件系统路径
 
     // 加载自定义字体
-    QString font_path = QCoreApplication::applicationDirPath() + "/font.ttf";
-    int fontId = QFontDatabase::addApplicationFont(font_path);
+    QString fontPath = QCoreApplication::applicationDirPath() + "/font.ttf";
+    int fontId = QFontDatabase::addApplicationFont(fontPath);
     if (fontId != -1) {
         QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
         if (!fontFamilies.empty()) {
@@ -41,67 +41,67 @@ int main(int argc, char *argv[])
             QFont customFont(fontFamilies.at(0));
             customFont.setPointSize(13); // 设置默认字体大小
 
-            a.setFont(customFont);
+            app.setFont(customFont);
 
             QApplication::setFont(customFont);
             // QApplication::setStyle("fusion"); // 设置样式为fusion或其他支持抗锯齿的样式
         }
     }
 
-    start_page_w = new StartPage;
-    start_page_w->resize(500, 200);
-    start_page_w->hide();
-    start_page_w->setWindowTitle(TITLE_V);
+    startPageWindow = new StartPage;
+    startPageWindow->resize(500, 200);
+    startPageWindow->hide();
+    startPageWindow->setWindowTitle(TITLE_V);
 
-    simple_page_w = new SimplePage;
-    simple_page_w->resize(500, 300);
-    simple_page_w->hide();
-    simple_page_w->setWindowTitle(TITLE_V);
+    simplePageWindow = new SimplePage;
+    simplePageWindow->resize(500, 300);
+    simplePageWindow->hide();
+    simplePageWindow->setWindowTitle(TITLE_V);
 
-    intricate_page_w = new IntricatePage;
-    intricate_page_w->resize(800, 800);
-    intricate_page_w->hide();
-    intricate_page_w->setWindowTitle(TITLE_V);
+    intricatePageWindow = new IntricatePage;
+    intricatePageWindow->resize(800, 800);
+    intricatePageWindow->hide();
+    intricatePageWindow->setWindowTitle(TITLE_V);
 
-    FileTranslation_page_w = new FileTranslation_page;
-    FileTranslation_page_w->resize(800, 800);
-    FileTranslation_page_w->hide();
-    FileTranslation_page_w->setWindowTitle(TITLE_V);
+    fileTranslationPageWindow = new FileTranslation_page;
+    fileTranslationPageWindow->resize(800, 800);
+    fileTranslationPageWindow->hide();
+    fileTranslationPageWindow->setWindowTitle(TITLE_V);
 
     // 创建定时器
-    QTimer *page_change = new QTimer();
+    QTimer *pageChangeTimer = new QTimer();
 
     // 连接定时器的timeout信号到槽函数
-    QObject::connect(page_change, &QTimer::timeout, start_page_w, [&]() {
+    QObject::connect(pageChangeTimer, &QTimer::timeout, startPageWindow, [&]() {
         if (0 == StateManager::getInstance().ShowPage) {
-            start_page_w->show();
-            simple_page_w->hide();
-            intricate_page_w->hide();
-            FileTranslation_page_w->hide();
+            startPageWindow->show();
+            simplePageWindow->hide();
+            intricatePageWindow->hide();
+            fileTranslationPageWindow->hide();
         } else if (1 == StateManager::getInstance().ShowPage) {
-            start_page_w->hide();
-            simple_page_w->show();
-            intricate_page_w->hide();
-            FileTranslation_page_w->hide();
+            startPageWindow->hide();
+            simplePageWindow->show();
+            intricatePageWindow->hide();
+            fileTranslationPageWindow->hide();
         } else if (2 == StateManager::getInstance().ShowPage) {
-            start_page_w->hide();
-            simple_page_w->hide();
-            intricate_page_w->show();
-            FileTranslation_page_w->hide();
+            startPageWindow->hide();
+            simplePageWindow->hide();
+            intricatePageWindow->show();
+            fileTranslationPageWindow->hide();
         } else if (3 == StateManager::getInstance().ShowPage) {
-            start_page_w->hide();
-            simple_page_w->hide();
-            intricate_page_w->hide();
-            FileTranslation_page_w->show();
+            startPageWindow->hide();
+            simplePageWindow->hide();
+            intricatePageWindow->hide();
+            fileTranslationPageWindow->show();
         }
 
-        simple_page_w->UpdateModeComboBox();
-        intricate_page_w->UpdateModeComboBox();
-        FileTranslation_page_w->UpdateModeComboBox();
+        simplePageWindow->UpdateModeComboBox();
+        intricatePageWindow->UpdateModeComboBox();
+        fileTranslationPageWindow->UpdateModeComboBox();
     });
 
     // 启动定时器
-    page_change->start(100);
+    pageChangeTimer->start(100);
 
-    return a.exec();
+    return app.exec();
 }
