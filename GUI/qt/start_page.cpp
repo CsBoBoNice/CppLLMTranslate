@@ -61,7 +61,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
         m_outputTextEdit->clear();
         m_outputTextEdit->append("Please wait ...");
 
-        HttpManager::InitHttpManager(m_urlInput->text(), m_apiKeyInput->text(), m_modelInput->text(), 180000, 3);
+        HttpManager::InitHttpManager(m_urlInput->text(), m_apiKeyInput->text(), m_modelInput->text(), 300000, 3);
 
         agreementInfo infoSend;
         infoSend.system = "You are a helpful assistant. ";
@@ -83,7 +83,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
     });
 
     connect(m_startApplicationButton, &QPushButton::clicked, this, [this]() {
-        HttpManager::InitHttpManager(m_urlInput->text(), m_apiKeyInput->text(), m_modelInput->text(), 180000, 3);
+        HttpManager::InitHttpManager(m_urlInput->text(), m_apiKeyInput->text(), m_modelInput->text(), 300000, 3);
 
         // Start button clicked operation
         // Switch to second page

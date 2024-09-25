@@ -14,7 +14,7 @@
 // 初始化静态成员变量
 QString HttpManager::ApiKey = "888888";
 int HttpManager::MaxRetries = 3;
-int HttpManager::Timeout = 180000;
+int HttpManager::Timeout = 300000;
 QString HttpManager::Url = "http://127.0.0.1:11434/v1/chat/completions";
 QString HttpManager::Model = "gpt-4o";
 
