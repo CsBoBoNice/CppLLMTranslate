@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-10 16:22:55
+ * @LastEditTime: 2024-09-25 13:50:23
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -1044,8 +1044,8 @@ TranslationSetInfo ConfigManager::default_get_TranslationSetInfo()
 
     TranslationSetInfo info;
     info.paragraph_effective = 512;
-    info.paragraph_min = 4096;
-    info.paragraph_max = 6144;
+    info.paragraph_min = 3072;
+    info.paragraph_max = 4096;
     info.Input_file_path = InputPath.toStdString();
     info.Output_file_path = OutputPath.toStdString();
     info.Cut_file_path = CutPath.toStdString();

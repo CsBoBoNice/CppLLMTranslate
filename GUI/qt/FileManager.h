@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-31 11:11:00
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 10:43:33
+ * @LastEditTime: 2024-09-25 13:49:27
  * @FilePath: /CppLLMTranslate/GUI/qt/FileManager.h
  */
 #ifndef FILEMANAGER_H
@@ -28,8 +28,8 @@ struct FileContent {
 class FileManager {
   public:
     int paragraph_effective = 512; // 段落有效值
-    int paragraph_min = 4096;      // 段落最小值
-    int paragraph_max = 6144;      // 段落最大值
+    int paragraph_min = 3072;      // 段落最小值
+    int paragraph_max = 4096;      // 段落最大值
 
     std::filesystem::path directory;        // 原输入路径
     std::filesystem::path directory_output; // 输出路径
