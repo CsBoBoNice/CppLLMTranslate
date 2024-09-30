@@ -23,7 +23,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
     m_urlInput = new QLineEdit(serverInfo.url.c_str(), this);
     m_modelInput = new QLineEdit(serverInfo.model.c_str(), this);
     m_apiKeyInput = new QLineEdit(serverInfo.apiKey.c_str(), this);
-    m_titleInput = new QLineEdit(this);  // 新增: 用于输入模型标题
+    m_titleInput = new QLineEdit("模型名称", this);  // 修改: 设置默认值为"模型名称"
     m_testConnectionButton = new QPushButton("测试🔍", this);
     m_startApplicationButton = new QPushButton("开始🌟", this);
     m_outputTextEdit = new QTextEdit(this);
