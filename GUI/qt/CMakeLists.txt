@@ -41,7 +41,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         FileManager.h FileManager.cpp
         FileTranslation_page.h FileTranslation_page.cpp
         ThreadSafeString.h ThreadSafeString.cpp
-
+        ModelsInfo.h ModelsInfo.cpp
 
     )
 # Define target properties for Android with Qt 6 as:

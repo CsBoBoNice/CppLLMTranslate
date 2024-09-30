@@ -5,6 +5,7 @@
 #include <QThread>
 #include "HttpManager.h"
 #include "MessageManager.h"
+#include "ModelsInfo.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,7 +15,7 @@ QT_END_NAMESPACE
 
 StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
 {
-    ServerInfo serverInfo = ConfigManager::getInstance().GetServerIP();
+    ServerInfo serverInfo = ModelsInfo::getInstance().GetServerIP();
 
     // Initialize UI
     m_mainPage = new QWidget(this);
@@ -94,11 +95,11 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
         newServerInfo.apiKey = m_apiKeyInput->text().toStdString();
         newServerInfo.model = m_modelInput->text().toStdString();
 
-        ConfigManager::getInstance().SetServerIP(newServerInfo);
+        ModelsInfo::getInstance().SetServerIP(newServerInfo);
     });
 
     connect(m_resetButton, &QPushButton::clicked, this, [this]() {
-        ServerInfo defaultServerInfo = ConfigManager::getInstance().DefaultGetServerIP();
+        ServerInfo defaultServerInfo = ModelsInfo::getInstance().DefaultGetServerIP();
 
         m_urlInput->setText(defaultServerInfo.url.c_str());
         m_apiKeyInput->setText(defaultServerInfo.apiKey.c_str());

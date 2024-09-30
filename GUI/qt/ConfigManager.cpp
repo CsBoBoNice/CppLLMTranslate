@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-25 13:50:23
+ * @LastEditTime: 2024-09-30 13:50:19
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -40,66 +40,6 @@ bool ConfigManager::saveFile(const QString &filePath, const std::string &content
     out << QString::fromStdString(content);
     file.close();
     return true;
-}
-
-ServerInfo ConfigManager::DefaultGetServerIP()
-{
-    ServerInfo server_info{.url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
-    return server_info;
-}
-
-ServerInfo ConfigManager::GetServerIP()
-{
-    ServerInfo server_info{.url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
-    std::string ip_json;
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-    QFile file(ipconfig);
-    if (file.exists() == true) {
-        ip_json = readFile(ipconfig);
-        cJSON *root = cJSON_Parse(ip_json.c_str());
-        if (root == nullptr) {
-            // 解析失败
-            goto return_info;
-        }
-
-        cJSON *url_str = cJSON_GetObjectItem(root, "url");
-        if (url_str != nullptr) {
-            server_info.url = url_str->valuestring;
-        }
-
-        cJSON *apiKey_str = cJSON_GetObjectItem(root, "apiKey");
-        if (apiKey_str != nullptr) {
-            server_info.apiKey = apiKey_str->valuestring;
-        }
-
-        cJSON *model_str = cJSON_GetObjectItem(root, "model");
-        if (model_str != nullptr) {
-            server_info.model = model_str->valuestring;
-        }
-
-        cJSON_Delete(root);
-    }
-
-return_info:
-
-    return server_info;
-}
-
-void ConfigManager::SetServerIP(const ServerInfo &newServerInfo)
-{
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-
-    cJSON *root = cJSON_CreateObject();
-    cJSON_AddStringToObject(root, "url", newServerInfo.url.c_str());
-    cJSON_AddStringToObject(root, "apiKey", newServerInfo.apiKey.c_str());
-    cJSON_AddStringToObject(root, "model", newServerInfo.model.c_str());
-
-    char *jsonStr = cJSON_Print(root);
-    std::string result(jsonStr);
-    free(jsonStr);
-    cJSON_Delete(root);
-
-    saveFile(ipconfig, result); // 保存配置文件
 }
 
 agreementInfo ConfigManager::default_config_en_to_zh()
