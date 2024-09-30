@@ -2,7 +2,7 @@
  * @Author: csbobo 751541594@qq.com
  * @Date: 2024-09-30 13:44:51
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-30 14:43:13
+ * @LastEditTime: 2024-09-30 14:55:55
  * @FilePath: /CppLLMTranslate/GUI/qt/ModelsInfo.cpp
  * @Description: 
  * 
@@ -21,11 +21,11 @@ ModelsInfo &ModelsInfo::getInstance()
     return instance;
 }
 
-std::string ModelsInfo::readFile(const QString &filePath)
+std::string ModelsInfo::readFileContent(const QString &filePath)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        return ""; // 文件打开失败，返回空字符串
+        return "";
     }
 
     QTextStream in(&file);
@@ -34,11 +34,11 @@ std::string ModelsInfo::readFile(const QString &filePath)
     return content;
 }
 
-bool ModelsInfo::saveFile(const QString &filePath, const std::string &content)
+bool ModelsInfo::saveFileContent(const QString &filePath, const std::string &content)
 {
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        return false; // 文件打开失败，返回 false
+        return false;
     }
 
     QTextStream out(&file);
@@ -47,78 +47,76 @@ bool ModelsInfo::saveFile(const QString &filePath, const std::string &content)
     return true;
 }
 
-ModelsInfo_s ModelsInfo::DefaultGetServerIP()
+ModelsInfo_s ModelsInfo::getDefaultServerConfig()
 {
-    ModelsInfo_s server_info{
-        .url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
-    return server_info;
+    return {.url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
 }
 
-ModelsInfo_s ModelsInfo::GetServerIP()
+ModelsInfo_s ModelsInfo::getCurrentServerConfig()
 {
-    ModelsInfo_s server_info = DefaultGetServerIP();  // 使用默认值初始化
-    std::string ip_json;
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-    QFile file(ipconfig);
+    ModelsInfo_s serverConfig = getDefaultServerConfig();
+    QString configPath = QCoreApplication::applicationDirPath() + "/Server_config.json";
+    QFile file(configPath);
     if (file.exists()) {
-        ip_json = readFile(ipconfig);
-        cJSON *root = cJSON_Parse(ip_json.c_str());
+        std::string jsonContent = readFileContent(configPath);
+        cJSON *root = cJSON_Parse(jsonContent.c_str());
         if (root) {
             cJSON *serversArray = cJSON_GetObjectItem(root, "servers");
             if (serversArray && cJSON_IsArray(serversArray) && cJSON_GetArraySize(serversArray) > 0) {
                 cJSON *firstServer = cJSON_GetArrayItem(serversArray, 0);
                 if (firstServer) {
-                    cJSON *title = cJSON_GetObjectItem(firstServer, "title");
-                    cJSON *url = cJSON_GetObjectItem(firstServer, "url");
-                    cJSON *apiKey = cJSON_GetObjectItem(firstServer, "apiKey");
-                    cJSON *model = cJSON_GetObjectItem(firstServer, "model");
-
-                    if (title && cJSON_IsString(title)) {
-                        server_info.title = title->valuestring;
-                    }
-                    if (url && cJSON_IsString(url)) {
-                        server_info.url = url->valuestring;
-                    }
-                    if (apiKey && cJSON_IsString(apiKey)) {
-                        server_info.apiKey = apiKey->valuestring;
-                    }
-                    if (model && cJSON_IsString(model)) {
-                        server_info.model = model->valuestring;
-                    }
+                    updateServerConfigFromJson(serverConfig, firstServer);
                 }
             }
             cJSON_Delete(root);
         }
     }
-    return server_info;
+    return serverConfig;
 }
 
-void ModelsInfo::SetServerIP(const ModelsInfo_s &newServerInfo)
+void ModelsInfo::updateServerConfigFromJson(ModelsInfo_s &config, cJSON *jsonObject)
 {
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
+    cJSON *title = cJSON_GetObjectItem(jsonObject, "title");
+    cJSON *url = cJSON_GetObjectItem(jsonObject, "url");
+    cJSON *apiKey = cJSON_GetObjectItem(jsonObject, "apiKey");
+    cJSON *model = cJSON_GetObjectItem(jsonObject, "model");
+
+    if (title && cJSON_IsString(title))
+        config.title = title->valuestring;
+    if (url && cJSON_IsString(url))
+        config.url = url->valuestring;
+    if (apiKey && cJSON_IsString(apiKey))
+        config.apiKey = apiKey->valuestring;
+    if (model && cJSON_IsString(model))
+        config.model = model->valuestring;
+}
+
+void ModelsInfo::setServerConfig(const ModelsInfo_s &newServerConfig)
+{
+    QString configPath = QCoreApplication::applicationDirPath() + "/Server_config.json";
 
     cJSON *root = cJSON_CreateObject();
-    cJSON_AddStringToObject(root, "url", newServerInfo.url.c_str());
-    cJSON_AddStringToObject(root, "apiKey", newServerInfo.apiKey.c_str());
-    cJSON_AddStringToObject(root, "model", newServerInfo.model.c_str());
+    cJSON_AddStringToObject(root, "url", newServerConfig.url.c_str());
+    cJSON_AddStringToObject(root, "apiKey", newServerConfig.apiKey.c_str());
+    cJSON_AddStringToObject(root, "model", newServerConfig.model.c_str());
 
     char *jsonStr = cJSON_Print(root);
     std::string result(jsonStr);
     free(jsonStr);
     cJSON_Delete(root);
 
-    saveFile(ipconfig, result); // 保存配置文件
+    saveFileContent(configPath, result);
 }
 
-std::vector<ModelsInfo_s> ModelsInfo::GetAllServerIPs()
+std::vector<ModelsInfo_s> ModelsInfo::getAllServerConfigs()
 {
-    std::vector<ModelsInfo_s> allServerInfos;
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-    std::string json_content = readFile(ipconfig);
-    
-    cJSON *root = cJSON_Parse(json_content.c_str());
+    std::vector<ModelsInfo_s> allConfigs;
+    QString configPath = QCoreApplication::applicationDirPath() + "/Server_config.json";
+    std::string jsonContent = readFileContent(configPath);
+
+    cJSON *root = cJSON_Parse(jsonContent.c_str());
     if (root == nullptr) {
-        return allServerInfos;
+        return allConfigs;
     }
 
     cJSON *serverArray = cJSON_GetObjectItem(root, "servers");
@@ -126,47 +124,52 @@ std::vector<ModelsInfo_s> ModelsInfo::GetAllServerIPs()
         int arraySize = cJSON_GetArraySize(serverArray);
         for (int i = 0; i < arraySize; i++) {
             cJSON *serverObject = cJSON_GetArrayItem(serverArray, i);
-            ModelsInfo_s serverInfo;
-            serverInfo.title = cJSON_GetObjectItem(serverObject, "title")->valuestring;
-            serverInfo.url = cJSON_GetObjectItem(serverObject, "url")->valuestring;
-            serverInfo.apiKey = cJSON_GetObjectItem(serverObject, "apiKey")->valuestring;
-            serverInfo.model = cJSON_GetObjectItem(serverObject, "model")->valuestring;
-            allServerInfos.push_back(serverInfo);
+            ModelsInfo_s serverConfig;
+            updateServerConfigFromJson(serverConfig, serverObject);
+            allConfigs.push_back(serverConfig);
         }
     }
 
     cJSON_Delete(root);
-    return allServerInfos;
+    return allConfigs;
 }
 
-void ModelsInfo::SaveServerIP(const ModelsInfo_s &serverInfo)
+void ModelsInfo::saveServerConfig(const ModelsInfo_s &serverConfig)
 {
-    std::vector<ModelsInfo_s> allServerInfos = GetAllServerIPs();
-    
-    // 检查是否已存在相同标题的配置，如果存在则更新
-    bool found = false;
-    for (auto &info : allServerInfos) {
-        if (info.title == serverInfo.title) {
-            info = serverInfo;
-            found = true;
-            break;
-        }
-    }
-    
-    // 如果不存在，则添加新配置
-    if (!found) {
-        allServerInfos.push_back(serverInfo);
+    std::vector<ModelsInfo_s> allConfigs = getAllServerConfigs();
+
+    auto it = std::find_if(allConfigs.begin(), allConfigs.end(),
+                           [&](const ModelsInfo_s &config) { return config.title == serverConfig.title; });
+
+    if (it != allConfigs.end()) {
+        *it = serverConfig;
+    } else {
+        allConfigs.push_back(serverConfig);
     }
 
-    // 保存所有配置到文件
+    saveAllServerConfigs(allConfigs);
+}
+
+void ModelsInfo::deleteServerConfig(const std::string &title)
+{
+    std::vector<ModelsInfo_s> allConfigs = getAllServerConfigs();
+    allConfigs.erase(std::remove_if(allConfigs.begin(), allConfigs.end(),
+                                    [&title](const ModelsInfo_s &config) { return config.title == title; }),
+                     allConfigs.end());
+
+    saveAllServerConfigs(allConfigs);
+}
+
+void ModelsInfo::saveAllServerConfigs(const std::vector<ModelsInfo_s> &configs)
+{
     cJSON *root = cJSON_CreateObject();
     cJSON *serverArray = cJSON_CreateArray();
-    for (const auto &info : allServerInfos) {
+    for (const auto &config : configs) {
         cJSON *serverObject = cJSON_CreateObject();
-        cJSON_AddStringToObject(serverObject, "title", info.title.c_str());
-        cJSON_AddStringToObject(serverObject, "url", info.url.c_str());
-        cJSON_AddStringToObject(serverObject, "apiKey", info.apiKey.c_str());
-        cJSON_AddStringToObject(serverObject, "model", info.model.c_str());
+        cJSON_AddStringToObject(serverObject, "title", config.title.c_str());
+        cJSON_AddStringToObject(serverObject, "url", config.url.c_str());
+        cJSON_AddStringToObject(serverObject, "apiKey", config.apiKey.c_str());
+        cJSON_AddStringToObject(serverObject, "model", config.model.c_str());
         cJSON_AddItemToArray(serverArray, serverObject);
     }
     cJSON_AddItemToObject(root, "servers", serverArray);
@@ -176,36 +179,6 @@ void ModelsInfo::SaveServerIP(const ModelsInfo_s &serverInfo)
     free(jsonStr);
     cJSON_Delete(root);
 
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-    saveFile(ipconfig, result);
-}
-
-void ModelsInfo::DeleteServerIP(const std::string &title)
-{
-    std::vector<ModelsInfo_s> allServerInfos = GetAllServerIPs();
-    allServerInfos.erase(
-        std::remove_if(allServerInfos.begin(), allServerInfos.end(),
-                       [&title](const ModelsInfo_s &info) { return info.title == title; }),
-        allServerInfos.end());
-
-    // 保存更新后的配置到文件
-    cJSON *root = cJSON_CreateObject();
-    cJSON *serverArray = cJSON_CreateArray();
-    for (const auto &info : allServerInfos) {
-        cJSON *serverObject = cJSON_CreateObject();
-        cJSON_AddStringToObject(serverObject, "title", info.title.c_str());
-        cJSON_AddStringToObject(serverObject, "url", info.url.c_str());
-        cJSON_AddStringToObject(serverObject, "apiKey", info.apiKey.c_str());
-        cJSON_AddStringToObject(serverObject, "model", info.model.c_str());
-        cJSON_AddItemToArray(serverArray, serverObject);
-    }
-    cJSON_AddItemToObject(root, "servers", serverArray);
-
-    char *jsonStr = cJSON_Print(root);
-    std::string result(jsonStr);
-    free(jsonStr);
-    cJSON_Delete(root);
-
-    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
-    saveFile(ipconfig, result);
+    QString configPath = QCoreApplication::applicationDirPath() + "/Server_config.json";
+    saveFileContent(configPath, result);
 }

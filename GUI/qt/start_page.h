@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-26 15:22:31
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-08-28 14:42:28
+ * @LastEditTime: 2024-09-30 14:55:58
  * @FilePath: /CppLLMTranslate/GUI/qt/start_page.h
  */
 #ifndef START_PAGE_H
@@ -17,7 +17,9 @@
 #include <QLabel>
 #include <QClipboard>
 #include <QCheckBox>
-#include <QComboBox>  // 新增
+#include <QComboBox> // 新增
+
+#include "ModelsInfo.h"
 
 class StartPage : public QMainWindow {
     Q_OBJECT
@@ -30,17 +32,29 @@ class StartPage : public QMainWindow {
     QLineEdit *m_urlInput;
     QLineEdit *m_modelInput;
     QLineEdit *m_apiKeyInput;
-    QLineEdit *m_titleInput;  // 新增: 用于输入模型标题
+    QLineEdit *m_titleInput; // 新增: 用于输入模型标题
     QPushButton *m_resetButton;
     QPushButton *m_testConnectionButton;
     QPushButton *m_startApplicationButton;
     QTextEdit *m_outputTextEdit;
 
-    QComboBox *m_modelSelector;  // 新增
+    QComboBox *m_modelSelector;   // 新增
     QPushButton *m_deleteButton;  // 新增
-    QPushButton *m_refreshButton;  // 新增
+    QPushButton *m_refreshButton; // 新增
 
-    void updateModelSelector();  // 新增
+    ModelsInfo_s m_serverConfig; // 添加这行
+
+    void updateModelSelector(); // 新增
+
+    // 添加以下函数声明
+    void initializeUI();
+    void setupLayouts();
+    void connectSignalsAndSlots();
+    void addInputFieldToLayout(QVBoxLayout *layout, const QString &label, QLineEdit *input);
+    void testConnection();
+    void startApplication();
+    void deleteSelectedModel();
+    void onModelSelected(int index);
 
   signals:
 };
