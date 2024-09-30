@@ -20,6 +20,20 @@
 
 #include "CommonUtils.h"
 
+#include <QMainWindow>
+#include <QComboBox>
+#include <QTextEdit>
+#include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QLineEdit>
+#include <QTabWidget>
+#include <QTimer>
+#include <QDebug>
+
+using namespace std;
+
 FileManager fileManager;
 
 // 进度信息
@@ -209,25 +223,39 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
     QVBoxLayout *infoPageLayout = new QVBoxLayout();
 
+    m_inputFilePath = new QLineEdit(this);
+    m_outputFilePath = new QLineEdit(this);
+    m_cutFilePath = new QLineEdit(this);
+    m_referenceFilePath = new QLineEdit(this);
+    m_successFilePath = new QLineEdit(this);
+
+    QVector<QLineEdit*> lineEdits = {m_inputFilePath, m_outputFilePath, m_cutFilePath, m_referenceFilePath, m_successFilePath};
+
     for (int i = 0; i < labels.size(); ++i) {
         QHBoxLayout *inputLayout = new QHBoxLayout();
         inputLayout->addWidget(new QLabel(labels[i] + ": "));
-        inputLayout->addWidget(new QLineEdit(paths[i]));
+        lineEdits[i]->setText(paths[i]);
+        inputLayout->addWidget(lineEdits[i]);
         infoPageLayout->addLayout(inputLayout);
     }
 
     // 段落设置
+    m_paragraphEffective = new QLineEdit(this);
+    m_paragraphMin = new QLineEdit(this);
+    m_paragraphMax = new QLineEdit(this);
+
     QStringList paragraphLabels = {"段落有效值", "段落最小值", "段落最大值"};
-    QStringList paragraphValues = {std::to_string(translationSetInfo.paragraph_effective).c_str(),
-                                   std::to_string(translationSetInfo.paragraph_min).c_str(),
-                                   std::to_string(translationSetInfo.paragraph_max).c_str()};
+    QVector<QLineEdit*> paragraphLineEdits = {m_paragraphEffective, m_paragraphMin, m_paragraphMax};
+    QStringList paragraphValues = {QString::number(translationSetInfo.paragraph_effective),
+                                   QString::number(translationSetInfo.paragraph_min),
+                                   QString::number(translationSetInfo.paragraph_max)};
 
     for (int i = 0; i < paragraphLabels.size(); ++i) {
         QHBoxLayout *inputLayout = new QHBoxLayout();
         inputLayout->addWidget(new QLabel(paragraphLabels[i] + ": "));
-        QLineEdit *lineEdit = new QLineEdit(paragraphValues[i]);
-        lineEdit->setValidator(new QIntValidator(1, 131072, this));
-        inputLayout->addWidget(lineEdit);
+        paragraphLineEdits[i]->setText(paragraphValues[i]);
+        paragraphLineEdits[i]->setValidator(new QIntValidator(1, 131072, this));
+        inputLayout->addWidget(paragraphLineEdits[i]);
         infoPageLayout->addLayout(inputLayout);
     }
 
@@ -268,84 +296,38 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     /********************************************************/
 
     m_fileTypeComboBox = new QComboBox();
-    m_fileTypeComboBox->addItem(".md");
-    m_fileTypeComboBox->addItem(".txt");
-    m_fileTypeComboBox->addItem(".rst");
-    m_fileTypeComboBox->addItem(".h");
+    QStringList fileTypes = {".md", ".txt", ".rst", ".h"};
+    m_fileTypeComboBox->addItems(fileTypes);
 
-    // 创建输入框
-    m_textEditSystem = new QTextEdit();
-    m_textEditChatPrefix = new QTextEdit();
-    m_textEditChatSuffix = new QTextEdit();
-    m_textEditUserMsg1 = new QTextEdit();
-    m_textEditUserMsg2 = new QTextEdit();
-    m_textEditUserMsg3 = new QTextEdit();
-    m_textEditAssistantMsg1 = new QTextEdit();
-    m_textEditAssistantMsg2 = new QTextEdit();
-    m_textEditAssistantMsg3 = new QTextEdit();
+    m_textEditSystem = new QTextEdit(this);
+    m_textEditChatPrefix = new QTextEdit(this);
+    m_textEditChatSuffix = new QTextEdit(this);
+    m_textEditUserMsg1 = new QTextEdit(this);
+    m_textEditUserMsg2 = new QTextEdit(this);
+    m_textEditUserMsg3 = new QTextEdit(this);
+    m_textEditAssistantMsg1 = new QTextEdit(this);
+    m_textEditAssistantMsg2 = new QTextEdit(this);
+    m_textEditAssistantMsg3 = new QTextEdit(this);
 
-    // 创建标签
-    QLabel *setLabel1 = new QLabel("系统设置  :");
-    QLabel *setLabel2 = new QLabel("消息前缀  :");
-    QLabel *setLabel3 = new QLabel("消息后缀  :");
-    QLabel *setLabel4 = new QLabel("优质提问1:");
-    QLabel *setLabel5 = new QLabel("优质回答1:");
-    QLabel *setLabel6 = new QLabel("优质提问2:");
-    QLabel *setLabel7 = new QLabel("优质回答2:");
-    QLabel *setLabel8 = new QLabel("优质提问3:");
-    QLabel *setLabel9 = new QLabel("优质回答3:");
+    QVector<QTextEdit*> textEdits = {m_textEditSystem,        m_textEditChatPrefix,    m_textEditChatSuffix,
+                                      m_textEditUserMsg1,      m_textEditAssistantMsg1, m_textEditUserMsg2,
+                                      m_textEditAssistantMsg2, m_textEditUserMsg3,      m_textEditAssistantMsg3};
 
-    // 创建布局管理器
+    QStringList labels2 = {"系统设置  :", "消息前缀  :", "消息后缀  :", "优质提问1:", "优质回答1:",
+                           "优质提问2:",  "优质回答2:",  "优质提问3:",  "优质回答3:"};
+
     QVBoxLayout *setLayout = new QVBoxLayout();
-
     setLayout->addWidget(m_fileTypeComboBox);
 
-    // 添加控件到布局管理器
-
-    QHBoxLayout *setHBoxLayout1 = new QHBoxLayout();
-    setHBoxLayout1->addWidget(setLabel1);
-    setHBoxLayout1->addWidget(m_textEditSystem);
-    setLayout->addLayout(setHBoxLayout1);
-
-    QHBoxLayout *setHBoxLayout2 = new QHBoxLayout();
-    setHBoxLayout2->addWidget(setLabel2);
-    setHBoxLayout2->addWidget(m_textEditChatPrefix);
-    setLayout->addLayout(setHBoxLayout2);
-
-    QHBoxLayout *setHBoxLayout3 = new QHBoxLayout();
-    setHBoxLayout3->addWidget(setLabel3);
-    setHBoxLayout3->addWidget(m_textEditChatSuffix);
-    setLayout->addLayout(setHBoxLayout3);
-
-    QHBoxLayout *setHBoxLayout4 = new QHBoxLayout();
-    setHBoxLayout4->addWidget(setLabel4);
-    setHBoxLayout4->addWidget(m_textEditUserMsg1);
-    setLayout->addLayout(setHBoxLayout4);
-
-    QHBoxLayout *setHBoxLayout5 = new QHBoxLayout();
-    setHBoxLayout5->addWidget(setLabel5);
-    setHBoxLayout5->addWidget(m_textEditAssistantMsg1);
-    setLayout->addLayout(setHBoxLayout5);
-
-    QHBoxLayout *setHBoxLayout6 = new QHBoxLayout();
-    setHBoxLayout6->addWidget(setLabel6);
-    setHBoxLayout6->addWidget(m_textEditUserMsg2);
-    setLayout->addLayout(setHBoxLayout6);
-
-    QHBoxLayout *setHBoxLayout7 = new QHBoxLayout();
-    setHBoxLayout7->addWidget(setLabel7);
-    setHBoxLayout7->addWidget(m_textEditAssistantMsg2);
-    setLayout->addLayout(setHBoxLayout7);
-
-    QHBoxLayout *setHBoxLayout8 = new QHBoxLayout();
-    setHBoxLayout8->addWidget(setLabel8);
-    setHBoxLayout8->addWidget(m_textEditUserMsg3);
-    setLayout->addLayout(setHBoxLayout8);
-
-    QHBoxLayout *setHBoxLayout9 = new QHBoxLayout();
-    setHBoxLayout9->addWidget(setLabel9);
-    setHBoxLayout9->addWidget(m_textEditAssistantMsg3);
-    setLayout->addLayout(setHBoxLayout9);
+    for (int i = 0; i < textEdits.size(); ++i) {
+        if (textEdits[i] == nullptr) {
+            textEdits[i] = new QTextEdit();
+        }
+        QHBoxLayout *hBoxLayout = new QHBoxLayout();
+        hBoxLayout->addWidget(new QLabel(labels2[i]));
+        hBoxLayout->addWidget(textEdits[i]);
+        setLayout->addLayout(hBoxLayout);
+    }
 
     QPushButton *rstButton = new QPushButton("重置prompt");
     QPushButton *getButton = new QPushButton("获取prompt");
@@ -357,7 +339,6 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     setButtonLayout->addWidget(setButton);
     setLayout->addLayout(setButtonLayout);
 
-    // 创建页面并设置布局
     QWidget *promptsWidgetPage = new QWidget();
     promptsWidgetPage->setLayout(setLayout);
 
@@ -532,10 +513,10 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
             // 将切割好的段落放入缓冲区
             fileManager.ProcessFilesRecursive(fileManager.directory_cut, fileManager.directory_en,
-                                              fileManager.directory_cut, fileManager.translation_cache);
+                                                fileManager.directory_cut, fileManager.translation_cache);
 
             ConfigManager::getInstance().set_TranslationProgressConfig(progressInfo,
-                                                                       translationSetInfo.Input_file_path); // 保存进度
+                                                                     translationSetInfo.Input_file_path); // 保存进度
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
 
@@ -562,7 +543,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
             progress_info.Set("已恢复默认");
 
-            // 将进度信息显示到UI
+            // 将进信息显示到UI
             m_paragraphEffective->setText(QString::number(info.paragraph_effective));
             m_paragraphMin->setText(QString::number(info.paragraph_min));
             m_paragraphMax->setText(QString::number(info.paragraph_max));
@@ -664,7 +645,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     connect(m_translateTimer, &QTimer::timeout, this, [=]() {
         if (translation_content_last != translation_content.Get()) {
             translation_content_last = translation_content.Get();
-            // 完全翻译的信息覆盖
+            // 完翻译的信息覆盖
             m_textEdit1->clear();
             m_textEdit1->append(translation_content.Get().c_str());
             QTextCursor cursor1 = m_textEdit1->textCursor();
