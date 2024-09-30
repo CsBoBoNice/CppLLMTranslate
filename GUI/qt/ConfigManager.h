@@ -1,9 +1,14 @@
 /*
- * @Date: 2024-08-28 14:27:38
+ * @Author: csbobo 751541594@qq.com
+ * @Date: 2024-09-30 08:31:56
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 10:23:11
+ * @LastEditTime: 2024-09-30 13:57:28
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.h
+ * @Description: 
+ * 
+ * Copyright (c) 2024 by csbobo, All Rights Reserved. 
  */
+
 #ifndef CONFIGMANAGER_H
 #define CONFIGMANAGER_H
 
@@ -14,12 +19,6 @@
 #include <string>
 #include <mutex>
 #include "agreement.h"
-
-struct ServerInfo {
-    std::string url;
-    std::string apiKey;
-    std::string model;
-};
 
 struct TranslationProgressConfig {
     int file_index;      // 文件计数
@@ -53,10 +52,6 @@ class ConfigManager {
 
     // 将字符串内容保存到文件
     bool saveFile(const QString &filePath, const std::string &content);
-
-    ServerInfo DefaultGetServerIP();
-    ServerInfo GetServerIP();
-    void SetServerIP(const ServerInfo &newServerInfo);
 
     agreementInfo default_config_en_to_zh();
     agreementInfo Get_config_en_to_zh();
