@@ -15,7 +15,7 @@ QT_END_NAMESPACE
 
 StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
 {
-    ServerInfo serverInfo = ModelsInfo::getInstance().GetServerIP();
+    ModelsInfo_s serverInfo = ModelsInfo::getInstance().GetServerIP();
 
     // Initialize UI
     m_mainPage = new QWidget(this);
@@ -90,7 +90,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
         // Switch to second page
         StateManager::getInstance().ShowPage = 1;
 
-        ServerInfo newServerInfo;
+        ModelsInfo_s newServerInfo;
         newServerInfo.url = m_urlInput->text().toStdString();
         newServerInfo.apiKey = m_apiKeyInput->text().toStdString();
         newServerInfo.model = m_modelInput->text().toStdString();
@@ -99,7 +99,7 @@ StartPage::StartPage(QWidget *parent) : QMainWindow{parent}
     });
 
     connect(m_resetButton, &QPushButton::clicked, this, [this]() {
-        ServerInfo defaultServerInfo = ModelsInfo::getInstance().DefaultGetServerIP();
+        ModelsInfo_s defaultServerInfo = ModelsInfo::getInstance().DefaultGetServerIP();
 
         m_urlInput->setText(defaultServerInfo.url.c_str());
         m_apiKeyInput->setText(defaultServerInfo.apiKey.c_str());

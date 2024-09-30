@@ -47,15 +47,17 @@ bool ModelsInfo::saveFile(const QString &filePath, const std::string &content)
     return true;
 }
 
-ServerInfo ModelsInfo::DefaultGetServerIP()
+ModelsInfo_s ModelsInfo::DefaultGetServerIP()
 {
-    ServerInfo server_info{.url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
+    ModelsInfo_s server_info{
+        .url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
     return server_info;
 }
 
-ServerInfo ModelsInfo::GetServerIP()
+ModelsInfo_s ModelsInfo::GetServerIP()
 {
-    ServerInfo server_info{.url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
+    ModelsInfo_s server_info{
+        .url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
     std::string ip_json;
     QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
     QFile file(ipconfig);
@@ -90,7 +92,7 @@ return_info:
     return server_info;
 }
 
-void ModelsInfo::SetServerIP(const ServerInfo &newServerInfo)
+void ModelsInfo::SetServerIP(const ModelsInfo_s &newServerInfo)
 {
     QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
 

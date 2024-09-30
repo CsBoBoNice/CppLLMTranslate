@@ -5,7 +5,7 @@
 #include <string>
 #include <QString>
 
-struct ServerInfo {
+struct ModelsInfo_s {
     std::string url;
     std::string apiKey;
     std::string model;
@@ -26,9 +26,9 @@ class ModelsInfo {
     // 将字符串内容保存到文件
     bool saveFile(const QString &filePath, const std::string &content);
 
-    ServerInfo DefaultGetServerIP();
-    ServerInfo GetServerIP();
-    void SetServerIP(const ServerInfo &newServerInfo);
+    ModelsInfo_s DefaultGetServerIP();
+    ModelsInfo_s GetServerIP();
+    void SetServerIP(const ModelsInfo_s &newServerInfo);
 
   private:
     // 私有构造函数
