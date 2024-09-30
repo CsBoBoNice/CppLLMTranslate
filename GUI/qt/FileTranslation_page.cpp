@@ -201,75 +201,35 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
     // 读取配置文件
     TranslationSetInfo translationSetInfo = ConfigManager::getInstance().get_TranslationSetInfo();
 
-    QString inputPath = translationSetInfo.Input_file_path.c_str();
-    QString outputPath = translationSetInfo.Output_file_path.c_str();
-    QString cutPath = translationSetInfo.Cut_file_path.c_str();
-    QString referencePath = translationSetInfo.Reference_file_path.c_str();
-    QString successPath = translationSetInfo.Success_file_path.c_str();
-
-    fileManager.paragraph_effective = translationSetInfo.paragraph_effective;
-    fileManager.paragraph_min = translationSetInfo.paragraph_min;
-    fileManager.paragraph_max = translationSetInfo.paragraph_max;
-
-    m_inputFilePath = new QLineEdit(inputPath);
-    m_outputFilePath = new QLineEdit(outputPath);
-    m_cutFilePath = new QLineEdit(cutPath);
-    m_referenceFilePath = new QLineEdit(referencePath);
-    m_successFilePath = new QLineEdit(successPath);
-    m_paragraphEffective = new QLineEdit(std::to_string(fileManager.paragraph_effective).c_str());
-    m_paragraphMin = new QLineEdit(std::to_string(fileManager.paragraph_min).c_str());
-    m_paragraphMax = new QLineEdit(std::to_string(fileManager.paragraph_max).c_str());
-
-    QIntValidator *validator = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    m_paragraphEffective->setValidator(validator);
-
-    QIntValidator *validator1 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    m_paragraphMin->setValidator(validator1);
-
-    QIntValidator *validator2 = new QIntValidator(1, 131072, this); // 限制输入在1到131072之间
-    m_paragraphMax->setValidator(validator2);
+    // 创建输入字段
+    QStringList labels = {"输入路径", "输出路径", "切割路径", "对照路径", "完成路径"};
+    QStringList paths = {translationSetInfo.Input_file_path.c_str(), translationSetInfo.Output_file_path.c_str(),
+                         translationSetInfo.Cut_file_path.c_str(), translationSetInfo.Reference_file_path.c_str(),
+                         translationSetInfo.Success_file_path.c_str()};
 
     QVBoxLayout *infoPageLayout = new QVBoxLayout();
 
-    QHBoxLayout *inputLayout1 = new QHBoxLayout();
-    inputLayout1->addWidget(new QLabel("输入路径: "));
-    inputLayout1->addWidget(m_inputFilePath);
-    infoPageLayout->addLayout(inputLayout1);
+    for (int i = 0; i < labels.size(); ++i) {
+        QHBoxLayout *inputLayout = new QHBoxLayout();
+        inputLayout->addWidget(new QLabel(labels[i] + ": "));
+        inputLayout->addWidget(new QLineEdit(paths[i]));
+        infoPageLayout->addLayout(inputLayout);
+    }
 
-    QHBoxLayout *inputLayout2 = new QHBoxLayout();
-    inputLayout2->addWidget(new QLabel("输出路径: "));
-    inputLayout2->addWidget(m_outputFilePath);
-    infoPageLayout->addLayout(inputLayout2);
+    // 段落设置
+    QStringList paragraphLabels = {"段落有效值", "段落最小值", "段落最大值"};
+    QStringList paragraphValues = {std::to_string(translationSetInfo.paragraph_effective).c_str(),
+                                   std::to_string(translationSetInfo.paragraph_min).c_str(),
+                                   std::to_string(translationSetInfo.paragraph_max).c_str()};
 
-    QHBoxLayout *inputLayout3 = new QHBoxLayout();
-    inputLayout3->addWidget(new QLabel("切割路径: "));
-    inputLayout3->addWidget(m_cutFilePath);
-    infoPageLayout->addLayout(inputLayout3);
-
-    QHBoxLayout *inputLayout4 = new QHBoxLayout();
-    inputLayout4->addWidget(new QLabel("对照路径: "));
-    inputLayout4->addWidget(m_referenceFilePath);
-    infoPageLayout->addLayout(inputLayout4);
-
-    QHBoxLayout *inputLayout5 = new QHBoxLayout();
-    inputLayout5->addWidget(new QLabel("完成路径: "));
-    inputLayout5->addWidget(m_successFilePath);
-    infoPageLayout->addLayout(inputLayout5);
-
-    QHBoxLayout *inputLayout6 = new QHBoxLayout();
-    inputLayout6->addWidget(new QLabel("段落有效值: "));
-    inputLayout6->addWidget(m_paragraphEffective);
-    infoPageLayout->addLayout(inputLayout6);
-
-    QHBoxLayout *inputLayout7 = new QHBoxLayout();
-    inputLayout7->addWidget(new QLabel("段落最小值: "));
-    inputLayout7->addWidget(m_paragraphMin);
-    infoPageLayout->addLayout(inputLayout7);
-
-    QHBoxLayout *inputLayout8 = new QHBoxLayout();
-    inputLayout8->addWidget(new QLabel("段落最大值: "));
-    inputLayout8->addWidget(m_paragraphMax);
-    infoPageLayout->addLayout(inputLayout8);
+    for (int i = 0; i < paragraphLabels.size(); ++i) {
+        QHBoxLayout *inputLayout = new QHBoxLayout();
+        inputLayout->addWidget(new QLabel(paragraphLabels[i] + ": "));
+        QLineEdit *lineEdit = new QLineEdit(paragraphValues[i]);
+        lineEdit->setValidator(new QIntValidator(1, 131072, this));
+        inputLayout->addWidget(lineEdit);
+        infoPageLayout->addLayout(inputLayout);
+    }
 
     m_resetButton = new QPushButton("恢复默认🔄");
     m_cleanButton = new QPushButton("清理翻译文件🗑️");
@@ -559,8 +519,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
                     deleteFolder(m_outputFilePath->text());
 
                     // 切割段落
-                    fileManager.ProcessFilesCut(translationSetInfo.Input_file_path,
-                                                translationSetInfo.Cut_file_path,
+                    fileManager.ProcessFilesCut(translationSetInfo.Input_file_path, translationSetInfo.Cut_file_path,
                                                 translationSetInfo.Input_file_path);
                     fileManager.m_cut_sign = true;
                 }
@@ -575,9 +534,8 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             fileManager.ProcessFilesRecursive(fileManager.directory_cut, fileManager.directory_en,
                                               fileManager.directory_cut, fileManager.translation_cache);
 
-            ConfigManager::getInstance().set_TranslationProgressConfig(
-                progressInfo,
-                translationSetInfo.Input_file_path); // 保存进度
+            ConfigManager::getInstance().set_TranslationProgressConfig(progressInfo,
+                                                                       translationSetInfo.Input_file_path); // 保存进度
 
             qDebug() << "22222 fileManager.translation_cache.size()" << fileManager.translation_cache.size();
 
@@ -711,7 +669,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             m_textEdit1->append(translation_content.Get().c_str());
             QTextCursor cursor1 = m_textEdit1->textCursor();
             cursor1.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            m_textEdit1->setTextCursor(cursor1);        // 更新 QTextEdit 的光标位置
+            m_textEdit1->setTextCursor(cursor1);      // 更新 QTextEdit 的光标位置
         }
 
         if (translation_result_last != translation_result.Get()) {
@@ -722,7 +680,7 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             m_textEdit2->append(translation_result.Get().c_str());
             QTextCursor cursor2 = m_textEdit2->textCursor();
             cursor2.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            m_textEdit2->setTextCursor(cursor2);        // 更新 QTextEdit 的光标位置
+            m_textEdit2->setTextCursor(cursor2);      // 更新 QTextEdit 的光标位置
         }
 
         if (progress_info_last != progress_info.Get()) {
@@ -732,23 +690,21 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
             m_progressEdit->append(progress_info.Get().c_str());
             QTextCursor cursor3 = m_progressEdit->textCursor();
             cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
-            m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+            m_progressEdit->setTextCursor(cursor3);   // 更新 QTextEdit 的光标位置
         }
         // 完全翻译的信息覆盖
         m_progressEdit->clear();
         m_progressEdit->append(progress_info.Get().c_str());
         QTextCursor cursor3 = m_progressEdit->textCursor();
         cursor3.movePosition(QTextCursor::Start); // 移动光标到文本开头
-        m_progressEdit->setTextCursor(cursor3);     // 更新 QTextEdit 的光标位置
+        m_progressEdit->setTextCursor(cursor3);   // 更新 QTextEdit 的光标位置
     });
 
     // 启动定时器，间隔时间为毫秒
     m_translateTimer->start(100);
 
-
     // 将窗口移动到屏幕中心
     CommonUtils::moveToCenter(this);
-
 }
 
 FileTranslationPage::~FileTranslationPage() {}
