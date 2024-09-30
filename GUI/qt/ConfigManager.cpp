@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:04:01
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-25 13:50:23
+ * @LastEditTime: 2024-09-29 17:30:42
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.cpp
  */
 #include "ConfigManager.h"
@@ -100,6 +100,85 @@ void ConfigManager::SetServerIP(const ServerInfo &newServerInfo)
     cJSON_Delete(root);
 
     saveFile(ipconfig, result); // 保存配置文件
+}
+
+std::vector<ServerInfo> ConfigManager::GetServerConfigs()
+{
+    std::vector<ServerInfo> configs;
+    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_configs.json";
+    std::string json_str = readFile(ipconfig);
+    
+    if (!json_str.empty()) {
+        cJSON *root = cJSON_Parse(json_str.c_str());
+        if (root != nullptr) {
+            cJSON *configs_array = cJSON_GetObjectItem(root, "configs");
+            if (configs_array != nullptr) {
+                int size = cJSON_GetArraySize(configs_array);
+                for (int i = 0; i < size; i++) {
+                    cJSON *config = cJSON_GetArrayItem(configs_array, i);
+                    ServerInfo info;
+                    info.alias = cJSON_GetObjectItem(config, "alias")->valuestring;
+                    info.url = cJSON_GetObjectItem(config, "url")->valuestring;
+                    info.apiKey = cJSON_GetObjectItem(config, "apiKey")->valuestring;
+                    info.model = cJSON_GetObjectItem(config, "model")->valuestring;
+                    configs.push_back(info);
+                }
+            }
+            cJSON_Delete(root);
+        }
+    }
+    
+    if (configs.empty()) {
+        // 添加默认配置
+        configs.push_back({
+            "默认",
+            "http://127.0.0.1:11434/v1/chat/completions",
+            "888888",
+            "gpt-4o"
+        });
+    }
+    
+    return configs;
+}
+
+void ConfigManager::SetServerConfigs(const std::vector<ServerInfo>& configs)
+{
+    cJSON *root = cJSON_CreateObject();
+    cJSON *configs_array = cJSON_CreateArray();
+    
+    for (const auto& config : configs) {
+        cJSON *config_obj = cJSON_CreateObject();
+        cJSON_AddStringToObject(config_obj, "alias", config.alias.c_str());
+        cJSON_AddStringToObject(config_obj, "url", config.url.c_str());
+        cJSON_AddStringToObject(config_obj, "apiKey", config.apiKey.c_str());
+        cJSON_AddStringToObject(config_obj, "model", config.model.c_str());
+        cJSON_AddItemToArray(configs_array, config_obj);
+    }
+    
+    cJSON_AddItemToObject(root, "configs", configs_array);
+    
+    char *json_str = cJSON_Print(root);
+    QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_configs.json";
+    saveFile(ipconfig, std::string(json_str));
+    
+    free(json_str);
+    cJSON_Delete(root);
+}
+
+void ConfigManager::AddServerConfig(const ServerInfo& config)
+{
+    auto configs = GetServerConfigs();
+    configs.push_back(config);
+    SetServerConfigs(configs);
+}
+
+void ConfigManager::RemoveServerConfig(const std::string& alias)
+{
+    auto configs = GetServerConfigs();
+    configs.erase(std::remove_if(configs.begin(), configs.end(),
+                                 [&alias](const ServerInfo& config) { return config.alias == alias; }),
+                  configs.end());
+    SetServerConfigs(configs);
 }
 
 agreementInfo ConfigManager::default_config_en_to_zh()

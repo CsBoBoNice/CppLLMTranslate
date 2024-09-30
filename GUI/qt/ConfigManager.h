@@ -1,7 +1,7 @@
 /*
  * @Date: 2024-08-28 14:27:38
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-06 10:23:11
+ * @LastEditTime: 2024-09-29 17:38:23
  * @FilePath: /CppLLMTranslate/GUI/qt/ConfigManager.h
  */
 #ifndef CONFIGMANAGER_H
@@ -16,6 +16,7 @@
 #include "agreement.h"
 
 struct ServerInfo {
+    std::string alias;  // 新增别名字段
     std::string url;
     std::string apiKey;
     std::string model;
@@ -53,6 +54,13 @@ class ConfigManager {
 
     // 将字符串内容保存到文件
     bool saveFile(const QString &filePath, const std::string &content);
+
+    // 新增方法
+    std::vector<ServerInfo> GetServerConfigs();
+    void SetServerConfigs(const std::vector<ServerInfo>& configs);
+    void AddServerConfig(const ServerInfo& config);
+    void RemoveServerConfig(const std::string& alias);
+
 
     ServerInfo DefaultGetServerIP();
     ServerInfo GetServerIP();
@@ -113,6 +121,7 @@ class ConfigManager {
     TranslationProgressConfig default_get_TranslationProgressConfig();
     TranslationProgressConfig get_TranslationProgressConfig(std::string Input_file_path);
     void set_TranslationProgressConfig(const TranslationProgressConfig &Info, std::string Input_file_path);
+
 
   private:
     // 私有构造函数
