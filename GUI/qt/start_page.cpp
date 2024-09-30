@@ -5,6 +5,7 @@
 #include <QThread>
 #include "HttpManager.h"
 #include "MessageManager.h"
+#include <QMessageBox>
 
 // 构造函数
 StartPage::StartPage(QWidget *parent) : QMainWindow(parent)
@@ -159,8 +160,18 @@ void StartPage::deleteSelectedModel()
     int currentIndex = m_modelSelector->currentIndex();
     if (currentIndex > 0) {
         ModelsInfo_s selectedInfo = m_modelSelector->itemData(currentIndex).value<ModelsInfo_s>();
-        ModelsInfo::getInstance().deleteServerConfig(selectedInfo.title);
-        updateModelSelector();
+        
+        // 创建确认对话框
+        QMessageBox::StandardButton reply;
+        reply = QMessageBox::question(this, "确认删除",
+                                      "您确定要删除 '" + QString::fromStdString(selectedInfo.title) + "' 吗？",
+                                      QMessageBox::Yes|QMessageBox::No);
+        
+        // 如果用户确认删除，则执行删除操作
+        if (reply == QMessageBox::Yes) {
+            ModelsInfo::getInstance().deleteServerConfig(selectedInfo.title);
+            updateModelSelector();
+        }
     }
 }
 
