@@ -17,6 +17,7 @@
 #include <QLabel>
 #include <QClipboard>
 #include <QCheckBox>
+#include <QComboBox>  // 新增
 
 class StartPage : public QMainWindow {
     Q_OBJECT
@@ -29,10 +30,17 @@ class StartPage : public QMainWindow {
     QLineEdit *m_urlInput;
     QLineEdit *m_modelInput;
     QLineEdit *m_apiKeyInput;
+    QLineEdit *m_titleInput;  // 新增: 用于输入模型标题
     QPushButton *m_resetButton;
     QPushButton *m_testConnectionButton;
     QPushButton *m_startApplicationButton;
     QTextEdit *m_outputTextEdit;
+
+    QComboBox *m_modelSelector;  // 新增
+    QPushButton *m_deleteButton;  // 新增
+    QPushButton *m_refreshButton;  // 新增
+
+    void updateModelSelector();  // 新增
 
   signals:
 };
