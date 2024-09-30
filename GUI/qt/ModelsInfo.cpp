@@ -2,7 +2,7 @@
  * @Author: csbobo 751541594@qq.com
  * @Date: 2024-09-30 13:44:51
  * @LastEditors: csbobo 751541594@qq.com
- * @LastEditTime: 2024-09-30 13:56:09
+ * @LastEditTime: 2024-09-30 14:43:13
  * @FilePath: /CppLLMTranslate/GUI/qt/ModelsInfo.cpp
  * @Description: 
  * 
@@ -56,39 +56,40 @@ ModelsInfo_s ModelsInfo::DefaultGetServerIP()
 
 ModelsInfo_s ModelsInfo::GetServerIP()
 {
-    ModelsInfo_s server_info{
-        .url = "http://127.0.0.1:11434/v1/chat/completions", .apiKey = "888888", .model = "gpt-4o"};
+    ModelsInfo_s server_info = DefaultGetServerIP();  // 使用默认值初始化
     std::string ip_json;
     QString ipconfig = QCoreApplication::applicationDirPath() + "/Server_config.json";
     QFile file(ipconfig);
-    if (file.exists() == true) {
+    if (file.exists()) {
         ip_json = readFile(ipconfig);
         cJSON *root = cJSON_Parse(ip_json.c_str());
-        if (root == nullptr) {
-            // 解析失败
-            goto return_info;
-        }
+        if (root) {
+            cJSON *serversArray = cJSON_GetObjectItem(root, "servers");
+            if (serversArray && cJSON_IsArray(serversArray) && cJSON_GetArraySize(serversArray) > 0) {
+                cJSON *firstServer = cJSON_GetArrayItem(serversArray, 0);
+                if (firstServer) {
+                    cJSON *title = cJSON_GetObjectItem(firstServer, "title");
+                    cJSON *url = cJSON_GetObjectItem(firstServer, "url");
+                    cJSON *apiKey = cJSON_GetObjectItem(firstServer, "apiKey");
+                    cJSON *model = cJSON_GetObjectItem(firstServer, "model");
 
-        cJSON *url_str = cJSON_GetObjectItem(root, "url");
-        if (url_str != nullptr) {
-            server_info.url = url_str->valuestring;
+                    if (title && cJSON_IsString(title)) {
+                        server_info.title = title->valuestring;
+                    }
+                    if (url && cJSON_IsString(url)) {
+                        server_info.url = url->valuestring;
+                    }
+                    if (apiKey && cJSON_IsString(apiKey)) {
+                        server_info.apiKey = apiKey->valuestring;
+                    }
+                    if (model && cJSON_IsString(model)) {
+                        server_info.model = model->valuestring;
+                    }
+                }
+            }
+            cJSON_Delete(root);
         }
-
-        cJSON *apiKey_str = cJSON_GetObjectItem(root, "apiKey");
-        if (apiKey_str != nullptr) {
-            server_info.apiKey = apiKey_str->valuestring;
-        }
-
-        cJSON *model_str = cJSON_GetObjectItem(root, "model");
-        if (model_str != nullptr) {
-            server_info.model = model_str->valuestring;
-        }
-
-        cJSON_Delete(root);
     }
-
-return_info:
-
     return server_info;
 }
 
