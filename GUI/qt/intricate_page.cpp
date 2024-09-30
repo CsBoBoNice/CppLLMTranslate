@@ -8,6 +8,7 @@
 #include "intricate_page.h"
 #include "MessageManager.h"
 #include "agreement.h"
+#include "CommonUtils.h"
 
 #include <QClipboard>
 #include <QApplication>
@@ -318,6 +319,9 @@ IntricatePage::IntricatePage(QWidget *parent) : QMainWindow(parent)
 
     // 启动定时器，间隔时间为毫秒
     m_translateTimer->start(1);
+
+    // 将窗口移动到屏幕中心
+    CommonUtils::moveToCenter(this);
 }
 
 IntricatePage::~IntricatePage() {}

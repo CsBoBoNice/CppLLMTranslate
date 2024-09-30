@@ -19,6 +19,7 @@ find_package(Qt6 REQUIRED COMPONENTS Network)
 
 set(PROJECT_SOURCES
         main.cpp
+        CommonUtils.cpp
 
 
 )

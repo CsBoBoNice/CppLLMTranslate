@@ -2,6 +2,7 @@
 #include "HttpManager.h"
 #include "MessageManager.h"
 #include "agreement.h"
+#include "CommonUtils.h"
 
 #include <QClipboard>
 #include <QApplication>
@@ -161,6 +162,9 @@ SimplePage::SimplePage(QWidget *parent) : QMainWindow(parent)
 
     std::thread t_HTTP_thread(HttpThread);
     t_HTTP_thread.detach();
+
+    // 将窗口移动到屏幕中心
+    CommonUtils::moveToCenter(this);
 }
 
 SimplePage::~SimplePage() {}

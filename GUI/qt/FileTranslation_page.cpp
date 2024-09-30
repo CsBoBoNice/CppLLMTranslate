@@ -18,6 +18,8 @@
 
 #include "ThreadSafeString.h"
 
+#include "CommonUtils.h"
+
 FileManager fileManager;
 
 // 进度信息
@@ -742,6 +744,11 @@ FileTranslationPage::FileTranslationPage(QWidget *parent) : QMainWindow(parent)
 
     // 启动定时器，间隔时间为毫秒
     m_translateTimer->start(100);
+
+
+    // 将窗口移动到屏幕中心
+    CommonUtils::moveToCenter(this);
+
 }
 
 FileTranslationPage::~FileTranslationPage() {}

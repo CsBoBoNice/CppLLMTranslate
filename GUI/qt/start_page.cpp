@@ -6,6 +6,9 @@
 #include "HttpManager.h"
 #include "MessageManager.h"
 #include <QMessageBox>
+#include <QScreen>
+#include <QApplication>
+#include "CommonUtils.h"
 
 // 构造函数
 StartPage::StartPage(QWidget *parent) : QMainWindow(parent)
@@ -21,6 +24,9 @@ StartPage::StartPage(QWidget *parent) : QMainWindow(parent)
     connectSignalsAndSlots();
     // 更新模型选择器
     updateModelSelector();
+
+    // 将窗口移动到屏幕中心
+    CommonUtils::moveToCenter(this);
 }
 
 // 初始化UI组件
@@ -167,7 +173,7 @@ void StartPage::deleteSelectedModel()
                                       "您确定要删除 '" + QString::fromStdString(selectedInfo.title) + "' 吗？",
                                       QMessageBox::Yes|QMessageBox::No);
         
-        // 如果用户确认删除，则执行删除操作
+        // 如���用户确认删除，则执行删除操作
         if (reply == QMessageBox::Yes) {
             ModelsInfo::getInstance().deleteServerConfig(selectedInfo.title);
             updateModelSelector();
